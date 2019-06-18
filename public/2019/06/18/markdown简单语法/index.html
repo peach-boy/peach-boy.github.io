@@ -96,18 +96,20 @@
 
 
 
-  <meta name="description" content="业务场景 最近接手一个供app端调用的网关项目，app端迭代更新，接口就要相应的区分版本并做相应的逻辑区分，所以每一次请求必须要获取版本号。  实现逻辑 期初的做法是在controller中直接定义 @RequestParam(“name”) String name，但发现调用的方法层数增加时，参数需要逐层传递，调用链上每个方法都需要加参数，代码及不优雅。后改为添加一个拦截器VersionInfo">
-<meta name="keywords" content="java">
+  <meta name="description" content="markdown语法1. 斜体和粗体使用 * 和 ** 表示斜体和粗体。 示例： 这是 斜体，这是 粗体。 2. 分级标题使用 === 表示一级标题，使用 — 表示二级标题。 示例： 1234567这是一个一级标题============================这是一个二级标题--------------------------------------------------### 这是一">
+<meta name="keywords" content="工具">
 <meta property="og:type" content="article">
-<meta property="og:title" content="interceptor 配合Threadlocal全局处理请求基本信息">
-<meta property="og:url" content="http://www.wuxiantao123.cn/2019/06/18/interceptor-配合Threadlocal全局处理请求基本信息/index.html">
+<meta property="og:title" content="markdown简单语法">
+<meta property="og:url" content="http://www.wuxiantao123.cn/2019/06/18/markdown简单语法/index.html">
 <meta property="og:site_name" content="费曼的门徒">
-<meta property="og:description" content="业务场景 最近接手一个供app端调用的网关项目，app端迭代更新，接口就要相应的区分版本并做相应的逻辑区分，所以每一次请求必须要获取版本号。  实现逻辑 期初的做法是在controller中直接定义 @RequestParam(“name”) String name，但发现调用的方法层数增加时，参数需要逐层传递，调用链上每个方法都需要加参数，代码及不优雅。后改为添加一个拦截器VersionInfo">
+<meta property="og:description" content="markdown语法1. 斜体和粗体使用 * 和 ** 表示斜体和粗体。 示例： 这是 斜体，这是 粗体。 2. 分级标题使用 === 表示一级标题，使用 — 表示二级标题。 示例： 1234567这是一个一级标题============================这是一个二级标题--------------------------------------------------### 这是一">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-18T13:46:02.637Z">
+<meta property="og:image" content="https://www.zybuluo.com/static/img/my_head.jpg">
+<meta property="og:updated_time" content="2019-06-18T14:49:34.694Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="interceptor 配合Threadlocal全局处理请求基本信息">
-<meta name="twitter:description" content="业务场景 最近接手一个供app端调用的网关项目，app端迭代更新，接口就要相应的区分版本并做相应的逻辑区分，所以每一次请求必须要获取版本号。  实现逻辑 期初的做法是在controller中直接定义 @RequestParam(“name”) String name，但发现调用的方法层数增加时，参数需要逐层传递，调用链上每个方法都需要加参数，代码及不优雅。后改为添加一个拦截器VersionInfo">
+<meta name="twitter:title" content="markdown简单语法">
+<meta name="twitter:description" content="markdown语法1. 斜体和粗体使用 * 和 ** 表示斜体和粗体。 示例： 这是 斜体，这是 粗体。 2. 分级标题使用 === 表示一级标题，使用 — 表示二级标题。 示例： 1234567这是一个一级标题============================这是一个二级标题--------------------------------------------------### 这是一">
+<meta name="twitter:image" content="https://www.zybuluo.com/static/img/my_head.jpg">
 
 
 
@@ -115,7 +117,7 @@
 
   
   
-  <link rel="canonical" href="http://www.wuxiantao123.cn/2019/06/18/interceptor-配合Threadlocal全局处理请求基本信息/">
+  <link rel="canonical" href="http://www.wuxiantao123.cn/2019/06/18/markdown简单语法/">
 
 
 
@@ -125,7 +127,7 @@
   };
 </script>
 
-  <title>interceptor 配合Threadlocal全局处理请求基本信息 | 费曼的门徒</title>
+  <title>markdown简单语法 | 费曼的门徒</title>
   
 
 
@@ -386,7 +388,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/interceptor-配合Threadlocal全局处理请求基本信息/">
+    <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/markdown简单语法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="THomas Wu">
@@ -403,7 +405,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">interceptor 配合Threadlocal全局处理请求基本信息
+          <h2 class="post-title" itemprop="name headline">markdown简单语法
 
               
             
@@ -429,7 +431,7 @@
                 
               
 
-              <time title="创建时间：2019-06-18 16:43:32 / 修改时间：21:46:02" itemprop="dateCreated datePublished" datetime="2019-06-18T16:43:32+08:00">2019-06-18</time>
+              <time title="创建时间：2019-06-18 22:25:56 / 修改时间：22:49:34" itemprop="dateCreated datePublished" datetime="2019-06-18T22:25:56+08:00">2019-06-18</time>
             
 
             
@@ -451,7 +453,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java基础/" itemprop="url" rel="index"><span itemprop="name">java基础</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/markdown/" itemprop="url" rel="index"><span itemprop="name">markdown</span></a></span>
 
                 
                 
@@ -486,106 +488,40 @@
       
 
       
-        <h3 id="业务场景"><a href="#业务场景" class="headerlink" title="业务场景"></a>业务场景</h3><blockquote>
-<p>最近接手一个供app端调用的网关项目，app端迭代更新，接口就要相应的区分版本并做相应的逻辑区分，所以每一次请求必须要获取版本号。</p>
+        <h2 id="markdown语法"><a href="#markdown语法" class="headerlink" title="markdown语法"></a>markdown语法</h2><h3 id="1-斜体和粗体"><a href="#1-斜体和粗体" class="headerlink" title="1. 斜体和粗体"></a>1. 斜体和粗体</h3><p>使用 * 和 ** 表示斜体和粗体。</p>
+<p>示例：</p>
+<p>这是 <em>斜体</em>，这是 <strong>粗体</strong>。</p>
+<h3 id="2-分级标题"><a href="#2-分级标题" class="headerlink" title="2. 分级标题"></a>2. 分级标题</h3><p>使用 === 表示一级标题，使用 — 表示二级标题。</p>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">这是一个一级标题</span><br><span class="line">============================</span><br><span class="line"></span><br><span class="line">这是一个二级标题</span><br><span class="line">--------------------------------------------------</span><br><span class="line"></span><br><span class="line">### 这是一个三级标题</span><br></pre></td></tr></table></figure>
+
+<p>你也可以选择在行首加井号表示不同级别的标题 (H1-H6)，例如：# H1, ## H2, ### H3，#### H4。</p>
+<h3 id="3-外链接"><a href="#3-外链接" class="headerlink" title="3. 外链接"></a>3. 外链接</h3><p>使用 [描述](链接地址) 为文字增加外链接。</p>
+<p>示例：<a href="http://www.wuxiantao123.cn">我的博客</a></p>
+<h3 id="4-无序列表"><a href="#4-无序列表" class="headerlink" title="4. 无序列表"></a>4. 无序列表</h3><p>使用 *，+，- 表示无序列表。</p>
+<p>示例：</p>
+<ul>
+<li>无序列表项 一</li>
+<li>无序列表项 二</li>
+<li>无序列表项 三</li>
+</ul>
+<h3 id="5-有序列表"><a href="#5-有序列表" class="headerlink" title="5. 有序列表"></a>5. 有序列表</h3><p>使用数字和点表示有序列表。</p>
+<p>示例：</p>
+<ol>
+<li>有序列表项 一</li>
+<li>有序列表项 二</li>
+<li>有序列表项 三</li>
+</ol>
+<h3 id="6-文字引用"><a href="#6-文字引用" class="headerlink" title="6. 文字引用"></a>6. 文字引用</h3><p>使用 &gt; 表示文字引用。</p>
+<p>示例：</p>
+<blockquote>
+<p>野火烧不尽，春风吹又生。</p>
 </blockquote>
-<h3 id="实现逻辑"><a href="#实现逻辑" class="headerlink" title="实现逻辑"></a>实现逻辑</h3><blockquote>
-<p>期初的做法是在controller中直接定义 @RequestParam(“name”) String name，但发现调用的方法层数增加时，参数需要逐层传递，调用链上每个方法都需要加参数，代码及不优雅。后改为添加一个拦截器VersionInfoInterceptor，在拦截器中操作Threadlocal中的变量，代码如下：</p>
-</blockquote>
-<pre><code>/**
- * @author:xiantao.wu
- * @createDate:2018/7/1011:25
- * 先执行preHandle方法，将需要的变量放入ThreadLocal,方法执行完执行afterCompletion，将变量remove掉，拦截器原理后续文章将会介绍
- * 
- **/
-public class VersionInfoInterceptor extends HandlerInterceptorAdapter {
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String clientVersion = request.getHeader(&quot;x-client-version&quot;);
-        if (clientVersion != null) {
-            RequestHeaderBaseInfo requestHeaderBaseInfo=new RequestHeaderBaseInfo();
-            requestHeaderBaseInfo.setVersion(clientVersion);
-            ThreadLocalUtil.set(requestHeaderBaseInfo);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        ThreadLocalUtil.remove();
-    }</code></pre><blockquote>
-<p>直接TreadlocalUtil.get()即可获取version放入的变量</p>
-</blockquote>
-<pre><code>/**
- * @author:xiantao.wu
- * @createDate:2018/7/1011:25
- * 提供工具类你，操作Threadlocal
- **/
-public class ThreadLocalUtil {
-    private ThreadLocalUtil() {
-    }
-
-    private static ThreadLocal&lt;RequestHeaderBaseInfo&gt; LOCAL = new  TransmittableThreadLocal&lt;&gt;();
-
-    public static void set(RequestHeaderBaseInfo requestHeaderBaseInfo) {
-        LOCAL.set(requestHeaderBaseInfo);
-    }
-
-    public static RequestHeaderBaseInfo get() {
-        return LOCAL.get();
-    }
-
-    public static void remove() {
-        LOCAL.remove();
-    }
-
-}</code></pre><h3 id="敲黑板（需要避免的坑）-现在ThreadLocal除原生实现外，还有InheritableThreadLocal，TransmittableThreadLocal（眼尖的同学可能已经注意到了）这两种实现，上面选用的就是TransmittableThreadLocal，以下是三者的比较："><a href="#敲黑板（需要避免的坑）-现在ThreadLocal除原生实现外，还有InheritableThreadLocal，TransmittableThreadLocal（眼尖的同学可能已经注意到了）这两种实现，上面选用的就是TransmittableThreadLocal，以下是三者的比较：" class="headerlink" title="敲黑板（需要避免的坑） 现在ThreadLocal除原生实现外，还有InheritableThreadLocal，TransmittableThreadLocal（眼尖的同学可能已经注意到了）这两种实现，上面选用的就是TransmittableThreadLocal，以下是三者的比较："></a>敲黑板（需要避免的坑） 现在ThreadLocal除原生实现外，还有InheritableThreadLocal，TransmittableThreadLocal（眼尖的同学可能已经注意到了）这两种实现，上面选用的就是TransmittableThreadLocal，以下是三者的比较：</h3><table>
-<thead>
-<tr>
-<th align="left">实现</th>
-<th align="left">能否在传递到子线程</th>
-<th align="left">使用注意点</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">ThreadLocal</td>
-<td align="left">否</td>
-<td align="left">只能在当前线程中获取本地变量</td>
-</tr>
-<tr>
-<td align="left">InheritableThreadLocal</td>
-<td align="left">是</td>
-<td align="left">可获取父线程的中的本地变量，线程池场景不适用，存在线程复用，会导致混</td>
-</tr>
-<tr>
-<td align="left">TransmittableThreadLocal</td>
-<td align="left">是</td>
-<td align="left">可获取父线程中的本地变量，适用线程池场景</td>
-</tr>
-</tbody></table>
-<h3 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果"></a>测试结果</h3><p>/** * Created by wuxiantao on 2018/7/14. */ public class TransmittableThreadlocalTest {</p>
-<pre><code>private static ThreadLocal&lt;String&gt; transmittableThreadLocal=new TransmittableThreadLocal&lt;&gt;();
-
-public static void main(String[] args) throws InterruptedException {
-    ThreadPoolExecutor threadPoolExecutor=new ThreadPoolExecutor(3,3,10, TimeUnit.MINUTES, new LinkedBlockingQueue&lt;Runnable&gt;());
-    transmittableThreadLocal.set(&quot;父线程设定的值&quot;);
-    System.out.println(Thread.currentThread().getName()+&quot;====&quot;+transmittableThreadLocal.get());
-
-    for (int i = 0; i &lt; 5; i++) {
-        threadPoolExecutor.submit(TtlCallable.get(new Callable&lt;String&gt;() {
-            public String call() throws Exception {
-                System.out.println(Thread.currentThread().getName()+&quot;------&quot;+transmittableThreadLocal.get());
-                transmittableThreadLocal.set(&quot;我被修改了&quot;);
-                return transmittableThreadLocal.get();
-            }
-        }));
-    }
-}</code></pre><p>}</p>
-<pre><code>&lt;br /&gt;使用transmimttable-threadlocal中TtlCallable.get()提交任务，在子线程中修改Threadlocal,子线程还是会取主线程中的threadlocal</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">main====父线程设定的值</span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">2</span>------父线程设定的值</span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">1</span>------父线程设定的值</span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">1</span>------父线程设定的值</span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">1</span>------父线程设定的值</span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">3</span>------父线程设定的值</span><br></pre></td></tr></table></figure>
-
-<p>`<code>\</code></p>
+<h3 id="7-行内代码块"><a href="#7-行内代码块" class="headerlink" title="7. 行内代码块"></a>7. 行内代码块</h3><p>使用 `代码` 表示行内代码块。</p>
+<p>示例：让我们聊聊 <code>html</code>。</p>
+<h3 id="8-插入图像"><a href="#8-插入图像" class="headerlink" title="8.  插入图像"></a>8.  插入图像</h3><p>使用 ![描述](图片链接地址) 插入图像。</p>
+<p>示例：</p>
+<p><img src="https://www.zybuluo.com/static/img/my_head.jpg" alt="我的头像"></p>
 
       
     </div>
@@ -612,7 +548,7 @@ public static void main(String[] args) throws InterruptedException {
         
         <div class="post-tags">
           
-            <a href="/tags/java/" rel="tag"># java</a>
+            <a href="/tags/工具/" rel="tag"># 工具</a>
           
         </div>
       
@@ -625,14 +561,18 @@ public static void main(String[] args) throws InterruptedException {
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2019/06/18/git常用命令/" rel="next" title="git常用命令">
+                <i class="fa fa-chevron-left"></i> git常用命令
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/06/18/java8新特性之lamda表达式/" rel="prev" title="java8新特性之lamda表达式">
-                java8新特性之lamda表达式 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/06/18/markdown高阶语法/" rel="prev" title="markdown高阶语法">
+                markdown高阶语法 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -844,7 +784,7 @@ public static void main(String[] args) throws InterruptedException {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#业务场景"><span class="nav-number">1.</span> <span class="nav-text">业务场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现逻辑"><span class="nav-number">2.</span> <span class="nav-text">实现逻辑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#敲黑板（需要避免的坑）-现在ThreadLocal除原生实现外，还有InheritableThreadLocal，TransmittableThreadLocal（眼尖的同学可能已经注意到了）这两种实现，上面选用的就是TransmittableThreadLocal，以下是三者的比较："><span class="nav-number">3.</span> <span class="nav-text">敲黑板（需要避免的坑） 现在ThreadLocal除原生实现外，还有InheritableThreadLocal，TransmittableThreadLocal（眼尖的同学可能已经注意到了）这两种实现，上面选用的就是TransmittableThreadLocal，以下是三者的比较：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试结果"><span class="nav-number">4.</span> <span class="nav-text">测试结果</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#markdown语法"><span class="nav-number">1.</span> <span class="nav-text">markdown语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-斜体和粗体"><span class="nav-number">1.1.</span> <span class="nav-text">1. 斜体和粗体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-分级标题"><span class="nav-number">1.2.</span> <span class="nav-text">2. 分级标题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-外链接"><span class="nav-number">1.3.</span> <span class="nav-text">3. 外链接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-无序列表"><span class="nav-number">1.4.</span> <span class="nav-text">4. 无序列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-有序列表"><span class="nav-number">1.5.</span> <span class="nav-text">5. 有序列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-文字引用"><span class="nav-number">1.6.</span> <span class="nav-text">6. 文字引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-行内代码块"><span class="nav-number">1.7.</span> <span class="nav-text">7. 行内代码块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-插入图像"><span class="nav-number">1.8.</span> <span class="nav-text">8.  插入图像</span></a></li></ol></li></ol></div>
             
 
           </div>
