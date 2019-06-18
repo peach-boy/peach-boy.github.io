@@ -157,11 +157,12 @@ baidu_push: false
 # Value after `||` delimiter is the name of FontAwesome icon. If icon (with or without delimiter) is not specified, question icon will be loaded.
 # External url should start with http:// or https://
 menu:
-  home: / 
-  about: /about/ 
-  tags: /tags/ 
-  categories: /categories/ 
-  archives: /archives/ 
+  home: / || home
+  tags: /tags/ || tags
+  categories: /categories/  || th
+  archives: /archives/ || archive
+  读书: /books || book
+  about: /about/  || user
   #schedule: /schedule/ || calendar
   #sitemap: /sitemap.xml || sitemap
   #commonweal: /404/ || heartbeat
@@ -216,18 +217,20 @@ social_icons:
 
 # Blog rolls
 links_icon: link
-links_title: Links
+links_title: 友情链接
 links_layout: block
 #links_layout: inline
 links:
-  #Title: http://example.com
+  五月的仓颉: https://www.cnblogs.com/xrq730/
+  架构师之路: https://www.w3cschool.cn/architectroad/
+  crossoverjie: https://crossoverjie.top/
 
 # Sidebar Avatar
 avatar:
   # In theme directory (source/images): /images/avatar.gif
   # In site directory (source/uploads): /uploads/avatar.gif
   # You can also use other linking images.
-  url: #/images/avatar.gif
+  url: /images/avatar.jpg
   # If true, the avatar would be dispalyed in circle.
   rounded: false
   # The value of opacity should be choose from 0 to 1 to set the opacity of the avatar.
@@ -415,7 +418,7 @@ custom_logo:
 # Code Highlight theme
 # Available values: normal | night | night eighties | night blue | night bright
 # https://github.com/chriskempson/tomorrow-theme
-highlight_theme: normal
+highlight_theme: night
 
 # Enable "cheers" for archive page.
 cheers: true
