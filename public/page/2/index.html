@@ -99,7 +99,7 @@
   <meta name="description" content="人帅也要多读书，多学习，多运动">
 <meta property="og:type" content="website">
 <meta property="og:title" content="费曼的门徒">
-<meta property="og:url" content="http://www.wuxiantao123.cn/archives/index.html">
+<meta property="og:url" content="http://www.wuxiantao123.cn/page/2/index.html">
 <meta property="og:site_name" content="费曼的门徒">
 <meta property="og:description" content="人帅也要多读书，多学习，多运动">
 <meta property="og:locale" content="zh-Hans">
@@ -113,7 +113,7 @@
 
   
   
-  <link rel="canonical" href="http://www.wuxiantao123.cn/archives/">
+  <link rel="canonical" href="http://www.wuxiantao123.cn/page/2/">
 
 
 
@@ -123,7 +123,7 @@
   };
 </script>
 
-  <title>Archiv | 费曼的门徒</title>
+  <title>费曼的门徒</title>
   
 
 
@@ -171,7 +171,8 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left 
+  page-home">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -281,7 +282,7 @@
         
         
           
-          <li class="menu-item menu-item-archives menu-item-active">
+          <li class="menu-item menu-item-archives">
 
     
     
@@ -323,418 +324,281 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
+  <section id="posts" class="posts-expand">
+    
+      
+
+  
 
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/interceptor-配合Threadlocal全局处理请求基本信息/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="THomas Wu">
+      <meta itemprop="description" content="人帅也要多读书，多学习，多运动">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="费曼的门徒">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/06/18/interceptor-配合Threadlocal全局处理请求基本信息/" class="post-title-link" itemprop="url">interceptor 配合Threadlocal全局处理请求基本信息</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-06-18 16:43:32 / Geändert am: 16:45:09" itemprop="dateCreated datePublished" datetime="2019-06-18T16:43:32+08:00">2019-06-18</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java基础/" itemprop="url" rel="index"><span itemprop="name">java基础</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-      <span class="archive-page-counter">
-        
-        
+      
+
+      
         
           
-        
-        Öhm..! Insgesamt 11 Artikel. Bleib dran.
-      </span>
-      
+            <p>一. 业务场景</p>
+<blockquote>
+<p>最近接手一个供app端调用的网关项目，app端迭代更新，接口就要相应的区分版本并做相应的逻辑区分，所以每一次请求必须要获取版本号。</p>
+</blockquote>
+<p>二. 实现逻辑</p>
+<blockquote>
+<p>期初的做法是在controller中直接定义 @RequestParam(“name”) String name，但发现调用的方法层数增加时，参数需要逐层传递，调用链上每个方法都需要加参数，代码及不优雅。后改为添加一个拦截器VersionInfoInterceptor，在拦截器中操作Threadlocal中的变量，代码如下：</p>
+</blockquote>
+<pre><code>/**
+ * @author:xiantao.wu
+ * @createDate:2018/7/1011:25
+ * 先执行preHandle方法，将需要的变量放入ThreadLocal,方法执行完执行afterCompletion，将变量remove掉，拦截器原理后续文章将会介绍
+ * 
+ **/
+public class VersionInfoInterceptor extends HandlerInterceptorAdapter {
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        String clientVersion = request.getHeader(&quot;x-client-version&quot;);
+        if (clientVersion != null) {
+            RequestHeaderBaseInfo requestHeaderBaseInfo=new RequestHeaderBaseInfo();
+            requestHeaderBaseInfo.setVersion(clientVersion);
+            ThreadLocalUtil.set(requestHeaderBaseInfo);
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-      
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        ThreadLocalUtil.remove();
+    }</code></pre><blockquote>
+<p>直接TreadlocalUtil.get()即可获取version放入的变量</p>
+</blockquote>
+<pre><code>/**
+ * @author:xiantao.wu
+ * @createDate:2018/7/1011:25
+ * 提供工具类你，操作Threadlocal
+ **/
+public class ThreadLocalUtil {
+    private ThreadLocalUtil() {
+    }
 
-        
-        
-        
+    private static ThreadLocal&lt;RequestHeaderBaseInfo&gt; LOCAL = new  TransmittableThreadLocal&lt;&gt;();
 
-        
+    public static void set(RequestHeaderBaseInfo requestHeaderBaseInfo) {
+        LOCAL.set(requestHeaderBaseInfo);
+    }
+
+    public static RequestHeaderBaseInfo get() {
+        return LOCAL.get();
+    }
+
+    public static void remove() {
+        LOCAL.remove();
+    }
+
+}</code></pre><p>三. 敲黑板（需要避免的坑） 现在ThreadLocal除原生实现外，还有InheritableThreadLocal，TransmittableThreadLocal（眼尖的同学可能已经注意到了）这两种实现，上面选用的就是TransmittableThreadLocal，以下是三者的比较：</p>
+<table>
+<thead>
+<tr>
+<th align="left">实现</th>
+<th align="left">能否在传递到子线程</th>
+<th align="left">使用注意点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">ThreadLocal</td>
+<td align="left">否</td>
+<td align="left">只能在当前线程中获取本地变量</td>
+</tr>
+<tr>
+<td align="left">InheritableThreadLocal</td>
+<td align="left">是</td>
+<td align="left">可获取父线程的中的本地变量，线程池场景不适用，存在线程复用，会导致混</td>
+</tr>
+<tr>
+<td align="left">TransmittableThreadLocal</td>
+<td align="left">是</td>
+<td align="left">可获取父线程中的本地变量，适用线程池场景</td>
+</tr>
+</tbody></table>
+<p>四. 测试结果</p>
+<p>/** * Created by wuxiantao on 2018/7/14. */ public class TransmittableThreadlocalTest {</p>
+<pre><code>private static ThreadLocal&lt;String&gt; transmittableThreadLocal=new TransmittableThreadLocal&lt;&gt;();
+
+public static void main(String[] args) throws InterruptedException {
+    ThreadPoolExecutor threadPoolExecutor=new ThreadPoolExecutor(3,3,10, TimeUnit.MINUTES, new LinkedBlockingQueue&lt;Runnable&gt;());
+    transmittableThreadLocal.set(&quot;父线程设定的值&quot;);
+    System.out.println(Thread.currentThread().getName()+&quot;====&quot;+transmittableThreadLocal.get());
+
+    for (int i = 0; i &lt; 5; i++) {
+        threadPoolExecutor.submit(TtlCallable.get(new Callable&lt;String&gt;() {
+            public String call() throws Exception {
+                System.out.println(Thread.currentThread().getName()+&quot;------&quot;+transmittableThreadLocal.get());
+                transmittableThreadLocal.set(&quot;我被修改了&quot;);
+                return transmittableThreadLocal.get();
+            }
+        }));
+    }
+}</code></pre><p>}</p>
+<pre><code>&lt;br /&gt;使用transmimttable-threadlocal中TtlCallable.get()提交任务，在子线程中修改Threadlocal,子线程还是会取主线程中的threadlocal</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">main====父线程设定的值</span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">2</span>------父线程设定的值</span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">1</span>------父线程设定的值</span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">1</span>------父线程设定的值</span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">1</span>------父线程设定的值</span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">3</span>------父线程设定的值</span><br></pre></td></tr></table></figure>
+
+<p>`<code>\</code></p>
+
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2019">2019</h1>
-          </div>
         
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/06/18/git常用命令/" itemprop="url">
-            
-              <span itemprop="name">git常用命令</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-18T16:57:14+08:00" content="2019-06-18">
-          06-18
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/06/18/多线程常见问题/" itemprop="url">
-            
-              <span itemprop="name">多线程常见问题</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-18T16:55:46+08:00" content="2019-06-18">
-          06-18
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/06/18/spring常用接口之InitializingBean/" itemprop="url">
-            
-              <span itemprop="name">spring常用接口之InitializingBean</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-18T16:54:55+08:00" content="2019-06-18">
-          06-18
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/06/18/spring常用接口之BeanpostProccesser/" itemprop="url">
-            
-              <span itemprop="name">spring常用接口之BeanpostProccesser</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-18T16:54:06+08:00" content="2019-06-18">
-          06-18
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/06/18/java多线程之ThreadPoolExcutor/" itemprop="url">
-            
-              <span itemprop="name">java多线程之ThreadPoolExcutor</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-18T16:53:26+08:00" content="2019-06-18">
-          06-18
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/06/18/关于提升工作效率的一点思考/" itemprop="url">
-            
-              <span itemprop="name">关于提升工作效率的一点思考</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-18T16:52:25+08:00" content="2019-06-18">
-          06-18
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/06/18/java-8之Stream-Api解析/" itemprop="url">
-            
-              <span itemprop="name">java 8之Stream Api解析</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-18T16:50:30+08:00" content="2019-06-18">
-          06-18
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/06/18/Iterator循环删除list中元素/" itemprop="url">
-            
-              <span itemprop="name">Iterator循环删除list中元素</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-18T16:49:39+08:00" content="2019-06-18">
-          06-18
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/06/18/策略模式替换switch-case/" itemprop="url">
-            
-              <span itemprop="name">策略模式替换switch case</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-18T16:48:43+08:00" content="2019-06-18">
-          06-18
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/06/18/java8新特性之lamda表达式/" itemprop="url">
-            
-              <span itemprop="name">java8新特性之lamda表达式</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-18T16:47:39+08:00" content="2019-06-18">
-          06-18
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </div>
   
   
   
+  </article>
+
+
+    
+  </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/"><i class="fa fa-angle-right" aria-label="Nächste Seite"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="Vorherige Seite"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
   </nav>
-
 
 
 

@@ -96,16 +96,18 @@
 
 
 
-  <meta name="description" content="人帅也要多读书，多学习，多运动">
-<meta property="og:type" content="website">
-<meta property="og:title" content="费曼的门徒">
-<meta property="og:url" content="http://www.wuxiantao123.cn/archives/index.html">
+  <meta name="description" content="springBean生命周期作用：BeanPostProcessor在bean初始化前后做自定义处理 场景：需要自定义swagger,使所有请求显示固定的请求头参数(自定义Docket类)，但是swagger被架构组封装到sdk中，所以在BeanPostProcessor中对Docket的bean做处理 12345678910111213141516171819202122232425262728">
+<meta name="keywords" content="spring">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spring常用接口之BeanpostProccesser">
+<meta property="og:url" content="http://www.wuxiantao123.cn/2019/06/18/spring常用接口之BeanpostProccesser/index.html">
 <meta property="og:site_name" content="费曼的门徒">
-<meta property="og:description" content="人帅也要多读书，多学习，多运动">
+<meta property="og:description" content="springBean生命周期作用：BeanPostProcessor在bean初始化前后做自定义处理 场景：需要自定义swagger,使所有请求显示固定的请求头参数(自定义Docket类)，但是swagger被架构组封装到sdk中，所以在BeanPostProcessor中对Docket的bean做处理 12345678910111213141516171819202122232425262728">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-06-18T08:54:37.335Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="费曼的门徒">
-<meta name="twitter:description" content="人帅也要多读书，多学习，多运动">
+<meta name="twitter:title" content="spring常用接口之BeanpostProccesser">
+<meta name="twitter:description" content="springBean生命周期作用：BeanPostProcessor在bean初始化前后做自定义处理 场景：需要自定义swagger,使所有请求显示固定的请求头参数(自定义Docket类)，但是swagger被架构组封装到sdk中，所以在BeanPostProcessor中对Docket的bean做处理 12345678910111213141516171819202122232425262728">
 
 
 
@@ -113,7 +115,7 @@
 
   
   
-  <link rel="canonical" href="http://www.wuxiantao123.cn/archives/">
+  <link rel="canonical" href="http://www.wuxiantao123.cn/2019/06/18/spring常用接口之BeanpostProccesser/">
 
 
 
@@ -123,7 +125,7 @@
   };
 </script>
 
-  <title>Archiv | 费曼的门徒</title>
+  <title>spring常用接口之BeanpostProccesser | 费曼的门徒</title>
   
 
 
@@ -171,7 +173,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -281,7 +283,7 @@
         
         
           
-          <li class="menu-item menu-item-archives menu-item-active">
+          <li class="menu-item menu-item-archives">
 
     
     
@@ -323,423 +325,206 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/spring常用接口之BeanpostProccesser/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="THomas Wu">
+      <meta itemprop="description" content="人帅也要多读书，多学习，多运动">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="费曼的门徒">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">spring常用接口之BeanpostProccesser
+
+              
+            
+          </h1>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-06-18 16:54:06 / Geändert am: 16:54:37" itemprop="dateCreated datePublished" datetime="2019-06-18T16:54:06+08:00">2019-06-18</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
           
-        
-        Öhm..! Insgesamt 11 Artikel. Bleib dran.
-      </span>
-      
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/spring框架/" itemprop="url" rel="index"><span itemprop="name">spring框架</span></a></span>
 
-      
-
-        
-        
-        
-
-        
+                
+                
+              
+            </span>
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2019">2019</h1>
-          </div>
-        
-        
 
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/06/18/git常用命令/" itemprop="url">
+          
             
-              <span itemprop="name">git常用命令</span>
             
-          </a>
-        
-      </h2>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-18T16:57:14+08:00" content="2019-06-18">
-          06-18
-        </time>
-      </div>
+          
+          
 
-    </header>
-  </article>
+          
 
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="springBean生命周期"><a href="#springBean生命周期" class="headerlink" title="springBean生命周期"></a>springBean生命周期</h2><p>作用：BeanPostProcessor在bean初始化前后做自定义处理</p>
+<p>场景：需要自定义swagger,使所有请求显示固定的请求头参数(自定义Docket类)，但是swagger被架构组封装到sdk中，所以在BeanPostProcessor中对Docket的bean做处理</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 自定义swagger</span><br><span class="line"> *</span><br><span class="line"> * @author xiantao.wu</span><br><span class="line"> * @create 2019/3/269:51</span><br><span class="line"> **/</span><br><span class="line">@Component</span><br><span class="line">public class GiveAppBeanPostProcessor implements BeanPostProcessor &#123;</span><br><span class="line">    //bean初始化之前的操作</span><br><span class="line">    @Override</span><br><span class="line">    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException &#123;</span><br><span class="line">        return bean;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //bean初始化之后的操作</span><br><span class="line">    @Override</span><br><span class="line">    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException &#123;</span><br><span class="line">        //swagger统一增加请求头</span><br><span class="line">        if (&quot;docket&quot;.equals(beanName)) &#123;</span><br><span class="line">            return builderHeader((Docket) bean);</span><br><span class="line">        &#125;</span><br><span class="line">        return bean;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private Docket builderHeader(Docket docket) &#123;</span><br><span class="line">        List&lt;Parameter&gt; pars = new TreeList();</span><br><span class="line">        pars.add(new ParameterBuilder().name(&quot;x-os-name&quot;).description(&quot;系统类型&quot;).defaultValue(&quot;iOS&quot;)</span><br><span class="line">                .modelRef(new ModelRef(&quot;string&quot;)).parameterType(&quot;header&quot;).required(true).build());</span><br><span class="line"></span><br><span class="line">        pars.add(new ParameterBuilder().name(&quot;x-os-version&quot;).description(&quot;系统版本&quot;).defaultValue(&quot;10.3.3&quot;)</span><br><span class="line">                .modelRef(new ModelRef(&quot;string&quot;)).parameterType(&quot;header&quot;).required(true).build());</span><br><span class="line"></span><br><span class="line">        return docket.globalOperationParameters(pars);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/06/18/多线程常见问题/" itemprop="url">
-            
-              <span itemprop="name">多线程常见问题</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-18T16:55:46+08:00" content="2019-06-18">
-          06-18
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/06/18/spring常用接口之InitializingBean/" itemprop="url">
-            
-              <span itemprop="name">spring常用接口之InitializingBean</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-18T16:54:55+08:00" content="2019-06-18">
-          06-18
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/06/18/spring常用接口之BeanpostProccesser/" itemprop="url">
-            
-              <span itemprop="name">spring常用接口之BeanpostProccesser</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-18T16:54:06+08:00" content="2019-06-18">
-          06-18
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/06/18/java多线程之ThreadPoolExcutor/" itemprop="url">
-            
-              <span itemprop="name">java多线程之ThreadPoolExcutor</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-18T16:53:26+08:00" content="2019-06-18">
-          06-18
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/06/18/关于提升工作效率的一点思考/" itemprop="url">
-            
-              <span itemprop="name">关于提升工作效率的一点思考</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-18T16:52:25+08:00" content="2019-06-18">
-          06-18
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/06/18/java-8之Stream-Api解析/" itemprop="url">
-            
-              <span itemprop="name">java 8之Stream Api解析</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-18T16:50:30+08:00" content="2019-06-18">
-          06-18
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/06/18/Iterator循环删除list中元素/" itemprop="url">
-            
-              <span itemprop="name">Iterator循环删除list中元素</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-18T16:49:39+08:00" content="2019-06-18">
-          06-18
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/06/18/策略模式替换switch-case/" itemprop="url">
-            
-              <span itemprop="name">策略模式替换switch case</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-18T16:48:43+08:00" content="2019-06-18">
-          06-18
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/06/18/java8新特性之lamda表达式/" itemprop="url">
-            
-              <span itemprop="name">java8新特性之lamda表达式</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-18T16:47:39+08:00" content="2019-06-18">
-          06-18
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/spring/" rel="tag"># spring</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/18/java多线程之ThreadPoolExcutor/" rel="next" title="java多线程之ThreadPoolExcutor">
+                <i class="fa fa-chevron-left"></i> java多线程之ThreadPoolExcutor
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/18/spring常用接口之InitializingBean/" rel="prev" title="spring常用接口之InitializingBean">
+                spring常用接口之InitializingBean <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/"><i class="fa fa-angle-right" aria-label="Nächste Seite"></i></a>
-  </nav>
+  </article>
 
 
+  </div>
 
 
           </div>
           
+
+  
+
+
 
         </div>
         
@@ -759,8 +544,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -872,6 +666,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#springBean生命周期"><span class="nav-number">1.</span> <span class="nav-text">springBean生命周期</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
@@ -1003,6 +814,10 @@
 
 
   
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
 
   
 
@@ -1018,6 +833,8 @@
 
   
 
+
+  
 
 
   

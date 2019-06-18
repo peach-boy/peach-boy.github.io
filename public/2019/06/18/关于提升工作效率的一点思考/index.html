@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="最近参加了一个由TGO鲲鹏会组织线上技术交流活动，主办方邀请了一些大牛做技术分享，其中有个议题就是如何提高工作效率。听完各路大神的分享，然后刚好最近自己负责的项目出了一点问题，平时工作经常也会出现疲于应付的问题，根据高效这个议题，然后结合自己的工作经历，深刻反思了一下，就像总结一点东西，督促自己。 一、能高效的工作，首先要有良好的精神状态相信这一点，大家都知道，就不用多说了。最简单也最普遍方式就是">
+<meta name="keywords" content="代码之外">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于提升工作效率的一点思考">
+<meta property="og:url" content="http://www.wuxiantao123.cn/2019/06/18/关于提升工作效率的一点思考/index.html">
+<meta property="og:site_name" content="费曼的门徒">
+<meta property="og:description" content="最近参加了一个由TGO鲲鹏会组织线上技术交流活动，主办方邀请了一些大牛做技术分享，其中有个议题就是如何提高工作效率。听完各路大神的分享，然后刚好最近自己负责的项目出了一点问题，平时工作经常也会出现疲于应付的问题，根据高效这个议题，然后结合自己的工作经历，深刻反思了一下，就像总结一点东西，督促自己。 一、能高效的工作，首先要有良好的精神状态相信这一点，大家都知道，就不用多说了。最简单也最普遍方式就是">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-06-18T08:53:19.469Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于提升工作效率的一点思考">
+<meta name="twitter:description" content="最近参加了一个由TGO鲲鹏会组织线上技术交流活动，主办方邀请了一些大牛做技术分享，其中有个议题就是如何提高工作效率。听完各路大神的分享，然后刚好最近自己负责的项目出了一点问题，平时工作经常也会出现疲于应付的问题，根据高效这个议题，然后结合自己的工作经历，深刻反思了一下，就像总结一点东西，督促自己。 一、能高效的工作，首先要有良好的精神状态相信这一点，大家都知道，就不用多说了。最简单也最普遍方式就是">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://www.wuxiantao123.cn/2019/06/18/关于提升工作效率的一点思考/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>关于提升工作效率的一点思考 | 费曼的门徒</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">费曼的门徒</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Feynman follower</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Navigationsleiste an/ausschalten">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>Startseite</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>Über</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>Schlagwörter</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>Kategorien</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>Archiv</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/关于提升工作效率的一点思考/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="THomas Wu">
+      <meta itemprop="description" content="人帅也要多读书，多学习，多运动">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="费曼的门徒">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">关于提升工作效率的一点思考
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-06-18 16:52:25 / Geändert am: 16:53:19" itemprop="dateCreated datePublished" datetime="2019-06-18T16:52:25+08:00">2019-06-18</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码之外/" itemprop="url" rel="index"><span itemprop="name">代码之外</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近参加了一个由TGO鲲鹏会组织线上技术交流活动，主办方邀请了一些大牛做技术分享，其中有个议题就是如何提高工作效率。听完各路大神的分享，然后刚好最近自己负责的项目出了一点问题，平时工作经常也会出现疲于应付的问题，根据高效这个议题，然后结合自己的工作经历，深刻反思了一下，就像总结一点东西，督促自己。</p>
+<h4 id="一、能高效的工作，首先要有良好的精神状态"><a href="#一、能高效的工作，首先要有良好的精神状态" class="headerlink" title="一、能高效的工作，首先要有良好的精神状态"></a>一、能高效的工作，首先要有良好的精神状态</h4><p>相信这一点，大家都知道，就不用多说了。最简单也最普遍方式就是保证睡眠（早睡，午睡），锻炼。没有头发的程序员是失败的程序员，，保持良好的作息，健康的生活习惯，才能有良好的精神状态。</p>
+<h4 id="二、良好的工作习惯"><a href="#二、良好的工作习惯" class="headerlink" title="二、良好的工作习惯"></a>二、良好的工作习惯</h4><ol>
+<li>关于时间</li>
+</ol>
+<ul>
+<li>时间分片，做好计划：每段时间只做一件事，才能保持专注度，专注度才能保证效率，例如：不要同时解决测试提的bug,同时写代码或者写文档，思维中断后再连接是需要时间回顾之前的思路的。</li>
+<li>如何分片，如何排序：第一个问题顺序：要事第一，其后可按照优先级排序，第二个问题：分片的粒度，在开启新项目或新需求时，任务都会做拆分，可按照任务的粒度来执行，当然中间不免有一些会议，可以一天预留出一到两个小时作为临时会议或者沟通时间。</li>
+<li>避免情绪波动：与产品测试沟通过程中，难免有一些意见不合，比如针对不合理需求，可寻求开发leader或领导介入，尽力去沟通，争取自己的最大化利益，如果最终无法改变，就妥协。比如：加需求，顶头上次都说时间不能顺延，那就只能加班了（如果长期如此，也可以走人了）。</li>
+</ul>
+<ol start="2">
+<li>关于需求</li>
+</ol>
+<ul>
+<li>有备而来，带着疑问沟通：需求评审前，仔细精读需求文档。</li>
+<li>明确现状，评估可行性：回顾每一个需求改动点的业务现状及其现有实现逻辑，明确新需求期望与现状的差距，做好开发时间评估和可行性评估，方便在会上提出需求不可行原因以及可能存在的风险。</li>
+<li>记录结果，防止纠纷：记下需求中的模糊点，在会上沟通好确定好细节，并以文字的形式记录下疑问点的沟通结果，要求产品经理将疑问点写入公开的需求文档。</li>
+<li>正确理解，至关重要：任何时候对需求有疑问，必须找产品沟通确认，正确实现需求才是最重要的，切不可没时间把事情做对，却又时间返工。</li>
+</ul>
+<ol start="3">
+<li>关于会议</li>
+</ol>
+<ul>
+<li>不参加不需要我说话的会：我不需要说话，基本会议与我无关，纯属浪费时间。</li>
+<li>参加了就要高效： 凡是会议必有主题；凡是主题必有议程；凡是议程必有决议；凡是决议必有跟踪；凡是跟踪必有结果；凡是结果必有责任；凡是责任必有奖惩；凡是奖惩必须透明。最后一次会议达成共识，比面反复耗费时间。</li>
+</ul>
+<ol start="4">
+<li>关于反馈</li>
+</ol>
+<ul>
+<li>定时反馈进度：阶段性向leader或者PMO反馈开发进度，树立良好的做事风格，同时也可减少因为询问而被打断思路。</li>
+<li>主动反馈，不要做反馈黑洞：遇到技术难点，及时与leader讨论解决方案；</li>
+</ul>
+<ol start="5">
+<li>关于工作中被打断</li>
+</ol>
+<ul>
+<li>来自项目经理的打断：同时是询问开发进度，定期反馈，主动反馈。</li>
+<li>来自来自产品的打断：在审批阶段解决掉疑问，正式开发后只专注开发。</li>
+<li>来自测试的打断：文档写详细，避免被询问打断，将他人带到自己的工作习惯中，避免被牵着走。</li>
+</ul>
+<ol start="6">
+<li>关于面子</li>
+</ol>
+<ul>
+<li>需求沟通过程中，有疑问就要问，切记因为不好意思，而不沟通，需求的正确执行是第一要务，不懂就要问，爱面子只会阻碍你的进步。</li>
+</ul>
+<ol start="7">
+<li>关于工具</li>
+</ol>
+<ul>
+<li>熟练掌握常用工具：快捷键，代码不全功能（如idea的live template可定制代码生成），减少鼠标键盘切换，保持连贯的思维</li>
+<li>重复工作脚本化：autohotkey,windows批处理文件</li>
+<li>熟悉常用工具包：比如：Apache common,google guawa。</li>
+</ul>
+<h4 id="三、具体小习惯总结"><a href="#三、具体小习惯总结" class="headerlink" title="三、具体小习惯总结"></a>三、具体小习惯总结</h4><ol>
+<li>每日总结，下班总结工作内容，整理次日需完成的内容。</li>
+<li>早到半小时，安排工作计划，对一天进行规划</li>
+<li>在提测前，花一天时间整体review代码，对比master与develop,整体评估风险点，并优化代码。</li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/代码之外/" rel="tag"># 代码之外</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/18/java-8之Stream-Api解析/" rel="next" title="java 8之Stream Api解析">
+                <i class="fa fa-chevron-left"></i> java 8之Stream Api解析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/18/java多线程之ThreadPoolExcutor/" rel="prev" title="java多线程之ThreadPoolExcutor">
+                java多线程之ThreadPoolExcutor <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">THomas Wu</p>
+              <div class="site-description motion-element" itemprop="description">人帅也要多读书，多学习，多运动</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">Artikel</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">Kategorien</span>
+                  
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">schlagwörter</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/peach-boy" title="GitHub &rarr; https://github.com/peach-boy" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/1414924381@qq.com" title="E-Mail &rarr; 1414924381@qq.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#一、能高效的工作，首先要有良好的精神状态"><span class="nav-number">1.</span> <span class="nav-text">一、能高效的工作，首先要有良好的精神状态</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二、良好的工作习惯"><span class="nav-number">2.</span> <span class="nav-text">二、良好的工作习惯</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#三、具体小习惯总结"><span class="nav-number">3.</span> <span class="nav-text">三、具体小习惯总结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">THomas Wu</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Design – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.2</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.2"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
