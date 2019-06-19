@@ -385,10 +385,176 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/19/记一次线上事故总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Thomas Wu">
+      <meta itemprop="description" content="人帅也要多读书，多学习，多运动">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="费曼的门徒">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/06/19/记一次线上事故总结/" class="post-title-link" itemprop="url">记一次线上事故总结</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-19 22:40:45 / 修改时间：23:48:15" itemprop="dateCreated datePublished" datetime="2019-06-19T22:40:45+08:00">2019-06-19</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码之外/" itemprop="url" rel="index"><span itemprop="name">代码之外</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="事故起因"><a href="#事故起因" class="headerlink" title="事故起因"></a>事故起因</h3><p>发布预发布环境时，修改配置中心redis连接配置，连接密码错误，导致线上一个接口出现4000余个500请求</p>
+<h3 id="事故经过"><a href="#事故经过" class="headerlink" title="事故经过"></a>事故经过</h3><p>当发布到预发布环境时，控制台立刻发现了错误日志，经排查发现是由于线上环境连接redis没有配置密码导致的。才想起本次上线引用了新开发的redis sdk，同时这个改造是由另外一个同事完成的。当时那位同事已经不再公司，于是就找架构师要了对应redis的连接密码，问题就发生在在这里了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">配置一（线上使用的配置）</span><br><span class="line">host=redis.servers.test.jx</span><br><span class="line">port=6379</span><br><span class="line">password=</span><br><span class="line">database=9</span><br><span class="line">clientName=giveapp-rest</span><br><span class="line"></span><br><span class="line">配置二（新sdk使用的配置）</span><br><span class="line">spring.redis.host=redis.servers.test.jx</span><br><span class="line">spring.redis.port=6379</span><br><span class="line">spring.redis.password=</span><br><span class="line">spring.redis.database=14</span><br></pre></td></tr></table></figure>
+
+<p>线上代码使用的是配置一，上线代码使用的是配置二，我将上述配置截图给架构师后，他将密码发给我，我拿到密码看到配置也在疑惑是使用哪一个配置（注释说明当时没有），<br>于是想当然的加到了两个配置上，自己在app上马上测试了一下，发现没有报错就没有在管了。大概过了几分钟同事告诉我说线上出问题了，我在自己的手机上上试了一下，果然redis相关接口报错，我迅速反应过来，马上把配置还原，问题解决。后来发现线上使用的配置一是可以需要密码的，架构师发给我的密码是配置二节点的密码，配置一和配置二的节点不一同一个，使用同一个密码，线上就会出现redis连接异常，这才是问题所在。另外一个问题，为什么自己修改完redis密码后，自己app没有异常，现在看来可能是客户端本地缓存，当然这个已经不重要，本身这种验证凡是也是及其愚蠢的。</p>
+<h3 id="事故反思"><a href="#事故反思" class="headerlink" title="事故反思"></a>事故反思</h3><p>解决完后，自己也是自责不已，懊恼自己竟会做出如此草率的决定。回到家后，决定深入剖析一下当时自己的心路历程。回想起当时修改完后，自己验证”没问题后”，就被另一件事给耽搁住了，知道同事报障才反应过来。很多时候还是都是存在侥幸心理，以为会没问题。这让我想起了“墨菲定律”，任何小概率事假，看似几乎不能发生，当基数足够足够大时，它将会是必然时间。为什么会出现这次愚蠢的错误，究其原因还是因为自己之前也经常这么干，对有可能影响到线上的改动缺乏足够评估。综合来看，最近公司事故频发，大多数事故发生的场景都较为极端，甚至无法验证出来。但问题在于，这些代码问题或者不规范操作是长期存在的。当出现的次数不断增多时，事故的发生将会是一个必然事件。所以某种程度上，养成一个好的工作习惯是要胜过掌握一项新技术的。线上无小事，每一次关系到线上正常生产的改动，都需要再三保证其绝对正确，养成好的习惯。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/markdown高阶语法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="THomas Wu">
+      <meta itemprop="name" content="Thomas Wu">
       <meta itemprop="description" content="人帅也要多读书，多学习，多运动">
       <meta itemprop="image" content="/images/avatar.jpg">
     </span>
@@ -678,7 +844,7 @@
     <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/markdown简单语法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="THomas Wu">
+      <meta itemprop="name" content="Thomas Wu">
       <meta itemprop="description" content="人帅也要多读书，多学习，多运动">
       <meta itemprop="image" content="/images/avatar.jpg">
     </span>
@@ -872,7 +1038,7 @@
     <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/git常用命令/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="THomas Wu">
+      <meta itemprop="name" content="Thomas Wu">
       <meta itemprop="description" content="人帅也要多读书，多学习，多运动">
       <meta itemprop="image" content="/images/avatar.jpg">
     </span>
@@ -1046,7 +1212,7 @@
     <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/多线程常见问题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="THomas Wu">
+      <meta itemprop="name" content="Thomas Wu">
       <meta itemprop="description" content="人帅也要多读书，多学习，多运动">
       <meta itemprop="image" content="/images/avatar.jpg">
     </span>
@@ -1356,7 +1522,7 @@
     <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/spring常用接口之InitializingBean/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="THomas Wu">
+      <meta itemprop="name" content="Thomas Wu">
       <meta itemprop="description" content="人帅也要多读书，多学习，多运动">
       <meta itemprop="image" content="/images/avatar.jpg">
     </span>
@@ -1534,7 +1700,7 @@
     <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/spring常用接口之BeanpostProccesser/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="THomas Wu">
+      <meta itemprop="name" content="Thomas Wu">
       <meta itemprop="description" content="人帅也要多读书，多学习，多运动">
       <meta itemprop="image" content="/images/avatar.jpg">
     </span>
@@ -1698,7 +1864,7 @@
     <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/java多线程之ThreadPoolExcutor/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="THomas Wu">
+      <meta itemprop="name" content="Thomas Wu">
       <meta itemprop="description" content="人帅也要多读书，多学习，多运动">
       <meta itemprop="image" content="/images/avatar.jpg">
     </span>
@@ -1943,7 +2109,7 @@
     <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/关于提升工作效率的一点思考/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="THomas Wu">
+      <meta itemprop="name" content="Thomas Wu">
       <meta itemprop="description" content="人帅也要多读书，多学习，多运动">
       <meta itemprop="image" content="/images/avatar.jpg">
     </span>
@@ -1985,12 +2151,24 @@
                 
               
 
-              <time title="创建时间：2019-06-18 16:52:25 / 修改时间：21:46:02" itemprop="dateCreated datePublished" datetime="2019-06-18T16:52:25+08:00">2019-06-18</time>
+              <time title="创建时间：2019-06-18 16:52:25" itemprop="dateCreated datePublished" datetime="2019-06-18T16:52:25+08:00">2019-06-18</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-06-19 22:42:46" itemprop="dateModified" datetime="2019-06-19T22:42:46+08:00">2019-06-19</time>
               
             
           </span>
@@ -2163,7 +2341,7 @@
     <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/java-8之Stream-Api解析/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="THomas Wu">
+      <meta itemprop="name" content="Thomas Wu">
       <meta itemprop="description" content="人帅也要多读书，多学习，多运动">
       <meta itemprop="image" content="/images/avatar.jpg">
     </span>
@@ -2394,180 +2572,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/Iterator循环删除list中元素/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="THomas Wu">
-      <meta itemprop="description" content="人帅也要多读书，多学习，多运动">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="费曼的门徒">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/06/18/Iterator循环删除list中元素/" class="post-title-link" itemprop="url">Iterator循环删除list中元素</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-06-18 16:49:39 / 修改时间：21:46:02" itemprop="dateCreated datePublished" datetime="2019-06-18T16:49:39+08:00">2019-06-18</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java基础/" itemprop="url" rel="index"><span itemprop="name">java基础</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="一、业务场景"><a href="#一、业务场景" class="headerlink" title="一、业务场景"></a>一、业务场景</h3><p>当我们需要剔除list中的某些元素时，通常的做法就是循环遍历list,然后符合条件时remove掉该元素。</p>
-<h3 id="二、实现逻辑"><a href="#二、实现逻辑" class="headerlink" title="二、实现逻辑"></a>二、实现逻辑</h3><pre><code>for (Iterator&lt;String&gt; iterator = list.iterator(); iterator.hasNext(); ) {
-        String str=iterator.next();
-        if (Objects.equals(&quot;one&quot;,str)){
-            iterator.remove();
-        }
-    }
-// or
-Iterator&lt;String&gt; iterator = list.iterator();
-    while(iterator.hasNext()){
-        String str=iterator.next();
-        if (Objects.equals(&quot;one&quot;,str)){
-            iterator.remove();
-        }</code></pre><h3 id="三、代码分析"><a href="#三、代码分析" class="headerlink" title="三、代码分析"></a>三、代码分析</h3><p>使用iterator遍历list同时删除元素，不会因为删除元素改变size而造成异常</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2603,9 +2607,9 @@ Iterator&lt;String&gt; iterator = list.iterator();
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="THomas Wu">
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Thomas Wu">
             
-              <p class="site-author-name" itemprop="name">THomas Wu</p>
+              <p class="site-author-name" itemprop="name">Thomas Wu</p>
               <div class="site-description motion-element" itemprop="description">人帅也要多读书，多学习，多运动</div>
           </div>
 
@@ -2616,7 +2620,7 @@ Iterator&lt;String&gt; iterator = list.iterator();
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2764,7 +2768,7 @@ Iterator&lt;String&gt; iterator = list.iterator();
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">THomas Wu</span>
+  <span class="author" itemprop="copyrightHolder">Thomas Wu</span>
 
   
 

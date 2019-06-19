@@ -96,18 +96,18 @@
 
 
 
-  <meta name="description" content="git小记创建分支 git checkout -b develop_XXX origin/develop （以远程的develop分支为基准建立自己的本地分支） git push origin develop_XXX（将本地develop_XXX分支提交到远程）  删除分支 1.git branch -D branchName（删除本地分支）  git push origin –delete br">
-<meta name="keywords" content="工具">
+  <meta name="description" content="事故起因发布预发布环境时，修改配置中心redis连接配置，连接密码错误，导致线上一个接口出现4000余个500请求 事故经过当发布到预发布环境时，控制台立刻发现了错误日志，经排查发现是由于线上环境连接redis没有配置密码导致的。才想起本次上线引用了新开发的redis sdk，同时这个改造是由另外一个同事完成的。当时那位同事已经不再公司，于是就找架构师要了对应redis的连接密码，问题就发生在在这">
+<meta name="keywords" content="随笔">
 <meta property="og:type" content="article">
-<meta property="og:title" content="git常用命令">
-<meta property="og:url" content="http://www.wuxiantao123.cn/2019/06/18/git常用命令/index.html">
+<meta property="og:title" content="记一次线上事故总结">
+<meta property="og:url" content="http://www.wuxiantao123.cn/2019/06/19/记一次线上事故总结/index.html">
 <meta property="og:site_name" content="费曼的门徒">
-<meta property="og:description" content="git小记创建分支 git checkout -b develop_XXX origin/develop （以远程的develop分支为基准建立自己的本地分支） git push origin develop_XXX（将本地develop_XXX分支提交到远程）  删除分支 1.git branch -D branchName（删除本地分支）  git push origin –delete br">
+<meta property="og:description" content="事故起因发布预发布环境时，修改配置中心redis连接配置，连接密码错误，导致线上一个接口出现4000余个500请求 事故经过当发布到预发布环境时，控制台立刻发现了错误日志，经排查发现是由于线上环境连接redis没有配置密码导致的。才想起本次上线引用了新开发的redis sdk，同时这个改造是由另外一个同事完成的。当时那位同事已经不再公司，于是就找架构师要了对应redis的连接密码，问题就发生在在这">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-18T13:46:02.633Z">
+<meta property="og:updated_time" content="2019-06-19T15:48:15.189Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="git常用命令">
-<meta name="twitter:description" content="git小记创建分支 git checkout -b develop_XXX origin/develop （以远程的develop分支为基准建立自己的本地分支） git push origin develop_XXX（将本地develop_XXX分支提交到远程）  删除分支 1.git branch -D branchName（删除本地分支）  git push origin –delete br">
+<meta name="twitter:title" content="记一次线上事故总结">
+<meta name="twitter:description" content="事故起因发布预发布环境时，修改配置中心redis连接配置，连接密码错误，导致线上一个接口出现4000余个500请求 事故经过当发布到预发布环境时，控制台立刻发现了错误日志，经排查发现是由于线上环境连接redis没有配置密码导致的。才想起本次上线引用了新开发的redis sdk，同时这个改造是由另外一个同事完成的。当时那位同事已经不再公司，于是就找架构师要了对应redis的连接密码，问题就发生在在这">
 
 
 
@@ -115,7 +115,7 @@
 
   
   
-  <link rel="canonical" href="http://www.wuxiantao123.cn/2019/06/18/git常用命令/">
+  <link rel="canonical" href="http://www.wuxiantao123.cn/2019/06/19/记一次线上事故总结/">
 
 
 
@@ -125,7 +125,7 @@
   };
 </script>
 
-  <title>git常用命令 | 费曼的门徒</title>
+  <title>记一次线上事故总结 | 费曼的门徒</title>
   
 
 
@@ -386,7 +386,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/git常用命令/">
+    <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/19/记一次线上事故总结/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Thomas Wu">
@@ -403,7 +403,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">git常用命令
+          <h2 class="post-title" itemprop="name headline">记一次线上事故总结
 
               
             
@@ -429,7 +429,7 @@
                 
               
 
-              <time title="创建时间：2019-06-18 16:57:14 / 修改时间：21:46:02" itemprop="dateCreated datePublished" datetime="2019-06-18T16:57:14+08:00">2019-06-18</time>
+              <time title="创建时间：2019-06-19 22:40:45 / 修改时间：23:48:15" itemprop="dateCreated datePublished" datetime="2019-06-19T22:40:45+08:00">2019-06-19</time>
             
 
             
@@ -451,7 +451,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/git/" itemprop="url" rel="index"><span itemprop="name">git</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码之外/" itemprop="url" rel="index"><span itemprop="name">代码之外</span></a></span>
 
                 
                 
@@ -486,20 +486,12 @@
       
 
       
-        <h2 id="git小记"><a href="#git小记" class="headerlink" title="git小记"></a>git小记</h2><h3 id="创建分支"><a href="#创建分支" class="headerlink" title="创建分支"></a>创建分支</h3><ol>
-<li>git checkout -b develop_XXX origin/develop （以远程的develop分支为基准建立自己的本地分支）</li>
-<li>git push origin develop_XXX（将本地develop_XXX分支提交到远程）</li>
-</ol>
-<h3 id="删除分支"><a href="#删除分支" class="headerlink" title="删除分支"></a>删除分支</h3><p> 1.git branch -D branchName（删除本地分支）</p>
-<ol start="2">
-<li>git push origin –delete branchName （删除远程分支）</li>
-</ol>
-<a id="more"></a>
+        <h3 id="事故起因"><a href="#事故起因" class="headerlink" title="事故起因"></a>事故起因</h3><p>发布预发布环境时，修改配置中心redis连接配置，连接密码错误，导致线上一个接口出现4000余个500请求</p>
+<h3 id="事故经过"><a href="#事故经过" class="headerlink" title="事故经过"></a>事故经过</h3><p>当发布到预发布环境时，控制台立刻发现了错误日志，经排查发现是由于线上环境连接redis没有配置密码导致的。才想起本次上线引用了新开发的redis sdk，同时这个改造是由另外一个同事完成的。当时那位同事已经不再公司，于是就找架构师要了对应redis的连接密码，问题就发生在在这里了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">配置一（线上使用的配置）</span><br><span class="line">host=redis.servers.test.jx</span><br><span class="line">port=6379</span><br><span class="line">password=</span><br><span class="line">database=9</span><br><span class="line">clientName=giveapp-rest</span><br><span class="line"></span><br><span class="line">配置二（新sdk使用的配置）</span><br><span class="line">spring.redis.host=redis.servers.test.jx</span><br><span class="line">spring.redis.port=6379</span><br><span class="line">spring.redis.password=</span><br><span class="line">spring.redis.database=14</span><br></pre></td></tr></table></figure>
 
-<h3 id="merge单个commit（branch-A-to-branch-B）"><a href="#merge单个commit（branch-A-to-branch-B）" class="headerlink" title="merge单个commit（branch_A to branch_B）"></a>merge单个commit（branch_A to branch_B）</h3><p>先checkout到branch_A , 从branch_B merge单个commit到branch_A<br>git checkout branch_A<br>git cherry-pick commitId</p>
-<h3 id="git-更改本地和远程分支的名称"><a href="#git-更改本地和远程分支的名称" class="headerlink" title="git-更改本地和远程分支的名称"></a>git-更改本地和远程分支的名称</h3><p>git branch -m old_branch new_branch # Rename branch locally<br>git push origin :old_branch # Delete the old branch<br>git push –set-upstream origin new_branch # Push the new branch, set local branch to track the new remote</p>
-<h3 id="回退到指定版本"><a href="#回退到指定版本" class="headerlink" title="回退到指定版本"></a>回退到指定版本</h3><p>git reset –hard commitId<br>强制提交到master分支<br>git push -f -u origin master</p>
-<h3 id="本地项目推送到远程分支"><a href="#本地项目推送到远程分支" class="headerlink" title="本地项目推送到远程分支"></a>本地项目推送到远程分支</h3><p>git init：初始化本地仓库<br>git add ：添加到暂存区<br>git commit：将暂存区修改提交到本地仓库：<br>git remote add <a href="mailto:git@github.com.xxxxxx" target="_blank" rel="noopener">git@github.com.xxxxxx</a>:与远程仓库建立连接<br>git checkout develop -b(创建本地分支)<br>git push origin develop:推送到指定远程分支(没有分支线)</p>
+<p>线上代码使用的是配置一，上线代码使用的是配置二，我将上述配置截图给架构师后，他将密码发给我，我拿到密码看到配置也在疑惑是使用哪一个配置（注释说明当时没有），<br>于是想当然的加到了两个配置上，自己在app上马上测试了一下，发现没有报错就没有在管了。大概过了几分钟同事告诉我说线上出问题了，我在自己的手机上上试了一下，果然redis相关接口报错，我迅速反应过来，马上把配置还原，问题解决。后来发现线上使用的配置一是可以需要密码的，架构师发给我的密码是配置二节点的密码，配置一和配置二的节点不一同一个，使用同一个密码，线上就会出现redis连接异常，这才是问题所在。另外一个问题，为什么自己修改完redis密码后，自己app没有异常，现在看来可能是客户端本地缓存，当然这个已经不重要，本身这种验证凡是也是及其愚蠢的。</p>
+<h3 id="事故反思"><a href="#事故反思" class="headerlink" title="事故反思"></a>事故反思</h3><p>解决完后，自己也是自责不已，懊恼自己竟会做出如此草率的决定。回到家后，决定深入剖析一下当时自己的心路历程。回想起当时修改完后，自己验证”没问题后”，就被另一件事给耽搁住了，知道同事报障才反应过来。很多时候还是都是存在侥幸心理，以为会没问题。这让我想起了“墨菲定律”，任何小概率事假，看似几乎不能发生，当基数足够足够大时，它将会是必然时间。为什么会出现这次愚蠢的错误，究其原因还是因为自己之前也经常这么干，对有可能影响到线上的改动缺乏足够评估。综合来看，最近公司事故频发，大多数事故发生的场景都较为极端，甚至无法验证出来。但问题在于，这些代码问题或者不规范操作是长期存在的。当出现的次数不断增多时，事故的发生将会是一个必然事件。所以某种程度上，养成一个好的工作习惯是要胜过掌握一项新技术的。线上无小事，每一次关系到线上正常生产的改动，都需要再三保证其绝对正确，养成好的习惯。</p>
 
       
     </div>
@@ -526,7 +518,7 @@
         
         <div class="post-tags">
           
-            <a href="/tags/工具/" rel="tag"># 工具</a>
+            <a href="/tags/随笔/" rel="tag"># 随笔</a>
           
         </div>
       
@@ -539,8 +531,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/06/18/多线程常见问题/" rel="next" title="多线程常见问题">
-                <i class="fa fa-chevron-left"></i> 多线程常见问题
+              <a href="/2019/06/18/markdown高阶语法/" rel="next" title="markdown高阶语法">
+                <i class="fa fa-chevron-left"></i> markdown高阶语法
               </a>
             
           </div>
@@ -548,10 +540,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/06/18/markdown简单语法/" rel="prev" title="markdown简单语法">
-                markdown简单语法 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -762,7 +750,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#git小记"><span class="nav-number">1.</span> <span class="nav-text">git小记</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建分支"><span class="nav-number">1.1.</span> <span class="nav-text">创建分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除分支"><span class="nav-number">1.2.</span> <span class="nav-text">删除分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#merge单个commit（branch-A-to-branch-B）"><span class="nav-number">1.3.</span> <span class="nav-text">merge单个commit（branch_A to branch_B）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git-更改本地和远程分支的名称"><span class="nav-number">1.4.</span> <span class="nav-text">git-更改本地和远程分支的名称</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#回退到指定版本"><span class="nav-number">1.5.</span> <span class="nav-text">回退到指定版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#本地项目推送到远程分支"><span class="nav-number">1.6.</span> <span class="nav-text">本地项目推送到远程分支</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#事故起因"><span class="nav-number">1.</span> <span class="nav-text">事故起因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事故经过"><span class="nav-number">2.</span> <span class="nav-text">事故经过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事故反思"><span class="nav-number">3.</span> <span class="nav-text">事故反思</span></a></li></ol></div>
             
 
           </div>
