@@ -96,18 +96,18 @@
 
 
 
-  <meta name="description" content="CountDownLatch CountDownLatch的作用：允许一个或多个线程，等待其他线程达到触发条件时（触发条件即CountDownLatch对象计数器减为0时）才开始执行 常用方法 CountDownLatch构造函数：CountDownLatch的构造函数接收一个int类型的参数作为计数器，如果你想等待N个点完成，这里就传入N countDown：当我们调用CountDownLatc">
+  <meta name="description" content="CountDownLatch CountDownLatch的作用：允许一个或多个线程，等待其他线程达到触发条件时（触发条件即CountDownLatch对象计数器减为0时）才开始执行 主要方法 CountDownLatch构造函数：CountDownLatch的构造函数接收一个int类型的参数作为计数器，如果你想等待N个点完成，这里就传入N countDown：当我们调用CountDownLatc">
 <meta name="keywords" content="java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java多线程之并发工具类">
 <meta property="og:url" content="http://www.wuxiantao123.cn/2019/06/22/java多线程之并发工具类/index.html">
 <meta property="og:site_name" content="费曼的门徒">
-<meta property="og:description" content="CountDownLatch CountDownLatch的作用：允许一个或多个线程，等待其他线程达到触发条件时（触发条件即CountDownLatch对象计数器减为0时）才开始执行 常用方法 CountDownLatch构造函数：CountDownLatch的构造函数接收一个int类型的参数作为计数器，如果你想等待N个点完成，这里就传入N countDown：当我们调用CountDownLatc">
+<meta property="og:description" content="CountDownLatch CountDownLatch的作用：允许一个或多个线程，等待其他线程达到触发条件时（触发条件即CountDownLatch对象计数器减为0时）才开始执行 主要方法 CountDownLatch构造函数：CountDownLatch的构造函数接收一个int类型的参数作为计数器，如果你想等待N个点完成，这里就传入N countDown：当我们调用CountDownLatc">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-22T13:57:54.753Z">
+<meta property="og:updated_time" content="2019-06-22T15:44:12.015Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java多线程之并发工具类">
-<meta name="twitter:description" content="CountDownLatch CountDownLatch的作用：允许一个或多个线程，等待其他线程达到触发条件时（触发条件即CountDownLatch对象计数器减为0时）才开始执行 常用方法 CountDownLatch构造函数：CountDownLatch的构造函数接收一个int类型的参数作为计数器，如果你想等待N个点完成，这里就传入N countDown：当我们调用CountDownLatc">
+<meta name="twitter:description" content="CountDownLatch CountDownLatch的作用：允许一个或多个线程，等待其他线程达到触发条件时（触发条件即CountDownLatch对象计数器减为0时）才开始执行 主要方法 CountDownLatch构造函数：CountDownLatch的构造函数接收一个int类型的参数作为计数器，如果你想等待N个点完成，这里就传入N countDown：当我们调用CountDownLatc">
 
 
 
@@ -429,7 +429,7 @@
                 
               
 
-              <time title="创建时间：2019-06-22 20:41:00 / 修改时间：21:57:54" itemprop="dateCreated datePublished" datetime="2019-06-22T20:41:00+08:00">2019-06-22</time>
+              <time title="创建时间：2019-06-22 20:41:00 / 修改时间：23:44:12" itemprop="dateCreated datePublished" datetime="2019-06-22T20:41:00+08:00">2019-06-22</time>
             
 
             
@@ -488,7 +488,7 @@
       
         <h2 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h2><ul>
 <li>CountDownLatch的作用：允许一个或多个线程，等待其他线程达到触发条件时（触发条件即CountDownLatch对象计数器减为0时）才开始执行</li>
-<li>常用方法<ol>
+<li>主要方法<ol>
 <li>CountDownLatch构造函数：CountDownLatch的构造函数接收一个int类型的参数作为计数器，如果你想等待N个点完<br>成，这里就传入N</li>
 <li>countDown：当我们调用CountDownLatch的countDown方法时，N就会减1</li>
 <li>await:CountDownLatch的await方法<br>会阻塞当前线程，直到N变成零,当前线程才会执行；await（long time，TimeUnit unit）这个方法等待特定时<br>间后，就会不再阻塞当前线程</li>
@@ -496,6 +496,35 @@
 </li>
 <li>示例代码：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">**</span><br><span class="line"> * @Description: TODO</span><br><span class="line"> * @Auther: ThomasWu</span><br><span class="line"> * @Date: 2019/6/22 20:53</span><br><span class="line"> * @Email:1414924381@qq.com</span><br><span class="line"> */</span><br><span class="line">public class CountDownLatchTest &#123;</span><br><span class="line"></span><br><span class="line">    private static class WorkTask extends Thread &#123;</span><br><span class="line">        private CountDownLatch countDownLatch;</span><br><span class="line"></span><br><span class="line">        public WorkTask(String name, CountDownLatch countDownLatch) &#123;</span><br><span class="line">            super(name);</span><br><span class="line">            this.countDownLatch = countDownLatch;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                System.out.println(this.getName() + &quot;启动了&quot;+System.currentTimeMillis());</span><br><span class="line">                Thread.sleep(1000);</span><br><span class="line">            &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; finally &#123;</span><br><span class="line">                System.out.println(this.getName() + &quot;执行完了&quot;+System.currentTimeMillis());</span><br><span class="line">                countDownLatch.countDown();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static class DoneTask extends Thread &#123;</span><br><span class="line">        private CountDownLatch countDownLatch;</span><br><span class="line"></span><br><span class="line">        public DoneTask(String name, CountDownLatch countDownLatch) &#123;</span><br><span class="line">            super(name);</span><br><span class="line">            this.countDownLatch = countDownLatch;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                System.out.println(this.getName() + &quot;开始等待&quot;+System.currentTimeMillis());</span><br><span class="line">                countDownLatch.await();</span><br><span class="line">                System.out.println(this.getName() + &quot;执行完了&quot;+System.currentTimeMillis());</span><br><span class="line">            &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        CountDownLatch countDownLatch=new CountDownLatch(3);</span><br><span class="line">        ExecutorService service=Executors.newFixedThreadPool(5);</span><br><span class="line">        service.submit(new DoneTask(&quot;DonwTask1&quot;,countDownLatch));</span><br><span class="line">        service.submit(new DoneTask(&quot;DoneTask2&quot;,countDownLatch));</span><br><span class="line">        service.submit(new WorkTask(&quot;workTask1&quot;,countDownLatch));</span><br><span class="line">        service.submit(new WorkTask(&quot;workTask2&quot;,countDownLatch));</span><br><span class="line">        service.submit(new WorkTask(&quot;workTask3&quot;,countDownLatch));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">console result</span><br><span class="line">DonwTask1开始等待1561210606078</span><br><span class="line">DoneTask2开始等待1561210606078</span><br><span class="line">workTask2启动了1561210606079</span><br><span class="line">workTask1启动了1561210606079</span><br><span class="line">workTask3启动了1561210606079</span><br><span class="line">workTask3执行完了1561210607079</span><br><span class="line">workTask2执行完了1561210607079</span><br><span class="line">workTask1执行完了1561210607079</span><br><span class="line">DonwTask1执行完了1561210607079</span><br><span class="line">DoneTask2执行完了1561210607079</span><br></pre></td></tr></table></figure>
 
+</li>
+</ul>
+<h2 id="CyclicBarrier-同步屏障或栅栏"><a href="#CyclicBarrier-同步屏障或栅栏" class="headerlink" title="CyclicBarrier(同步屏障或栅栏)"></a>CyclicBarrier(同步屏障或栅栏)</h2><ul>
+<li>CyclicBarrier作用:让一<br>组线程到达一个屏障（也可以叫同步点）时被阻塞，直到最后一个线程到达屏障时，屏障才会<br>开门，所有被屏障拦截的线程才会继续运行</li>
+<li>主要方法<ol>
+<li>构造函数CyclicBarrier（int parties，Runnable barrierAction）:用于在线程到达屏障时，优先执行barrierAction</li>
+<li>默认构造函数CyclicBarrier（int parties）：屏障拦截的线程数<br>量，每个线程调用await方法告诉CyclicBarrier我已经到达了屏障，然后当前线程被阻塞</li>
+<li>await:调用该方法的线程会被阻塞</li>
+</ol>
+</li>
+<li>注意：线程池中使用CyclicBarrier ，要考虑线程被阻塞问题，</li>
+<li>示例代码<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @Description: 多任务结算银行流水</span><br><span class="line"> * @Auther: ThomasWu</span><br><span class="line"> * @Date: 2019/6/22 22:32</span><br><span class="line"> * @Email:1414924381@qq.com</span><br><span class="line"> */</span><br><span class="line">public class CyclicBarrierTest &#123;</span><br><span class="line">    static class BankWaterTask implements Runnable &#123;</span><br><span class="line">        private ConcurrentHashMap&lt;String, Integer&gt; sheetBankWaterCount = new ConcurrentHashMap&lt;String, Integer&gt;();</span><br><span class="line">        private CyclicBarrier c = new CyclicBarrier(4, this);</span><br><span class="line">        private Executor executor = Executors.newFixedThreadPool(4);</span><br><span class="line"></span><br><span class="line">        private void count() &#123;</span><br><span class="line">            System.out.println(&quot;count 开始&quot; + System.currentTimeMillis());</span><br><span class="line">            for (int i = 0; i &lt; 4; i++) &#123;</span><br><span class="line">                executor.execute(() -&gt; &#123;</span><br><span class="line">                    sheetBankWaterCount.put(Thread.currentThread().getName(), 1);</span><br><span class="line">                    try &#123;</span><br><span class="line">                        c.await();</span><br><span class="line">                    &#125; catch (InterruptedException | BrokenBarrierException e) &#123;</span><br><span class="line">                        e.printStackTrace();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(&quot;count 结束&quot; + System.currentTimeMillis());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            System.out.println(&quot;run&quot; + System.currentTimeMillis());</span><br><span class="line">            int result = 0;</span><br><span class="line">            for (Map.Entry&lt;String, Integer&gt; sheet : sheetBankWaterCount.entrySet()) &#123;</span><br><span class="line">                result += sheet.getValue();</span><br><span class="line">            &#125;</span><br><span class="line">            sheetBankWaterCount.put(&quot;result&quot;, result);</span><br><span class="line">            System.out.println(result);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">   public static void main(String[] args) &#123;</span><br><span class="line">        BankWaterTask task = new BankWaterTask();</span><br><span class="line">        task.count();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="CyclicBarrier和CountDownLatch的区别"><a href="#CyclicBarrier和CountDownLatch的区别" class="headerlink" title="CyclicBarrier和CountDownLatch的区别"></a>CyclicBarrier和CountDownLatch的区别</h2><ul>
+<li><p>CountDownLatch：调用countDown的线程（A线程），调用了await的线程（B线程），A线程先执行，B线程阻塞，满足条件（计数器为0时）B线程开始执行，没有被阻塞；</p>
+</li>
+<li><p>CyclicBarrier：构造函数传入barrierAction线程（A线程） ，调用了await的线程（B线程），A线程先阻塞，B线程也阻塞，满足条件（B线程都调用都调用await后），A线程开始执行完后，B线程开始执行</p>
+</li>
+<li><p>CyclicBarrier：barrierAction只能指定一个线程</p>
+</li>
+<li><p>CountDownLatch的计数器只能使用一次，而CyclicBarrier的计数器可以使用reset()方法重<br>置</p>
+</li>
+<li><p>CyclicBarrier还提供其他有用的方法</p>
+<ol>
+<li>getNumberWaiting方法可以获得Cyclic-Barrier阻塞的线程数量</li>
+<li>isBroken()方法用来了解阻塞的线程是否被中断</li>
+</ol>
 </li>
 </ul>
 
@@ -756,7 +785,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CountDownLatch"><span class="nav-number">1.</span> <span class="nav-text">CountDownLatch</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CountDownLatch"><span class="nav-number">1.</span> <span class="nav-text">CountDownLatch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CyclicBarrier-同步屏障或栅栏"><span class="nav-number">2.</span> <span class="nav-text">CyclicBarrier(同步屏障或栅栏)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CyclicBarrier和CountDownLatch的区别"><span class="nav-number">3.</span> <span class="nav-text">CyclicBarrier和CountDownLatch的区别</span></a></li></ol></div>
             
 
           </div>
