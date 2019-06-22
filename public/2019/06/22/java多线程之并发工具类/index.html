@@ -96,18 +96,18 @@
 
 
 
-  <meta name="description" content="业务场景 最近接手一个供app端调用的网关项目，app端迭代更新，接口就要相应的区分版本并做相应的逻辑区分，所以每一次请求必须要获取版本号。  实现逻辑 期初的做法是在controller中直接定义 @RequestParam(“name”) String name，但发现调用的方法层数增加时，参数需要逐层传递，调用链上每个方法都需要加参数，代码及不优雅。后改为添加一个拦截器VersionInfo">
+  <meta name="description" content="CountDownLatch CountDownLatch的作用：允许一个或多个线程，等待其他线程达到触发条件时（触发条件即CountDownLatch对象计数器减为0时）才开始执行 常用方法 CountDownLatch构造函数：CountDownLatch的构造函数接收一个int类型的参数作为计数器，如果你想等待N个点完成，这里就传入N countDown：当我们调用CountDownLatc">
 <meta name="keywords" content="java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="interceptor 配合Threadlocal全局处理请求基本信息">
-<meta property="og:url" content="http://www.wuxiantao123.cn/2019/06/18/interceptor-配合Threadlocal全局处理请求基本信息/index.html">
+<meta property="og:title" content="java多线程之并发工具类">
+<meta property="og:url" content="http://www.wuxiantao123.cn/2019/06/22/java多线程之并发工具类/index.html">
 <meta property="og:site_name" content="费曼的门徒">
-<meta property="og:description" content="业务场景 最近接手一个供app端调用的网关项目，app端迭代更新，接口就要相应的区分版本并做相应的逻辑区分，所以每一次请求必须要获取版本号。  实现逻辑 期初的做法是在controller中直接定义 @RequestParam(“name”) String name，但发现调用的方法层数增加时，参数需要逐层传递，调用链上每个方法都需要加参数，代码及不优雅。后改为添加一个拦截器VersionInfo">
+<meta property="og:description" content="CountDownLatch CountDownLatch的作用：允许一个或多个线程，等待其他线程达到触发条件时（触发条件即CountDownLatch对象计数器减为0时）才开始执行 常用方法 CountDownLatch构造函数：CountDownLatch的构造函数接收一个int类型的参数作为计数器，如果你想等待N个点完成，这里就传入N countDown：当我们调用CountDownLatc">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-18T13:46:02.637Z">
+<meta property="og:updated_time" content="2019-06-22T13:57:54.753Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="interceptor 配合Threadlocal全局处理请求基本信息">
-<meta name="twitter:description" content="业务场景 最近接手一个供app端调用的网关项目，app端迭代更新，接口就要相应的区分版本并做相应的逻辑区分，所以每一次请求必须要获取版本号。  实现逻辑 期初的做法是在controller中直接定义 @RequestParam(“name”) String name，但发现调用的方法层数增加时，参数需要逐层传递，调用链上每个方法都需要加参数，代码及不优雅。后改为添加一个拦截器VersionInfo">
+<meta name="twitter:title" content="java多线程之并发工具类">
+<meta name="twitter:description" content="CountDownLatch CountDownLatch的作用：允许一个或多个线程，等待其他线程达到触发条件时（触发条件即CountDownLatch对象计数器减为0时）才开始执行 常用方法 CountDownLatch构造函数：CountDownLatch的构造函数接收一个int类型的参数作为计数器，如果你想等待N个点完成，这里就传入N countDown：当我们调用CountDownLatc">
 
 
 
@@ -115,7 +115,7 @@
 
   
   
-  <link rel="canonical" href="http://www.wuxiantao123.cn/2019/06/18/interceptor-配合Threadlocal全局处理请求基本信息/">
+  <link rel="canonical" href="http://www.wuxiantao123.cn/2019/06/22/java多线程之并发工具类/">
 
 
 
@@ -125,7 +125,7 @@
   };
 </script>
 
-  <title>interceptor 配合Threadlocal全局处理请求基本信息 | 费曼的门徒</title>
+  <title>java多线程之并发工具类 | 费曼的门徒</title>
   
 
 
@@ -386,7 +386,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/interceptor-配合Threadlocal全局处理请求基本信息/">
+    <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/22/java多线程之并发工具类/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Thomas Wu">
@@ -403,7 +403,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">interceptor 配合Threadlocal全局处理请求基本信息
+          <h2 class="post-title" itemprop="name headline">java多线程之并发工具类
 
               
             
@@ -429,7 +429,7 @@
                 
               
 
-              <time title="创建时间：2019-06-18 16:43:32 / 修改时间：21:46:02" itemprop="dateCreated datePublished" datetime="2019-06-18T16:43:32+08:00">2019-06-18</time>
+              <time title="创建时间：2019-06-22 20:41:00 / 修改时间：21:57:54" itemprop="dateCreated datePublished" datetime="2019-06-22T20:41:00+08:00">2019-06-22</time>
             
 
             
@@ -451,7 +451,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java基础/" itemprop="url" rel="index"><span itemprop="name">java基础</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java多线程/" itemprop="url" rel="index"><span itemprop="name">java多线程</span></a></span>
 
                 
                 
@@ -486,106 +486,18 @@
       
 
       
-        <h3 id="业务场景"><a href="#业务场景" class="headerlink" title="业务场景"></a>业务场景</h3><blockquote>
-<p>最近接手一个供app端调用的网关项目，app端迭代更新，接口就要相应的区分版本并做相应的逻辑区分，所以每一次请求必须要获取版本号。</p>
-</blockquote>
-<h3 id="实现逻辑"><a href="#实现逻辑" class="headerlink" title="实现逻辑"></a>实现逻辑</h3><blockquote>
-<p>期初的做法是在controller中直接定义 @RequestParam(“name”) String name，但发现调用的方法层数增加时，参数需要逐层传递，调用链上每个方法都需要加参数，代码及不优雅。后改为添加一个拦截器VersionInfoInterceptor，在拦截器中操作Threadlocal中的变量，代码如下：</p>
-</blockquote>
-<pre><code>/**
- * @author:xiantao.wu
- * @createDate:2018/7/1011:25
- * 先执行preHandle方法，将需要的变量放入ThreadLocal,方法执行完执行afterCompletion，将变量remove掉，拦截器原理后续文章将会介绍
- * 
- **/
-public class VersionInfoInterceptor extends HandlerInterceptorAdapter {
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String clientVersion = request.getHeader(&quot;x-client-version&quot;);
-        if (clientVersion != null) {
-            RequestHeaderBaseInfo requestHeaderBaseInfo=new RequestHeaderBaseInfo();
-            requestHeaderBaseInfo.setVersion(clientVersion);
-            ThreadLocalUtil.set(requestHeaderBaseInfo);
-            return true;
-        } else {
-            return false;
-        }
-    }
+        <h2 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h2><ul>
+<li>CountDownLatch的作用：允许一个或多个线程，等待其他线程达到触发条件时（触发条件即CountDownLatch对象计数器减为0时）才开始执行</li>
+<li>常用方法<ol>
+<li>CountDownLatch构造函数：CountDownLatch的构造函数接收一个int类型的参数作为计数器，如果你想等待N个点完<br>成，这里就传入N</li>
+<li>countDown：当我们调用CountDownLatch的countDown方法时，N就会减1</li>
+<li>await:CountDownLatch的await方法<br>会阻塞当前线程，直到N变成零,当前线程才会执行；await（long time，TimeUnit unit）这个方法等待特定时<br>间后，就会不再阻塞当前线程</li>
+</ol>
+</li>
+<li>示例代码：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">**</span><br><span class="line"> * @Description: TODO</span><br><span class="line"> * @Auther: ThomasWu</span><br><span class="line"> * @Date: 2019/6/22 20:53</span><br><span class="line"> * @Email:1414924381@qq.com</span><br><span class="line"> */</span><br><span class="line">public class CountDownLatchTest &#123;</span><br><span class="line"></span><br><span class="line">    private static class WorkTask extends Thread &#123;</span><br><span class="line">        private CountDownLatch countDownLatch;</span><br><span class="line"></span><br><span class="line">        public WorkTask(String name, CountDownLatch countDownLatch) &#123;</span><br><span class="line">            super(name);</span><br><span class="line">            this.countDownLatch = countDownLatch;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                System.out.println(this.getName() + &quot;启动了&quot;+System.currentTimeMillis());</span><br><span class="line">                Thread.sleep(1000);</span><br><span class="line">            &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; finally &#123;</span><br><span class="line">                System.out.println(this.getName() + &quot;执行完了&quot;+System.currentTimeMillis());</span><br><span class="line">                countDownLatch.countDown();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static class DoneTask extends Thread &#123;</span><br><span class="line">        private CountDownLatch countDownLatch;</span><br><span class="line"></span><br><span class="line">        public DoneTask(String name, CountDownLatch countDownLatch) &#123;</span><br><span class="line">            super(name);</span><br><span class="line">            this.countDownLatch = countDownLatch;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                System.out.println(this.getName() + &quot;开始等待&quot;+System.currentTimeMillis());</span><br><span class="line">                countDownLatch.await();</span><br><span class="line">                System.out.println(this.getName() + &quot;执行完了&quot;+System.currentTimeMillis());</span><br><span class="line">            &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        CountDownLatch countDownLatch=new CountDownLatch(3);</span><br><span class="line">        ExecutorService service=Executors.newFixedThreadPool(5);</span><br><span class="line">        service.submit(new DoneTask(&quot;DonwTask1&quot;,countDownLatch));</span><br><span class="line">        service.submit(new DoneTask(&quot;DoneTask2&quot;,countDownLatch));</span><br><span class="line">        service.submit(new WorkTask(&quot;workTask1&quot;,countDownLatch));</span><br><span class="line">        service.submit(new WorkTask(&quot;workTask2&quot;,countDownLatch));</span><br><span class="line">        service.submit(new WorkTask(&quot;workTask3&quot;,countDownLatch));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">console result</span><br><span class="line">DonwTask1开始等待1561210606078</span><br><span class="line">DoneTask2开始等待1561210606078</span><br><span class="line">workTask2启动了1561210606079</span><br><span class="line">workTask1启动了1561210606079</span><br><span class="line">workTask3启动了1561210606079</span><br><span class="line">workTask3执行完了1561210607079</span><br><span class="line">workTask2执行完了1561210607079</span><br><span class="line">workTask1执行完了1561210607079</span><br><span class="line">DonwTask1执行完了1561210607079</span><br><span class="line">DoneTask2执行完了1561210607079</span><br></pre></td></tr></table></figure>
 
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        ThreadLocalUtil.remove();
-    }</code></pre><blockquote>
-<p>直接TreadlocalUtil.get()即可获取version放入的变量</p>
-</blockquote>
-<pre><code>/**
- * @author:xiantao.wu
- * @createDate:2018/7/1011:25
- * 提供工具类你，操作Threadlocal
- **/
-public class ThreadLocalUtil {
-    private ThreadLocalUtil() {
-    }
-
-    private static ThreadLocal&lt;RequestHeaderBaseInfo&gt; LOCAL = new  TransmittableThreadLocal&lt;&gt;();
-
-    public static void set(RequestHeaderBaseInfo requestHeaderBaseInfo) {
-        LOCAL.set(requestHeaderBaseInfo);
-    }
-
-    public static RequestHeaderBaseInfo get() {
-        return LOCAL.get();
-    }
-
-    public static void remove() {
-        LOCAL.remove();
-    }
-
-}</code></pre><h3 id="敲黑板（需要避免的坑）-现在ThreadLocal除原生实现外，还有InheritableThreadLocal，TransmittableThreadLocal（眼尖的同学可能已经注意到了）这两种实现，上面选用的就是TransmittableThreadLocal，以下是三者的比较："><a href="#敲黑板（需要避免的坑）-现在ThreadLocal除原生实现外，还有InheritableThreadLocal，TransmittableThreadLocal（眼尖的同学可能已经注意到了）这两种实现，上面选用的就是TransmittableThreadLocal，以下是三者的比较：" class="headerlink" title="敲黑板（需要避免的坑） 现在ThreadLocal除原生实现外，还有InheritableThreadLocal，TransmittableThreadLocal（眼尖的同学可能已经注意到了）这两种实现，上面选用的就是TransmittableThreadLocal，以下是三者的比较："></a>敲黑板（需要避免的坑） 现在ThreadLocal除原生实现外，还有InheritableThreadLocal，TransmittableThreadLocal（眼尖的同学可能已经注意到了）这两种实现，上面选用的就是TransmittableThreadLocal，以下是三者的比较：</h3><table>
-<thead>
-<tr>
-<th align="left">实现</th>
-<th align="left">能否在传递到子线程</th>
-<th align="left">使用注意点</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">ThreadLocal</td>
-<td align="left">否</td>
-<td align="left">只能在当前线程中获取本地变量</td>
-</tr>
-<tr>
-<td align="left">InheritableThreadLocal</td>
-<td align="left">是</td>
-<td align="left">可获取父线程的中的本地变量，线程池场景不适用，存在线程复用，会导致混</td>
-</tr>
-<tr>
-<td align="left">TransmittableThreadLocal</td>
-<td align="left">是</td>
-<td align="left">可获取父线程中的本地变量，适用线程池场景</td>
-</tr>
-</tbody></table>
-<h3 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果"></a>测试结果</h3><p>/** * Created by wuxiantao on 2018/7/14. */ public class TransmittableThreadlocalTest {</p>
-<pre><code>private static ThreadLocal&lt;String&gt; transmittableThreadLocal=new TransmittableThreadLocal&lt;&gt;();
-
-public static void main(String[] args) throws InterruptedException {
-    ThreadPoolExecutor threadPoolExecutor=new ThreadPoolExecutor(3,3,10, TimeUnit.MINUTES, new LinkedBlockingQueue&lt;Runnable&gt;());
-    transmittableThreadLocal.set(&quot;父线程设定的值&quot;);
-    System.out.println(Thread.currentThread().getName()+&quot;====&quot;+transmittableThreadLocal.get());
-
-    for (int i = 0; i &lt; 5; i++) {
-        threadPoolExecutor.submit(TtlCallable.get(new Callable&lt;String&gt;() {
-            public String call() throws Exception {
-                System.out.println(Thread.currentThread().getName()+&quot;------&quot;+transmittableThreadLocal.get());
-                transmittableThreadLocal.set(&quot;我被修改了&quot;);
-                return transmittableThreadLocal.get();
-            }
-        }));
-    }
-}</code></pre><p>}</p>
-<pre><code>&lt;br /&gt;使用transmimttable-threadlocal中TtlCallable.get()提交任务，在子线程中修改Threadlocal,子线程还是会取主线程中的threadlocal</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">main====父线程设定的值</span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">2</span>------父线程设定的值</span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">1</span>------父线程设定的值</span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">1</span>------父线程设定的值</span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">1</span>------父线程设定的值</span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">3</span>------父线程设定的值</span><br></pre></td></tr></table></figure>
-
-<p>`<code>\</code></p>
+</li>
+</ul>
 
       
     </div>
@@ -625,15 +537,15 @@ public static void main(String[] args) throws InterruptedException {
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2019/06/19/记一次线上事故总结/" rel="next" title="记一次线上事故总结">
+                <i class="fa fa-chevron-left"></i> 记一次线上事故总结
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/06/18/java8新特性之lamda表达式/" rel="prev" title="java8新特性之lamda表达式">
-                java8新特性之lamda表达式 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -844,7 +756,7 @@ public static void main(String[] args) throws InterruptedException {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#业务场景"><span class="nav-number">1.</span> <span class="nav-text">业务场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现逻辑"><span class="nav-number">2.</span> <span class="nav-text">实现逻辑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#敲黑板（需要避免的坑）-现在ThreadLocal除原生实现外，还有InheritableThreadLocal，TransmittableThreadLocal（眼尖的同学可能已经注意到了）这两种实现，上面选用的就是TransmittableThreadLocal，以下是三者的比较："><span class="nav-number">3.</span> <span class="nav-text">敲黑板（需要避免的坑） 现在ThreadLocal除原生实现外，还有InheritableThreadLocal，TransmittableThreadLocal（眼尖的同学可能已经注意到了）这两种实现，上面选用的就是TransmittableThreadLocal，以下是三者的比较：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试结果"><span class="nav-number">4.</span> <span class="nav-text">测试结果</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CountDownLatch"><span class="nav-number">1.</span> <span class="nav-text">CountDownLatch</span></a></li></ol></div>
             
 
           </div>
