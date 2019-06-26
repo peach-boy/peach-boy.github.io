@@ -385,6 +385,211 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/26/java多线程之内存模型/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Thomas Wu">
+      <meta itemprop="description" content="人帅也要多读书，多学习，多运动">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="费曼的门徒">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/06/26/java多线程之内存模型/" class="post-title-link" itemprop="url">java多线程之内存模型</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-26 21:54:31 / 修改时间：22:45:41" itemprop="dateCreated datePublished" datetime="2019-06-26T21:54:31+08:00">2019-06-26</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java多线程/" itemprop="url" rel="index"><span itemprop="name">java多线程</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>现代计算机存储设备与处理器的计算速度存在着几个数量级的差距，大量的时间花费在磁盘I/O或数据库访问上，所以现代计算机系统都不得不加入一层读写速度尽可能接近处理器速度的高速缓存来作为内存与处理器之间的缓中；将计算时需要使用的数据复制到缓存中，让计算速度快速进行，当计算结束后再从缓存同步到内存之中，这样处理器就无需等待缓慢的内存读写了。</p>
+<h3 id="新的问题"><a href="#新的问题" class="headerlink" title="新的问题"></a>新的问题</h3><p>高速缓存解决了处理器与内存的速度矛盾，但却引入了一个新的问题-缓存不一致问题；多处理器系统中，每个处理器都有自己的高速缓存，而他们都共享同一个主内存，各自处理器计算完成后，需要将各自缓存的数据回写到主内存时，处理器之间缓存的数据不一致时就会导致不一致问题，java内存模型的出现即为解决这一问题</p>
+<h3 id="什么是java内存模型"><a href="#什么是java内存模型" class="headerlink" title="什么是java内存模型"></a>什么是java内存模型</h3><p>不同的硬件生产商和不同的操作系统下，内存的访问逻辑有一定的差异，结果就是当你的代码在某个系统环境下运行良好，并且线程安全，但是换了个系统就出现各种问题。Java内存模型，就是为了屏蔽系统和硬件的差异，让一套代码在不同平台下能到达相同的访问结果。JMM从java 5开始的JSR-133发布后，已经成熟和完善起来。</p>
+<h2 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h2><h3 id="内存划分"><a href="#内存划分" class="headerlink" title="内存划分"></a>内存划分</h3><p>JVM在设计时候考虑到，如果JAVA线程每次读取和写入变量都直接操作主内存，对性能影响比较大，所以每条线程拥有各自的工作内存，工作内存中的变量是主内存中的一份拷贝，线程对变量的读取和写入，直接在工作内存中操作，而不能直接去操作主内存中的变量。但是这样就会出现一个问题，当一个线程修改了自己工作内存中变量，对其他线程是不可见的，会导致线程不安全的问题。因为JMM制定了一套标准来保证开发者在编写多线程程序的时候，能够控制什么时候内存会被同步给其他线程。<br><img src="/source/images/jus/JMM1.png" alt="alt"></p>
+<h3 id="内存之间的交互操作"><a href="#内存之间的交互操作" class="headerlink" title="内存之间的交互操作"></a>内存之间的交互操作</h3><p>内存交互操作有8种，虚拟机实现必须保证每一个操作都是原子的，不可在分的（对于double和long类型的变量来说，load、store、read和write操作在某些平台上允许例外）</p>
+<ul>
+<li>lock     （锁定）：作用于主内存的变量，把一个变量标识为线程独占状态</li>
+<li>unlock （解锁）：作用于主内存的变量，它把一个处于锁定状态的变量释放出来，释放后的变量才可以被其他线程锁定</li>
+<li>read    （读取）：作用于主内存变量，它把一个变量的值从主内存传输到线程的工作内存中，以便随后的load动作使用</li>
+<li>load     （载入）：作用于工作内存的变量，它把read操作从主存中变量放入工作内存中</li>
+<li>use      （使用）：作用于工作内存中的变量，它把工作内存中的变量传输给执行引擎，每当虚拟机遇到一个需要使用到变量的值，就会使用到这个指令</li>
+<li>assign  （赋值）：作用于工作内存中的变量，它把一个从执行引擎中接受到的值放入工作内存的变量副本中</li>
+<li>store    （存储）：作用于主内存中的变量，它把一个从工作内存中一个变量的值传送到主内存中，以便后续的write使用</li>
+<li>write 　（写入）：作用于主内存中的变量，它把store操作从工作内存中得到的变量的值放入主内存的变量中</li>
+</ul>
+<p>　　JMM对这八种指令的使用，制定了如下规则：</p>
+<ul>
+<li>不允许read和load、store和write操作之一单独出现。即使用了read必须load，使用了store必须write</li>
+<li>不允许线程丢弃他最近的assign操作，即工作变量的数据改变了之后，必须告知主存</li>
+<li>不允许一个线程将没有assign的数据从工作内存同步回主内存</li>
+<li>一个新的变量必须在主内存中诞生，不允许工作内存直接使用一个未被初始化的变量。就是怼变量实施use、store操作之前，必须经过assign和load操作</li>
+<li>一个变量同一时间只有一个线程能对其进行lock。多次lock后，必须执行相同次数的unlock才能解锁</li>
+<li>如果对一个变量进行lock操作，会清空所有工作内存中此变量的值，在执行引擎使用这个变量前，必须重新load或assign操作初始化变量的值</li>
+<li>如果一个变量没有被lock，就不能对其进行unlock操作。也不能unlock一个被其他线程锁住的变量</li>
+<li>对一个变量进行unlock操作之前，必须把此变量同步回主内存</li>
+</ul>
+<p>JMM对这八种操作规则和对volatile的一些特殊规则就能确定哪里操作是线程安全，哪些操作是线程不安全的了。但是这些规则实在复杂，很难在实践中直接分析。所以一般我们也不会通过上述规则进行分析。更多的时候，使用java的happen-before规则来进行分析。</p>
+<h2 id="Happen-Before（先行发生规则）"><a href="#Happen-Before（先行发生规则）" class="headerlink" title="Happen-Before（先行发生规则）"></a>Happen-Before（先行发生规则）</h2><p>　　在常规的开发中，如果我们通过上述规则来分析一个并发程序是否安全，估计脑壳会很疼。因为更多时候，我们是分析一个并发程序是否安全，其实都依赖Happen-Before原则进行分析。Happen-Before被翻译成先行发生原则，意思就是当A操作先行发生于B操作，则在发生B操作的时候，操作A产生的影响能被B观察到，“影响”包括修改了内存中的共享变量的值、发送了消息、调用了方法等。</p>
+<p>　　Happen-Before的规则有以下几条</p>
+<ul>
+<li>程序次序规则（Program Order Rule）：在一个线程内，程序的执行规则跟程序的书写规则是一致的，从上往下执行。</li>
+<li>管程锁定规则（Monitor Lock Rule）：一个Unlock的操作肯定先于下一次Lock的操作。这里必须是同一个锁。同理我们可以认为在synchronized同步同一个锁的时候，锁内先行执行的代码，对后续同步该锁的线程来说是完全可见的。</li>
+<li>volatile变量规则（volatile Variable Rule）：对同一个volatile的变量，先行发生的写操作，肯定早于后续发生的读操作</li>
+<li>线程启动规则（Thread Start Rule）：Thread对象的start()方法先行发生于此线程的没一个动作</li>
+<li>线程中止规则（Thread Termination Rule）：Thread对象的中止检测（如：Thread.join()，Thread.isAlive()等）操作，必行晚于线程中所有操作</li>
+<li>线程中断规则（Thread Interruption Rule）：对线程的interruption（）调用，先于被调用的线程检测中断事件(Thread.interrupted())的发生</li>
+<li>对象中止规则（Finalizer Rule）：一个对象的初始化方法先于一个方法执行Finalizer()方法</li>
+<li>传递性（Transitivity）：如果操作A先于操作B、操作B先于操作C,则操作A先于操作C</li>
+</ul>
+<p>　　以上就是Happen-Before中的规则。通过这些条件的判定，仍然很难判断一个线程是否能安全执行，毕竟在我们的时候线程安全多数依赖于工具类的安全性来保证。想提高自己对线程是否安全的判断能力，必然需要理解所使用的框架或者工具的实现，并积累线程安全的经验。</p>
+<p>参考：</p>
+<ul>
+<li><a href="http://tutorials.jenkov.com/java-concurrency/java-memory-model.html" target="_blank" rel="noopener">http://tutorials.jenkov.com/java-concurrency/java-memory-model.html</a></li>
+<li>深入理解java虚拟第12张</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/22/java多线程之并发工具类/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -430,12 +635,24 @@
                 
               
 
-              <time title="创建时间：2019-06-22 20:41:00 / 修改时间：23:44:12" itemprop="dateCreated datePublished" datetime="2019-06-22T20:41:00+08:00">2019-06-22</time>
+              <time title="创建时间：2019-06-22 20:41:00" itemprop="dateCreated datePublished" datetime="2019-06-22T20:41:00+08:00">2019-06-22</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-06-23 16:06:01" itemprop="dateModified" datetime="2019-06-23T16:06:01+08:00">2019-06-23</time>
               
             
           </span>
@@ -502,34 +719,59 @@
 </li>
 </ul>
 <h2 id="CyclicBarrier-同步屏障或栅栏"><a href="#CyclicBarrier-同步屏障或栅栏" class="headerlink" title="CyclicBarrier(同步屏障或栅栏)"></a>CyclicBarrier(同步屏障或栅栏)</h2><ul>
-<li>CyclicBarrier作用:让一<br>组线程到达一个屏障（也可以叫同步点）时被阻塞，直到最后一个线程到达屏障时，屏障才会<br>开门，所有被屏障拦截的线程才会继续运行</li>
-<li>主要方法<ol>
+<li><p>CyclicBarrier作用:让一<br>组线程到达一个屏障（也可以叫同步点）时被阻塞，直到最后一个线程到达屏障时，屏障才会<br>开门，所有被屏障拦截的线程才会继续运行</p>
+</li>
+<li><p>主要方法</p>
+<ol>
 <li>构造函数CyclicBarrier（int parties，Runnable barrierAction）:用于在线程到达屏障时，优先执行barrierAction</li>
 <li>默认构造函数CyclicBarrier（int parties）：屏障拦截的线程数<br>量，每个线程调用await方法告诉CyclicBarrier我已经到达了屏障，然后当前线程被阻塞</li>
 <li>await:调用该方法的线程会被阻塞</li>
 </ol>
 </li>
-<li>注意：线程池中使用CyclicBarrier ，要考虑线程被阻塞问题，</li>
-<li>示例代码<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @Description: 多任务结算银行流水</span><br><span class="line"> * @Auther: ThomasWu</span><br><span class="line"> * @Date: 2019/6/22 22:32</span><br><span class="line"> * @Email:1414924381@qq.com</span><br><span class="line"> */</span><br><span class="line">public class CyclicBarrierTest &#123;</span><br><span class="line">    static class BankWaterTask implements Runnable &#123;</span><br><span class="line">        private ConcurrentHashMap&lt;String, Integer&gt; sheetBankWaterCount = new ConcurrentHashMap&lt;String, Integer&gt;();</span><br><span class="line">        private CyclicBarrier c = new CyclicBarrier(4, this);</span><br><span class="line">        private Executor executor = Executors.newFixedThreadPool(4);</span><br><span class="line"></span><br><span class="line">        private void count() &#123;</span><br><span class="line">            System.out.println(&quot;count 开始&quot; + System.currentTimeMillis());</span><br><span class="line">            for (int i = 0; i &lt; 4; i++) &#123;</span><br><span class="line">                executor.execute(() -&gt; &#123;</span><br><span class="line">                    sheetBankWaterCount.put(Thread.currentThread().getName(), 1);</span><br><span class="line">                    try &#123;</span><br><span class="line">                        c.await();</span><br><span class="line">                    &#125; catch (InterruptedException | BrokenBarrierException e) &#123;</span><br><span class="line">                        e.printStackTrace();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(&quot;count 结束&quot; + System.currentTimeMillis());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            System.out.println(&quot;run&quot; + System.currentTimeMillis());</span><br><span class="line">            int result = 0;</span><br><span class="line">            for (Map.Entry&lt;String, Integer&gt; sheet : sheetBankWaterCount.entrySet()) &#123;</span><br><span class="line">                result += sheet.getValue();</span><br><span class="line">            &#125;</span><br><span class="line">            sheetBankWaterCount.put(&quot;result&quot;, result);</span><br><span class="line">            System.out.println(result);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">   public static void main(String[] args) &#123;</span><br><span class="line">        BankWaterTask task = new BankWaterTask();</span><br><span class="line">        task.count();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<li><p>注意：线程池中使用CyclicBarrier ，要考虑线程被阻塞问题，</p>
+</li>
+<li><p>示例代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @Description: 多任务结算银行流水</span><br><span class="line"> * @Auther: ThomasWu</span><br><span class="line"> * @Date: 2019/6/22 22:32</span><br><span class="line"> * @Email:1414924381@qq.com</span><br><span class="line"> */</span><br><span class="line">public class CyclicBarrierTest &#123;</span><br><span class="line">    static class BankWaterTask implements Runnable &#123;</span><br><span class="line">        private ConcurrentHashMap&lt;String, Integer&gt; sheetBankWaterCount = new ConcurrentHashMap&lt;String, Integer&gt;();</span><br><span class="line">        private CyclicBarrier c = new CyclicBarrier(4, this);</span><br><span class="line">        private Executor executor = Executors.newFixedThreadPool(4);</span><br><span class="line"></span><br><span class="line">        private void count() &#123;</span><br><span class="line">            System.out.println(&quot;count 开始&quot; + System.currentTimeMillis());</span><br><span class="line">            for (int i = 0; i &lt; 4; i++) &#123;</span><br><span class="line">                executor.execute(() -&gt; &#123;</span><br><span class="line">                    sheetBankWaterCount.put(Thread.currentThread().getName(), 1);</span><br><span class="line">                    try &#123;</span><br><span class="line">                        c.await();</span><br><span class="line">                    &#125; catch (InterruptedException | BrokenBarrierException e) &#123;</span><br><span class="line">                        e.printStackTrace();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(&quot;count 结束&quot; + System.currentTimeMillis());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            System.out.println(&quot;run&quot; + System.currentTimeMillis());</span><br><span class="line">            int result = 0;</span><br><span class="line">            for (Map.Entry&lt;String, Integer&gt; sheet : sheetBankWaterCount.entrySet()) &#123;</span><br><span class="line">                result += sheet.getValue();</span><br><span class="line">            &#125;</span><br><span class="line">            sheetBankWaterCount.put(&quot;result&quot;, result);</span><br><span class="line">            System.out.println(result);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">   public static void main(String[] args) &#123;</span><br><span class="line">        BankWaterTask task = new BankWaterTask();</span><br><span class="line">        task.count();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
 </li>
 </ul>
-<h2 id="CyclicBarrier和CountDownLatch的区别"><a href="#CyclicBarrier和CountDownLatch的区别" class="headerlink" title="CyclicBarrier和CountDownLatch的区别"></a>CyclicBarrier和CountDownLatch的区别</h2><ul>
+<h3 id="CyclicBarrier和CountDownLatch的区别"><a href="#CyclicBarrier和CountDownLatch的区别" class="headerlink" title="CyclicBarrier和CountDownLatch的区别"></a>CyclicBarrier和CountDownLatch的区别</h3><ul>
 <li><p>CountDownLatch：调用countDown的线程（A线程），调用了await的线程（B线程），A线程先执行，B线程阻塞，满足条件（计数器为0时）B线程开始执行，没有被阻塞；</p>
 </li>
 <li><p>CyclicBarrier：构造函数传入barrierAction线程（A线程） ，调用了await的线程（B线程），A线程先阻塞，B线程也阻塞，满足条件（B线程都调用都调用await后），A线程开始执行完后，B线程开始执行</p>
 </li>
 <li><p>CyclicBarrier：barrierAction只能指定一个线程</p>
 </li>
-<li><p>CountDownLatch的计数器只能使用一次，而CyclicBarrier的计数器可以使用reset()方法重<br>置</p>
+<li><p>CountDownLatch的计数器只能使用一次，而CyclicBarrier的计数器可以使用reset()方法重置</p>
 </li>
 <li><p>CyclicBarrier还提供其他有用的方法</p>
 <ol>
 <li>getNumberWaiting方法可以获得Cyclic-Barrier阻塞的线程数量</li>
 <li>isBroken()方法用来了解阻塞的线程是否被中断</li>
 </ol>
+<h2 id="Semaphore"><a href="#Semaphore" class="headerlink" title="Semaphore"></a>Semaphore</h2></li>
+<li><p>Semaphore的作用：用来控制同时访问特定资源的线程数量，它通过协调各个线程，以<br>保证合理的使用公共资源</p>
+</li>
+<li><p>使用场景： Semaphore可以用于做流量控制，特别是公用资源有限的应用场景，比如数据库连接。假<br>如有一个需求，要读取几万个文件的数据，因为都是IO密集型任务，我们可以启动几十个线程<br>并发地读取，但是如果读到内存后，还需要存储到数据库中，而数据库的连接数只有10个，这<br>时我们必须控制只有10个线程同时获取数据库连接保存数据，否则会报错无法获取数据库连<br>接。这个时候，就可以使用Semaphore来做流量控制</p>
+</li>
+<li><p>主要方法：</p>
+<ol>
+<li>Semaphore（int permits）：接受一个整型的数字，表示可用的许可证数量</li>
+<li>void acquire()：获取一个许可证，如果当前信号量大于0，则当前信号量的计数减1，该方法直接返回；如果当前信号量等于0，则当前线程会被放入AQS阻塞队列</li>
+<li>void release():将当前信号量加1</li>
+</ol>
 </li>
 </ul>
+<p>示例代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @Description: TODO</span><br><span class="line"> * @Auther: ThomasWu</span><br><span class="line"> * @Date: 2019/6/23 15:19</span><br><span class="line"> * @Email:1414924381@qq.com</span><br><span class="line"> */</span><br><span class="line">public class SemaphoreTest &#123;</span><br><span class="line">    private static final int THREAD_COUNT = 10;</span><br><span class="line">    private static ExecutorService threadPool = Executors.newFixedThreadPool(THREAD_COUNT);</span><br><span class="line">    private static Semaphore s = new Semaphore(5);</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        for (int i = 0; i &lt; THREAD_COUNT; i++) &#123;</span><br><span class="line">            threadPool.execute(() -&gt; &#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    s.acquire();</span><br><span class="line">                    System.out.println(Thread.currentThread().getName()+&quot;获得了信号量&quot;+&quot;---当前信号量:&quot;+s.availablePermits()+&quot;---等待信号量的线程数:&quot;+s.getQueueLength()+&quot;---&quot;+System.currentTimeMillis());</span><br><span class="line">                    Thread.sleep(2000);</span><br><span class="line">                &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;finally &#123;</span><br><span class="line">                    s.release();</span><br><span class="line">                    System.out.println(Thread.currentThread().getName()+&quot;释放了信号量------&quot;+&quot;---当前信号量:&quot;+s.availablePermits()+&quot;---等待信号量的线程数:&quot;+s.getQueueLength()+System.currentTimeMillis());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">        threadPool.shutdown();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">console result</span><br><span class="line">pool-1-thread-2获得了信号量---当前信号量:4---等待信号量的线程数:0---1561275554694</span><br><span class="line">pool-1-thread-1获得了信号量---当前信号量:3---等待信号量的线程数:0---1561275554694</span><br><span class="line">pool-1-thread-4获得了信号量---当前信号量:2---等待信号量的线程数:0---1561275554694</span><br><span class="line">pool-1-thread-3获得了信号量---当前信号量:1---等待信号量的线程数:0---1561275554694</span><br><span class="line">pool-1-thread-5获得了信号量---当前信号量:0---等待信号量的线程数:0---1561275554694</span><br><span class="line">pool-1-thread-6获得了信号量---当前信号量:0---等待信号量的线程数:4---1561275556695</span><br><span class="line">pool-1-thread-7获得了信号量---当前信号量:0---等待信号量的线程数:3---1561275556695</span><br><span class="line">pool-1-thread-4释放了信号量---------当前信号量:0---等待信号量的线程数:31561275556695</span><br><span class="line">pool-1-thread-1释放了信号量---------当前信号量:0---等待信号量的线程数:31561275556695</span><br><span class="line">pool-1-thread-8获得了信号量---当前信号量:0---等待信号量的线程数:2---1561275556695</span><br><span class="line">pool-1-thread-2释放了信号量---------当前信号量:0---等待信号量的线程数:21561275556695</span><br><span class="line">pool-1-thread-9获得了信号量---当前信号量:1---等待信号量的线程数:0---1561275556696</span><br><span class="line">pool-1-thread-3释放了信号量---------当前信号量:0---等待信号量的线程数:01561275556696</span><br><span class="line">pool-1-thread-5释放了信号量---------当前信号量:1---等待信号量的线程数:01561275556696</span><br><span class="line">pool-1-thread-10获得了信号量---当前信号量:0---等待信号量的线程数:0---1561275556696</span><br><span class="line">pool-1-thread-6释放了信号量---------当前信号量:1---等待信号量的线程数:01561275558695</span><br><span class="line">pool-1-thread-8释放了信号量---------当前信号量:3---等待信号量的线程数:01561275558695</span><br><span class="line">pool-1-thread-7释放了信号量---------当前信号量:2---等待信号量的线程数:01561275558695</span><br><span class="line">pool-1-thread-10释放了信号量---------当前信号量:5---等待信号量的线程数:01561275558696</span><br><span class="line">pool-1-thread-9释放了信号量---------当前信号量:5---等待信号量的线程数:01561275558696</span><br></pre></td></tr></table></figure>
+
+<h2 id="Exchanger"><a href="#Exchanger" class="headerlink" title="Exchanger"></a>Exchanger</h2><ul>
+<li>Exchanger作用：用于进行线程间的数据交<br>换。它提供一个同步点，在这个同步点，两个线程可以交换彼此的数据。这两个线程通过<br>exchange方法交换数据，如果第一个线程先执行exchange()方法，它会一直等待第二个线程也<br>执行exchange方法，当两个线程都到达同步点时，这两个线程就可以交换数据，将本线程生产<br>出来的数据传递给对方。<ul>
+<li>注意：如果两个线程有一个没有执行exchange()方法，则会一直等待，如果担心有特殊情况发<br>生，避免一直等待，可以使用exchange（V x，longtimeout，TimeUnit unit）设置最大等待时长</li>
+</ul>
+</li>
+</ul>
+<p> 示例代码：<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @Description: TODO</span><br><span class="line"> * @Auther: ThomasWu</span><br><span class="line"> * @Date: 2019/6/23 15:53</span><br><span class="line"> * @Email:1414924381@qq.com</span><br><span class="line"> */</span><br><span class="line">public class ExchangerTest &#123;</span><br><span class="line"></span><br><span class="line">    private static final Exchanger&lt;String&gt; exchanger = new Exchanger&lt;String&gt;();</span><br><span class="line">    private static ExecutorService threadPool = Executors.newFixedThreadPool(2);</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        threadPool.execute(new Runnable() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void run() &#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    // A录入银行流水数据</span><br><span class="line">                    String str = &quot;银行流水A&quot;;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + str);</span><br><span class="line">                    str = exchanger.exchange(str);</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + str);</span><br><span class="line">                &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        threadPool.execute(new Runnable() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void run() &#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    String str = &quot;银行流水B&quot;;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + str);</span><br><span class="line">                    str = exchanger.exchange(str);</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + str);</span><br><span class="line"></span><br><span class="line">                &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        threadPool.shutdown();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
           
         
@@ -2304,238 +2546,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/关于提升工作效率的一点思考/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Thomas Wu">
-      <meta itemprop="description" content="人帅也要多读书，多学习，多运动">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="费曼的门徒">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/06/18/关于提升工作效率的一点思考/" class="post-title-link" itemprop="url">关于提升工作效率的一点思考</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-06-18 16:52:25" itemprop="dateCreated datePublished" datetime="2019-06-18T16:52:25+08:00">2019-06-18</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-06-19 22:42:46" itemprop="dateModified" datetime="2019-06-19T22:42:46+08:00">2019-06-19</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码之外/" itemprop="url" rel="index"><span itemprop="name">代码之外</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>最近参加了一个由TGO鲲鹏会组织线上技术交流活动，主办方邀请了一些大牛做技术分享，其中有个议题就是如何提高工作效率。听完各路大神的分享，然后刚好最近自己负责的项目出了一点问题，平时工作经常也会出现疲于应付的问题，根据高效这个议题，然后结合自己的工作经历，深刻反思了一下，就像总结一点东西，督促自己。</p>
-<h4 id="一、能高效的工作，首先要有良好的精神状态"><a href="#一、能高效的工作，首先要有良好的精神状态" class="headerlink" title="一、能高效的工作，首先要有良好的精神状态"></a>一、能高效的工作，首先要有良好的精神状态</h4><p>相信这一点，大家都知道，就不用多说了。最简单也最普遍方式就是保证睡眠（早睡，午睡），锻炼。没有头发的程序员是失败的程序员，，保持良好的作息，健康的生活习惯，才能有良好的精神状态。</p>
-<h4 id="二、良好的工作习惯"><a href="#二、良好的工作习惯" class="headerlink" title="二、良好的工作习惯"></a>二、良好的工作习惯</h4><ol>
-<li>关于时间</li>
-</ol>
-<ul>
-<li>时间分片，做好计划：每段时间只做一件事，才能保持专注度，专注度才能保证效率，例如：不要同时解决测试提的bug,同时写代码或者写文档，思维中断后再连接是需要时间回顾之前的思路的。</li>
-<li>如何分片，如何排序：第一个问题顺序：要事第一，其后可按照优先级排序，第二个问题：分片的粒度，在开启新项目或新需求时，任务都会做拆分，可按照任务的粒度来执行，当然中间不免有一些会议，可以一天预留出一到两个小时作为临时会议或者沟通时间。</li>
-<li>避免情绪波动：与产品测试沟通过程中，难免有一些意见不合，比如针对不合理需求，可寻求开发leader或领导介入，尽力去沟通，争取自己的最大化利益，如果最终无法改变，就妥协。比如：加需求，顶头上次都说时间不能顺延，那就只能加班了（如果长期如此，也可以走人了）。</li>
-</ul>
-<ol start="2">
-<li>关于需求</li>
-</ol>
-<ul>
-<li>有备而来，带着疑问沟通：需求评审前，仔细精读需求文档。</li>
-<li>明确现状，评估可行性：回顾每一个需求改动点的业务现状及其现有实现逻辑，明确新需求期望与现状的差距，做好开发时间评估和可行性评估，方便在会上提出需求不可行原因以及可能存在的风险。</li>
-<li>记录结果，防止纠纷：记下需求中的模糊点，在会上沟通好确定好细节，并以文字的形式记录下疑问点的沟通结果，要求产品经理将疑问点写入公开的需求文档。</li>
-<li>正确理解，至关重要：任何时候对需求有疑问，必须找产品沟通确认，正确实现需求才是最重要的，切不可没时间把事情做对，却又时间返工。</li>
-</ul>
-<ol start="3">
-<li>关于会议</li>
-</ol>
-<ul>
-<li>不参加不需要我说话的会：我不需要说话，基本会议与我无关，纯属浪费时间。</li>
-<li>参加了就要高效： 凡是会议必有主题；凡是主题必有议程；凡是议程必有决议；凡是决议必有跟踪；凡是跟踪必有结果；凡是结果必有责任；凡是责任必有奖惩；凡是奖惩必须透明。最后一次会议达成共识，比面反复耗费时间。</li>
-</ul>
-<ol start="4">
-<li>关于反馈</li>
-</ol>
-<ul>
-<li>定时反馈进度：阶段性向leader或者PMO反馈开发进度，树立良好的做事风格，同时也可减少因为询问而被打断思路。</li>
-<li>主动反馈，不要做反馈黑洞：遇到技术难点，及时与leader讨论解决方案；</li>
-</ul>
-<ol start="5">
-<li>关于工作中被打断</li>
-</ol>
-<ul>
-<li>来自项目经理的打断：同时是询问开发进度，定期反馈，主动反馈。</li>
-<li>来自来自产品的打断：在审批阶段解决掉疑问，正式开发后只专注开发。</li>
-<li>来自测试的打断：文档写详细，避免被询问打断，将他人带到自己的工作习惯中，避免被牵着走。</li>
-</ul>
-<ol start="6">
-<li>关于面子</li>
-</ol>
-<ul>
-<li>需求沟通过程中，有疑问就要问，切记因为不好意思，而不沟通，需求的正确执行是第一要务，不懂就要问，爱面子只会阻碍你的进步。</li>
-</ul>
-<ol start="7">
-<li>关于工具</li>
-</ol>
-<ul>
-<li>熟练掌握常用工具：快捷键，代码不全功能（如idea的live template可定制代码生成），减少鼠标键盘切换，保持连贯的思维</li>
-<li>重复工作脚本化：autohotkey,windows批处理文件</li>
-<li>熟悉常用工具包：比如：Apache common,google guawa。</li>
-</ul>
-<h4 id="三、具体小习惯总结"><a href="#三、具体小习惯总结" class="headerlink" title="三、具体小习惯总结"></a>三、具体小习惯总结</h4><ol>
-<li>每日总结，下班总结工作内容，整理次日需完成的内容。</li>
-<li>早到半小时，安排工作计划，对一天进行规划</li>
-<li>在提测前，花一天时间整体review代码，对比master与develop,整体评估风险点，并优化代码。</li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2584,7 +2594,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

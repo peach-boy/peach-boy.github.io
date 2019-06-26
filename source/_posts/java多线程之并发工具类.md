@@ -103,6 +103,7 @@ DoneTask2执行完了1561210607079
 量，每个线程调用await方法告诉CyclicBarrier我已经到达了屏障，然后当前线程被阻塞
     3. await:调用该方法的线程会被阻塞
 - 注意：线程池中使用CyclicBarrier ，要考虑线程被阻塞问题，
+
 - 示例代码
 ```
 /**
@@ -151,14 +152,141 @@ public class CyclicBarrierTest {
     }
 ```
 
-## CyclicBarrier和CountDownLatch的区别
+### CyclicBarrier和CountDownLatch的区别
 - CountDownLatch：调用countDown的线程（A线程），调用了await的线程（B线程），A线程先执行，B线程阻塞，满足条件（计数器为0时）B线程开始执行，没有被阻塞；
 - CyclicBarrier：构造函数传入barrierAction线程（A线程） ，调用了await的线程（B线程），A线程先阻塞，B线程也阻塞，满足条件（B线程都调用都调用await后），A线程开始执行完后，B线程开始执行
-
 - CyclicBarrier：barrierAction只能指定一个线程
-
-- CountDownLatch的计数器只能使用一次，而CyclicBarrier的计数器可以使用reset()方法重
-置
+- CountDownLatch的计数器只能使用一次，而CyclicBarrier的计数器可以使用reset()方法重置
 - CyclicBarrier还提供其他有用的方法
     1. getNumberWaiting方法可以获得Cyclic-Barrier阻塞的线程数量
     2. isBroken()方法用来了解阻塞的线程是否被中断
+
+ ## Semaphore 
+
+- Semaphore的作用：用来控制同时访问特定资源的线程数量，它通过协调各个线程，以
+保证合理的使用公共资源
+- 使用场景： Semaphore可以用于做流量控制，特别是公用资源有限的应用场景，比如数据库连接。假
+如有一个需求，要读取几万个文件的数据，因为都是IO密集型任务，我们可以启动几十个线程
+并发地读取，但是如果读到内存后，还需要存储到数据库中，而数据库的连接数只有10个，这
+时我们必须控制只有10个线程同时获取数据库连接保存数据，否则会报错无法获取数据库连
+接。这个时候，就可以使用Semaphore来做流量控制
+- 主要方法：
+    1. Semaphore（int permits）：接受一个整型的数字，表示可用的许可证数量
+    2. void acquire()：获取一个许可证，如果当前信号量大于0，则当前信号量的计数减1，该方法直接返回；如果当前信号量等于0，则当前线程会被放入AQS阻塞队列
+    3. void release():将当前信号量加1
+
+示例代码：
+```
+
+/**
+ * @Description: TODO
+ * @Auther: ThomasWu
+ * @Date: 2019/6/23 15:19
+ * @Email:1414924381@qq.com
+ */
+public class SemaphoreTest {
+    private static final int THREAD_COUNT = 10;
+    private static ExecutorService threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
+    private static Semaphore s = new Semaphore(5);
+
+    public static void main(String[] args) {
+        for (int i = 0; i < THREAD_COUNT; i++) {
+            threadPool.execute(() -> {
+                try {
+                    s.acquire();
+                    System.out.println(Thread.currentThread().getName()+"获得了信号量"+"---当前信号量:"+s.availablePermits()+"---等待信号量的线程数:"+s.getQueueLength()+"---"+System.currentTimeMillis());
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }finally {
+                    s.release();
+                    System.out.println(Thread.currentThread().getName()+"释放了信号量------"+"---当前信号量:"+s.availablePermits()+"---等待信号量的线程数:"+s.getQueueLength()+System.currentTimeMillis());
+                }
+            });
+        }
+        threadPool.shutdown();
+    }
+}
+
+console result
+pool-1-thread-2获得了信号量---当前信号量:4---等待信号量的线程数:0---1561275554694
+pool-1-thread-1获得了信号量---当前信号量:3---等待信号量的线程数:0---1561275554694
+pool-1-thread-4获得了信号量---当前信号量:2---等待信号量的线程数:0---1561275554694
+pool-1-thread-3获得了信号量---当前信号量:1---等待信号量的线程数:0---1561275554694
+pool-1-thread-5获得了信号量---当前信号量:0---等待信号量的线程数:0---1561275554694
+pool-1-thread-6获得了信号量---当前信号量:0---等待信号量的线程数:4---1561275556695
+pool-1-thread-7获得了信号量---当前信号量:0---等待信号量的线程数:3---1561275556695
+pool-1-thread-4释放了信号量---------当前信号量:0---等待信号量的线程数:31561275556695
+pool-1-thread-1释放了信号量---------当前信号量:0---等待信号量的线程数:31561275556695
+pool-1-thread-8获得了信号量---当前信号量:0---等待信号量的线程数:2---1561275556695
+pool-1-thread-2释放了信号量---------当前信号量:0---等待信号量的线程数:21561275556695
+pool-1-thread-9获得了信号量---当前信号量:1---等待信号量的线程数:0---1561275556696
+pool-1-thread-3释放了信号量---------当前信号量:0---等待信号量的线程数:01561275556696
+pool-1-thread-5释放了信号量---------当前信号量:1---等待信号量的线程数:01561275556696
+pool-1-thread-10获得了信号量---当前信号量:0---等待信号量的线程数:0---1561275556696
+pool-1-thread-6释放了信号量---------当前信号量:1---等待信号量的线程数:01561275558695
+pool-1-thread-8释放了信号量---------当前信号量:3---等待信号量的线程数:01561275558695
+pool-1-thread-7释放了信号量---------当前信号量:2---等待信号量的线程数:01561275558695
+pool-1-thread-10释放了信号量---------当前信号量:5---等待信号量的线程数:01561275558696
+pool-1-thread-9释放了信号量---------当前信号量:5---等待信号量的线程数:01561275558696
+```
+
+
+
+ ## Exchanger
+
+ - Exchanger作用：用于进行线程间的数据交
+换。它提供一个同步点，在这个同步点，两个线程可以交换彼此的数据。这两个线程通过
+exchange方法交换数据，如果第一个线程先执行exchange()方法，它会一直等待第二个线程也
+执行exchange方法，当两个线程都到达同步点时，这两个线程就可以交换数据，将本线程生产
+出来的数据传递给对方。
+- 注意：如果两个线程有一个没有执行exchange()方法，则会一直等待，如果担心有特殊情况发
+生，避免一直等待，可以使用exchange（V x，longtimeout，TimeUnit unit）设置最大等待时长
+
+
+
+ 示例代码：
+ ```
+/**
+ * @Description: TODO
+ * @Auther: ThomasWu
+ * @Date: 2019/6/23 15:53
+ * @Email:1414924381@qq.com
+ */
+public class ExchangerTest {
+
+    private static final Exchanger<String> exchanger = new Exchanger<String>();
+    private static ExecutorService threadPool = Executors.newFixedThreadPool(2);
+
+    public static void main(String[] args) {
+        threadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // A录入银行流水数据
+                    String str = "银行流水A";
+                    System.out.println(Thread.currentThread().getName() + str);
+                    str = exchanger.exchange(str);
+                    System.out.println(Thread.currentThread().getName() + str);
+                } catch (InterruptedException e) {
+                }
+            }
+        });
+        threadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String str = "银行流水B";
+                    System.out.println(Thread.currentThread().getName() + str);
+                    str = exchanger.exchange(str);
+                    System.out.println(Thread.currentThread().getName() + str);
+
+                } catch (InterruptedException e) {
+                }
+            }
+        });
+        threadPool.shutdown();
+    }
+}
+
+ ```
