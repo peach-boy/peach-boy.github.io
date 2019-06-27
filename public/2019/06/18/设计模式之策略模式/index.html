@@ -96,18 +96,18 @@
 
 
 
-  <meta name="description" content="最近参加了一个由TGO鲲鹏会组织线上技术交流活动，主办方邀请了一些大牛做技术分享，其中有个议题就是如何提高工作效率。听完各路大神的分享，然后刚好最近自己负责的项目出了一点问题，平时工作经常也会出现疲于应付的问题，根据高效这个议题，然后结合自己的工作经历，深刻反思了一下，就像总结一点东西，督促自己。 一、能高效的工作，首先要有良好的精神状态相信这一点，大家都知道，就不用多说了。最简单也最普遍方式就是">
-<meta name="keywords" content="随笔">
+  <meta name="description" content="一、业务场景一个接口需要根据前段传入的资产类型（assetType），调用不同的业务类中的资产明细方法（dealList），最初的做法就是最常见的switch case或者if/else调用不同的service。相信每个程序员看到代码中大段的判断逻辑代码都会很头疼，刚好之前看过《重构既有代码》这本Java届的经典书，里面就明确指出switch case违反开闭原则，可以用策略模式改写。 二、实现逻">
+<meta name="keywords" content="java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="关于提升工作效率的一点思考">
-<meta property="og:url" content="http://www.wuxiantao123.cn/2019/06/18/关于提升工作效率的一点思考/index.html">
+<meta property="og:title" content="设计模式之策略模式">
+<meta property="og:url" content="http://www.wuxiantao123.cn/2019/06/18/设计模式之策略模式/index.html">
 <meta property="og:site_name" content="费曼的门徒">
-<meta property="og:description" content="最近参加了一个由TGO鲲鹏会组织线上技术交流活动，主办方邀请了一些大牛做技术分享，其中有个议题就是如何提高工作效率。听完各路大神的分享，然后刚好最近自己负责的项目出了一点问题，平时工作经常也会出现疲于应付的问题，根据高效这个议题，然后结合自己的工作经历，深刻反思了一下，就像总结一点东西，督促自己。 一、能高效的工作，首先要有良好的精神状态相信这一点，大家都知道，就不用多说了。最简单也最普遍方式就是">
+<meta property="og:description" content="一、业务场景一个接口需要根据前段传入的资产类型（assetType），调用不同的业务类中的资产明细方法（dealList），最初的做法就是最常见的switch case或者if/else调用不同的service。相信每个程序员看到代码中大段的判断逻辑代码都会很头疼，刚好之前看过《重构既有代码》这本Java届的经典书，里面就明确指出switch case违反开闭原则，可以用策略模式改写。 二、实现逻">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-19T14:42:46.246Z">
+<meta property="og:updated_time" content="2019-06-27T13:12:08.110Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="关于提升工作效率的一点思考">
-<meta name="twitter:description" content="最近参加了一个由TGO鲲鹏会组织线上技术交流活动，主办方邀请了一些大牛做技术分享，其中有个议题就是如何提高工作效率。听完各路大神的分享，然后刚好最近自己负责的项目出了一点问题，平时工作经常也会出现疲于应付的问题，根据高效这个议题，然后结合自己的工作经历，深刻反思了一下，就像总结一点东西，督促自己。 一、能高效的工作，首先要有良好的精神状态相信这一点，大家都知道，就不用多说了。最简单也最普遍方式就是">
+<meta name="twitter:title" content="设计模式之策略模式">
+<meta name="twitter:description" content="一、业务场景一个接口需要根据前段传入的资产类型（assetType），调用不同的业务类中的资产明细方法（dealList），最初的做法就是最常见的switch case或者if/else调用不同的service。相信每个程序员看到代码中大段的判断逻辑代码都会很头疼，刚好之前看过《重构既有代码》这本Java届的经典书，里面就明确指出switch case违反开闭原则，可以用策略模式改写。 二、实现逻">
 
 
 
@@ -115,7 +115,7 @@
 
   
   
-  <link rel="canonical" href="http://www.wuxiantao123.cn/2019/06/18/关于提升工作效率的一点思考/">
+  <link rel="canonical" href="http://www.wuxiantao123.cn/2019/06/18/设计模式之策略模式/">
 
 
 
@@ -125,7 +125,7 @@
   };
 </script>
 
-  <title>关于提升工作效率的一点思考 | 费曼的门徒</title>
+  <title>设计模式之策略模式 | 费曼的门徒</title>
   
 
 
@@ -386,7 +386,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/关于提升工作效率的一点思考/">
+    <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/设计模式之策略模式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Thomas Wu">
@@ -403,7 +403,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">关于提升工作效率的一点思考
+          <h2 class="post-title" itemprop="name headline">设计模式之策略模式
 
               
             
@@ -429,7 +429,7 @@
                 
               
 
-              <time title="创建时间：2019-06-18 16:52:25" itemprop="dateCreated datePublished" datetime="2019-06-18T16:52:25+08:00">2019-06-18</time>
+              <time title="创建时间：2019-06-18 16:48:43" itemprop="dateCreated datePublished" datetime="2019-06-18T16:48:43+08:00">2019-06-18</time>
             
 
             
@@ -446,7 +446,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-06-19 22:42:46" itemprop="dateModified" datetime="2019-06-19T22:42:46+08:00">2019-06-19</time>
+                <time title="修改时间：2019-06-27 21:12:08" itemprop="dateModified" datetime="2019-06-27T21:12:08+08:00">2019-06-27</time>
               
             
           </span>
@@ -463,7 +463,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码之外/" itemprop="url" rel="index"><span itemprop="name">代码之外</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/设计模式/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a></span>
 
                 
                 
@@ -498,66 +498,20 @@
       
 
       
-        <p>最近参加了一个由TGO鲲鹏会组织线上技术交流活动，主办方邀请了一些大牛做技术分享，其中有个议题就是如何提高工作效率。听完各路大神的分享，然后刚好最近自己负责的项目出了一点问题，平时工作经常也会出现疲于应付的问题，根据高效这个议题，然后结合自己的工作经历，深刻反思了一下，就像总结一点东西，督促自己。</p>
-<h4 id="一、能高效的工作，首先要有良好的精神状态"><a href="#一、能高效的工作，首先要有良好的精神状态" class="headerlink" title="一、能高效的工作，首先要有良好的精神状态"></a>一、能高效的工作，首先要有良好的精神状态</h4><p>相信这一点，大家都知道，就不用多说了。最简单也最普遍方式就是保证睡眠（早睡，午睡），锻炼。没有头发的程序员是失败的程序员，，保持良好的作息，健康的生活习惯，才能有良好的精神状态。</p>
-<h4 id="二、良好的工作习惯"><a href="#二、良好的工作习惯" class="headerlink" title="二、良好的工作习惯"></a>二、良好的工作习惯</h4><ol>
-<li>关于时间</li>
-</ol>
-<ul>
-<li>时间分片，做好计划：每段时间只做一件事，才能保持专注度，专注度才能保证效率，例如：不要同时解决测试提的bug,同时写代码或者写文档，思维中断后再连接是需要时间回顾之前的思路的。</li>
-<li>如何分片，如何排序：第一个问题顺序：要事第一，其后可按照优先级排序，第二个问题：分片的粒度，在开启新项目或新需求时，任务都会做拆分，可按照任务的粒度来执行，当然中间不免有一些会议，可以一天预留出一到两个小时作为临时会议或者沟通时间。</li>
-<li>避免情绪波动：与产品测试沟通过程中，难免有一些意见不合，比如针对不合理需求，可寻求开发leader或领导介入，尽力去沟通，争取自己的最大化利益，如果最终无法改变，就妥协。比如：加需求，顶头上次都说时间不能顺延，那就只能加班了（如果长期如此，也可以走人了）。</li>
-</ul>
-<ol start="2">
-<li>关于需求</li>
-</ol>
-<ul>
-<li>有备而来，带着疑问沟通：需求评审前，仔细精读需求文档。</li>
-<li>明确现状，评估可行性：回顾每一个需求改动点的业务现状及其现有实现逻辑，明确新需求期望与现状的差距，做好开发时间评估和可行性评估，方便在会上提出需求不可行原因以及可能存在的风险。</li>
-<li>记录结果，防止纠纷：记下需求中的模糊点，在会上沟通好确定好细节，并以文字的形式记录下疑问点的沟通结果，要求产品经理将疑问点写入公开的需求文档。</li>
-<li>正确理解，至关重要：任何时候对需求有疑问，必须找产品沟通确认，正确实现需求才是最重要的，切不可没时间把事情做对，却又时间返工。</li>
-</ul>
-<ol start="3">
-<li>关于会议</li>
-</ol>
-<ul>
-<li>不参加不需要我说话的会：我不需要说话，基本会议与我无关，纯属浪费时间。</li>
-<li>参加了就要高效： 凡是会议必有主题；凡是主题必有议程；凡是议程必有决议；凡是决议必有跟踪；凡是跟踪必有结果；凡是结果必有责任；凡是责任必有奖惩；凡是奖惩必须透明。最后一次会议达成共识，比面反复耗费时间。</li>
-</ul>
-<ol start="4">
-<li>关于反馈</li>
-</ol>
-<ul>
-<li>定时反馈进度：阶段性向leader或者PMO反馈开发进度，树立良好的做事风格，同时也可减少因为询问而被打断思路。</li>
-<li>主动反馈，不要做反馈黑洞：遇到技术难点，及时与leader讨论解决方案；</li>
-</ul>
-<ol start="5">
-<li>关于工作中被打断</li>
-</ol>
-<ul>
-<li>来自项目经理的打断：同时是询问开发进度，定期反馈，主动反馈。</li>
-<li>来自来自产品的打断：在审批阶段解决掉疑问，正式开发后只专注开发。</li>
-<li>来自测试的打断：文档写详细，避免被询问打断，将他人带到自己的工作习惯中，避免被牵着走。</li>
-</ul>
-<ol start="6">
-<li>关于面子</li>
-</ol>
-<ul>
-<li>需求沟通过程中，有疑问就要问，切记因为不好意思，而不沟通，需求的正确执行是第一要务，不懂就要问，爱面子只会阻碍你的进步。</li>
-</ul>
-<ol start="7">
-<li>关于工具</li>
-</ol>
-<ul>
-<li>熟练掌握常用工具：快捷键，代码不全功能（如idea的live template可定制代码生成），减少鼠标键盘切换，保持连贯的思维</li>
-<li>重复工作脚本化：autohotkey,windows批处理文件</li>
-<li>熟悉常用工具包：比如：Apache common,google guawa。</li>
-</ul>
-<h4 id="三、具体小习惯总结"><a href="#三、具体小习惯总结" class="headerlink" title="三、具体小习惯总结"></a>三、具体小习惯总结</h4><ol>
-<li>每日总结，下班总结工作内容，整理次日需完成的内容。</li>
-<li>早到半小时，安排工作计划，对一天进行规划</li>
-<li>在提测前，花一天时间整体review代码，对比master与develop,整体评估风险点，并优化代码。</li>
-</ol>
+        <h3 id="一、业务场景"><a href="#一、业务场景" class="headerlink" title="一、业务场景"></a>一、业务场景</h3><p>一个接口需要根据前段传入的资产类型（assetType），调用不同的业务类中的资产明细方法（dealList），最初的做法就是最常见的switch case或者if/else调用不同的service。相信每个程序员看到代码中大段的判断逻辑代码都会很头疼，刚好之前看过《重构既有代码》这本Java届的经典书，里面就明确指出switch case违反开闭原则，可以用策略模式改写。</p>
+<h3 id="二、实现逻辑"><a href="#二、实现逻辑" class="headerlink" title="二、实现逻辑"></a>二、实现逻辑</h3><p>1.定义统一资产接口，每种资产实现此接口，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">AssetService</span> </span>&#123;</span><br><span class="line">    <span class="function">Integer <span class="title">assetType</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DealListResponse <span class="title">queryDealList</span><span class="params">(Integer assetId, Integer status, Integer sinceId, Integer count)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2.资产service实现接口，并重写assetType()和queryDealList()方法，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CashService</span> <span class="keyword">implements</span> <span class="title">AssetService</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> CashDetailService cashDetailService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">assetType</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> AssetType.CASH.getId();</span><br><span class="line">    &#125;</span><br><span class="line">	 <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> DealListResponse <span class="title">queryDealList</span><span class="params">(Integer assetId, Integer status, Integer sinceId, Integer count)</span> </span>&#123;</span><br><span class="line">		   </span><br><span class="line">	 &#125;</span><br></pre></td></tr></table></figure>
+
+<p>3.统一分发路由类，根据assetType调用对应的service,代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AssetServiceRoute</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> AssetService[] assetServices;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> AssetService <span class="title">route</span><span class="params">(Integer assetType)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (AssetService assetService : assetServices) &#123;</span><br><span class="line">            <span class="keyword">if</span> (Objects.equals(assetType, assetService.assetType())) &#123;</span><br><span class="line">                <span class="keyword">return</span> assetService;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> BusinessRuntimeException(GiveErrorCode.CHECK_PARAM_FAILED);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>4.调用，代码如下；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> DealListResponse <span class="title">dealList</span><span class="params">(Integer assetType, Integer assetId, Integer status, Integer sinceId, Integer count)</span> </span>&#123;</span><br><span class="line">       AssetService assetService = assetServiceRoute.route(assetType);</span><br><span class="line">       <span class="keyword">if</span> (assetService == <span class="keyword">null</span>) &#123;</span><br><span class="line">           <span class="keyword">throw</span> <span class="keyword">new</span> BusinessRuntimeException(GiveErrorCode.INVALID_PARAMS);</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> assetService.queryDealList(assetId, status, sinceId, count);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="三、代码分析"><a href="#三、代码分析" class="headerlink" title="三、代码分析"></a>三、代码分析</h3><p>意图：定义一系列的算法,把它们一个个封装起来, 并且使它们可相互替换。<br>主要解决：在有多种算法相似的情况下，使用 if…else 所带来的复杂和难以维护（违反开闭原则）。<br>何时使用：一个系统有许多许多类，而区分它们的只是他们直接的行为。<br>如何解决：将这些算法封装成一个一个的类，任意地替换。<br>关键代码：实现同一个接口。</p>
 
       
     </div>
@@ -584,7 +538,7 @@
         
         <div class="post-tags">
           
-            <a href="/tags/随笔/" rel="tag"># 随笔</a>
+            <a href="/tags/java/" rel="tag"># java</a>
           
         </div>
       
@@ -597,8 +551,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/06/18/java8之Stream-Api/" rel="next" title="java 8之Stream Api解析">
-                <i class="fa fa-chevron-left"></i> java 8之Stream Api解析
+              <a href="/2019/06/18/java8之lamda表达式/" rel="next" title="java8之lamda表达式">
+                <i class="fa fa-chevron-left"></i> java8之lamda表达式
               </a>
             
           </div>
@@ -607,8 +561,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/06/18/java多线程之ThreadPoolExcutor/" rel="prev" title="java多线程之ThreadPoolExcutor">
-                java多线程之ThreadPoolExcutor <i class="fa fa-chevron-right"></i>
+              <a href="/2019/06/18/Iterator循环删除list中元素/" rel="prev" title="Iterator循环删除list中元素">
+                Iterator循环删除list中元素 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -822,7 +776,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#一、能高效的工作，首先要有良好的精神状态"><span class="nav-number">1.</span> <span class="nav-text">一、能高效的工作，首先要有良好的精神状态</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二、良好的工作习惯"><span class="nav-number">2.</span> <span class="nav-text">二、良好的工作习惯</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#三、具体小习惯总结"><span class="nav-number">3.</span> <span class="nav-text">三、具体小习惯总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、业务场景"><span class="nav-number">1.</span> <span class="nav-text">一、业务场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、实现逻辑"><span class="nav-number">2.</span> <span class="nav-text">二、实现逻辑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、代码分析"><span class="nav-number">3.</span> <span class="nav-text">三、代码分析</span></a></li></ol></div>
             
 
           </div>

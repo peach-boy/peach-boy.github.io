@@ -430,12 +430,24 @@
                 
               
 
-              <time title="创建时间：2019-06-26 22:53:03 / 修改时间：22:53:58" itemprop="dateCreated datePublished" datetime="2019-06-26T22:53:03+08:00">2019-06-26</time>
+              <time title="创建时间：2019-06-26 22:53:03" itemprop="dateCreated datePublished" datetime="2019-06-26T22:53:03+08:00">2019-06-26</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-06-27 23:10:25" itemprop="dateModified" datetime="2019-06-27T23:10:25+08:00">2019-06-27</time>
               
             
           </span>
@@ -489,7 +501,52 @@
       
         
           
-            
+            <h2 id="synchronized简介"><a href="#synchronized简介" class="headerlink" title="synchronized简介"></a>synchronized简介</h2><p>一个共享变量同时被多个线程读写时，会出现不一致问题。我们来看下面的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @Description: 同时1000个线程给count加一</span><br><span class="line"> * @Auther: ThomasWu</span><br><span class="line"> * @Date: 2019/6/27 21:43</span><br><span class="line"> * @Email:1414924381@qq.com</span><br><span class="line"> */</span><br><span class="line">public class SynchronizedTest &#123;</span><br><span class="line">    private static Integer count = 0;</span><br><span class="line"></span><br><span class="line">    public static class MyThread extends Thread &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            addNum();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void addNum() &#123;</span><br><span class="line">        count++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        for (int i = 0; i &lt; 1000; i++) &#123;</span><br><span class="line">            MyThread thread = new MyThread();</span><br><span class="line">            thread.start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        try &#123;</span><br><span class="line">            Thread.sleep(1000);</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;result:&quot; + count);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">第一次运行：result:660</span><br><span class="line">第二次运行：result:660</span><br><span class="line">第三次运行：result:660</span><br><span class="line">每一次运行结果都不等于1000</span><br></pre></td></tr></table></figure>
+
+<h2 id="synchronized使用的各种场景"><a href="#synchronized使用的各种场景" class="headerlink" title="synchronized使用的各种场景"></a>synchronized使用的各种场景</h2><table>
+<thead>
+<tr>
+<th>位置</th>
+<th>被锁住的对象</th>
+<th>实例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>实例方法</td>
+<td>类的实例对象</td>
+<td><code>public synchronized void method{}</code></td>
+</tr>
+<tr>
+<td>静态方法</td>
+<td>类对象</td>
+<td><code>public static synchronized void method{}</code></td>
+</tr>
+<tr>
+<td>实例对象</td>
+<td>类的实例对象</td>
+<td><code>synchronized (this){}</code></td>
+</tr>
+<tr>
+<td>class对象</td>
+<td>类对象</td>
+<td><code>synchronized (Demo.class){}</code></td>
+</tr>
+<tr>
+<td>任意实例对象</td>
+<td>实例对象</td>
+<td><code>String loclk=&quot;&quot;;   synchronized (lock){}</code></td>
+</tr>
+</tbody></table>
+<h3 id="synchronized用于实例方法上"><a href="#synchronized用于实例方法上" class="headerlink" title="synchronized用于实例方法上"></a>synchronized用于实例方法上</h3><p>示例代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"> package syn;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @Description: TODO</span><br><span class="line"> * @Auther: ThomasWu</span><br><span class="line"> * @Date: 2019/6/27 22:25</span><br><span class="line"> * @Email:1414924381@qq.com</span><br><span class="line"> */</span><br><span class="line">public class LockObject &#123;</span><br><span class="line"></span><br><span class="line">    static class ThreadB extends Thread &#123;</span><br><span class="line">        private LockObject lockObject;</span><br><span class="line"></span><br><span class="line">        public ThreadB(LockObject lockObject) &#123;</span><br><span class="line">            super();</span><br><span class="line">            this.lockObject = lockObject;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            super.run();</span><br><span class="line">            lockObject.methodB();</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static class ThreadA extends Thread &#123;</span><br><span class="line">        private LockObject lockObject;</span><br><span class="line"></span><br><span class="line">        public ThreadA(LockObject lockObject) &#123;</span><br><span class="line">            super();</span><br><span class="line">            this.lockObject = lockObject;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            super.run();</span><br><span class="line">            lockObject.methodA();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public synchronized void methodA() &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            System.out.println(Thread.currentThread().getName() + &quot;--begin--&quot; + System.currentTimeMillis());</span><br><span class="line">            Thread.sleep(1000);</span><br><span class="line">            System.out.println(Thread.currentThread().getName() + &quot;--end----&quot; + System.currentTimeMillis());</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public synchronized void methodB() &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            System.out.println(Thread.currentThread().getName() + &quot;--begin--&quot; + System.currentTimeMillis());</span><br><span class="line">            Thread.sleep(1000);</span><br><span class="line">            System.out.println(Thread.currentThread().getName() + &quot;--end----&quot; + System.currentTimeMillis());</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        LockObject lockObject = new LockObject();</span><br><span class="line"></span><br><span class="line">        ThreadA threadA = new ThreadA(lockObject);</span><br><span class="line">        threadA.setName(&quot;A&quot;);</span><br><span class="line"></span><br><span class="line">        ThreadB threadB = new ThreadB(lockObject);</span><br><span class="line">        threadB.setName(&quot;A&quot;);</span><br><span class="line"></span><br><span class="line">        threadA.start();</span><br><span class="line">        threadB.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">result1 :methodA为同步方法，methodB为同步方法执行结果</span><br><span class="line">A--begin--1561647391094</span><br><span class="line">A--begin--1561647391094</span><br><span class="line">A--end----1561647392094</span><br><span class="line">A--end----1561647392094</span><br><span class="line"></span><br><span class="line">result2:methodB,methodA都为同步方法执行结果</span><br><span class="line">A--begin--1561647419478</span><br><span class="line">A--end----1561647420480</span><br><span class="line">A--begin--1561647420480</span><br><span class="line">A--end----1561647421480</span><br></pre></td></tr></table></figure>
+
+<p>由此上面的实验可以得出：</p>
+<ul>
+<li>1、A线程持有Object对象的Lock锁，B线程可以以异步方式调用Object对象中的非synchronized类型的方法</li>
+<li>2、A线程持有Object对象的Lock锁，B线程如果在这时调用Object对象中的synchronized类型的方法则需要等待，也就是同步</li>
+</ul>
+
           
         
       
@@ -2526,7 +2583,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">6</span>
+                      
+                    
+                    <span class="site-state-item-count">7</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>

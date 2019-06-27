@@ -1,5 +1,5 @@
 ---
-title: java8新特性之lamda表达式
+title: java8之lamda表达式
 date: 2019-06-18 16:47:39
 categories: java基础
 tags:
