@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="CountDownLatch CountDownLatch的作用：允许一个或多个线程，等待其他线程达到触发条件时（触发条件即CountDownLatch对象计数器减为0时）才开始执行 主要方法 CountDownLatch构造函数：CountDownLatch的构造函数接收一个int类型的参数作为计数器，如果你想等待N个点完成，这里就传入N countDown：当我们调用CountDownLatc">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java多线程之并发工具类">
+<meta property="og:url" content="http://www.wuxiantao123.cn/2019/06/22/java多线程之并发工具类/index.html">
+<meta property="og:site_name" content="费曼的门徒">
+<meta property="og:description" content="CountDownLatch CountDownLatch的作用：允许一个或多个线程，等待其他线程达到触发条件时（触发条件即CountDownLatch对象计数器减为0时）才开始执行 主要方法 CountDownLatch构造函数：CountDownLatch的构造函数接收一个int类型的参数作为计数器，如果你想等待N个点完成，这里就传入N countDown：当我们调用CountDownLatc">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-07-02T11:21:32.687Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java多线程之并发工具类">
+<meta name="twitter:description" content="CountDownLatch CountDownLatch的作用：允许一个或多个线程，等待其他线程达到触发条件时（触发条件即CountDownLatch对象计数器减为0时）才开始执行 主要方法 CountDownLatch构造函数：CountDownLatch的构造函数接收一个int类型的参数作为计数器，如果你想等待N个点完成，这里就传入N countDown：当我们调用CountDownLatc">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://www.wuxiantao123.cn/2019/06/22/java多线程之并发工具类/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>java多线程之并发工具类 | 费曼的门徒</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">费曼的门徒</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">Feynman follower</h1>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-读书">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/books" rel="section"><i class="menu-item-icon fa fa-fw fa-book"></i> <br>读书</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-计划待办">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/todolist" rel="section"><i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>计划待办</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+
+  
+
+  <a href="https://github.com/peach-boy" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/22/java多线程之并发工具类/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Thomas Wu">
+      <meta itemprop="description" content="人帅也要多读书，多学习，多运动">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="费曼的门徒">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">java多线程之并发工具类
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-22 20:41:00" itemprop="dateCreated datePublished" datetime="2019-06-22T20:41:00+08:00">2019-06-22</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-02 19:21:32" itemprop="dateModified" datetime="2019-07-02T19:21:32+08:00">2019-07-02</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java多线程/" itemprop="url" rel="index"><span itemprop="name">java多线程</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h2><ul>
+<li>CountDownLatch的作用：允许一个或多个线程，等待其他线程达到触发条件时（触发条件即CountDownLatch对象计数器减为0时）才开始执行</li>
+<li>主要方法<ol>
+<li>CountDownLatch构造函数：CountDownLatch的构造函数接收一个int类型的参数作为计数器，如果你想等待N个点完<br>成，这里就传入N</li>
+<li>countDown：当我们调用CountDownLatch的countDown方法时，N就会减1</li>
+<li>await:CountDownLatch的await方法<br>会阻塞当前线程，直到N变成零,当前线程才会执行；await（long time，TimeUnit unit）这个方法等待特定时<br>间后，就会不再阻塞当前线程</li>
+</ol>
+</li>
+<li>示例代码：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">**</span><br><span class="line"> * @Description: TODO</span><br><span class="line"> * @Auther: ThomasWu</span><br><span class="line"> * @Date: 2019/6/22 20:53</span><br><span class="line"> * @Email:1414924381@qq.com</span><br><span class="line"> */</span><br><span class="line">public class CountDownLatchTest &#123;</span><br><span class="line"></span><br><span class="line">    private static class WorkTask extends Thread &#123;</span><br><span class="line">        private CountDownLatch countDownLatch;</span><br><span class="line"></span><br><span class="line">        public WorkTask(String name, CountDownLatch countDownLatch) &#123;</span><br><span class="line">            super(name);</span><br><span class="line">            this.countDownLatch = countDownLatch;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                System.out.println(this.getName() + &quot;启动了&quot;+System.currentTimeMillis());</span><br><span class="line">                Thread.sleep(1000);</span><br><span class="line">            &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; finally &#123;</span><br><span class="line">                System.out.println(this.getName() + &quot;执行完了&quot;+System.currentTimeMillis());</span><br><span class="line">                countDownLatch.countDown();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static class DoneTask extends Thread &#123;</span><br><span class="line">        private CountDownLatch countDownLatch;</span><br><span class="line"></span><br><span class="line">        public DoneTask(String name, CountDownLatch countDownLatch) &#123;</span><br><span class="line">            super(name);</span><br><span class="line">            this.countDownLatch = countDownLatch;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                System.out.println(this.getName() + &quot;开始等待&quot;+System.currentTimeMillis());</span><br><span class="line">                countDownLatch.await();</span><br><span class="line">                System.out.println(this.getName() + &quot;执行完了&quot;+System.currentTimeMillis());</span><br><span class="line">            &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        CountDownLatch countDownLatch=new CountDownLatch(3);</span><br><span class="line">        ExecutorService service=Executors.newFixedThreadPool(5);</span><br><span class="line">        service.submit(new DoneTask(&quot;DonwTask1&quot;,countDownLatch));</span><br><span class="line">        service.submit(new DoneTask(&quot;DoneTask2&quot;,countDownLatch));</span><br><span class="line">        service.submit(new WorkTask(&quot;workTask1&quot;,countDownLatch));</span><br><span class="line">        service.submit(new WorkTask(&quot;workTask2&quot;,countDownLatch));</span><br><span class="line">        service.submit(new WorkTask(&quot;workTask3&quot;,countDownLatch));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">console result</span><br><span class="line">DonwTask1开始等待1561210606078</span><br><span class="line">DoneTask2开始等待1561210606078</span><br><span class="line">workTask2启动了1561210606079</span><br><span class="line">workTask1启动了1561210606079</span><br><span class="line">workTask3启动了1561210606079</span><br><span class="line">workTask3执行完了1561210607079</span><br><span class="line">workTask2执行完了1561210607079</span><br><span class="line">workTask1执行完了1561210607079</span><br><span class="line">DonwTask1执行完了1561210607079</span><br><span class="line">DoneTask2执行完了1561210607079</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="CyclicBarrier-同步屏障或栅栏"><a href="#CyclicBarrier-同步屏障或栅栏" class="headerlink" title="CyclicBarrier(同步屏障或栅栏)"></a>CyclicBarrier(同步屏障或栅栏)</h2><ul>
+<li><p>CyclicBarrier作用:让一<br>组线程到达一个屏障（也可以叫同步点）时被阻塞，直到最后一个线程到达屏障时，屏障才会<br>开门，所有被屏障拦截的线程才会继续运行</p>
+</li>
+<li><p>主要方法</p>
+<ol>
+<li>构造函数CyclicBarrier（int parties，Runnable barrierAction）:用于在线程到达屏障时，优先执行barrierAction</li>
+<li>默认构造函数CyclicBarrier（int parties）：屏障拦截的线程数<br>量，每个线程调用await方法告诉CyclicBarrier我已经到达了屏障，然后当前线程被阻塞</li>
+<li>await:调用该方法的线程会被阻塞</li>
+</ol>
+</li>
+<li><p>注意：线程池中使用CyclicBarrier ，要考虑线程被阻塞问题，</p>
+</li>
+<li><p>示例代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @Description: 多任务结算银行流水</span><br><span class="line"> * @Auther: ThomasWu</span><br><span class="line"> * @Date: 2019/6/22 22:32</span><br><span class="line"> * @Email:1414924381@qq.com</span><br><span class="line"> */</span><br><span class="line">public class CyclicBarrierTest &#123;</span><br><span class="line">    static class BankWaterTask implements Runnable &#123;</span><br><span class="line">        private ConcurrentHashMap&lt;String, Integer&gt; sheetBankWaterCount = new ConcurrentHashMap&lt;String, Integer&gt;();</span><br><span class="line">        private CyclicBarrier c = new CyclicBarrier(4, this);</span><br><span class="line">        private Executor executor = Executors.newFixedThreadPool(4);</span><br><span class="line"></span><br><span class="line">        private void count() &#123;</span><br><span class="line">            System.out.println(&quot;count 开始&quot; + System.currentTimeMillis());</span><br><span class="line">            for (int i = 0; i &lt; 4; i++) &#123;</span><br><span class="line">                executor.execute(() -&gt; &#123;</span><br><span class="line">                    sheetBankWaterCount.put(Thread.currentThread().getName(), 1);</span><br><span class="line">                    try &#123;</span><br><span class="line">                        c.await();</span><br><span class="line">                    &#125; catch (InterruptedException | BrokenBarrierException e) &#123;</span><br><span class="line">                        e.printStackTrace();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(&quot;count 结束&quot; + System.currentTimeMillis());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            System.out.println(&quot;run&quot; + System.currentTimeMillis());</span><br><span class="line">            int result = 0;</span><br><span class="line">            for (Map.Entry&lt;String, Integer&gt; sheet : sheetBankWaterCount.entrySet()) &#123;</span><br><span class="line">                result += sheet.getValue();</span><br><span class="line">            &#125;</span><br><span class="line">            sheetBankWaterCount.put(&quot;result&quot;, result);</span><br><span class="line">            System.out.println(result);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">   public static void main(String[] args) &#123;</span><br><span class="line">        BankWaterTask task = new BankWaterTask();</span><br><span class="line">        task.count();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="CyclicBarrier和CountDownLatch的区别"><a href="#CyclicBarrier和CountDownLatch的区别" class="headerlink" title="CyclicBarrier和CountDownLatch的区别"></a>CyclicBarrier和CountDownLatch的区别</h3><ul>
+<li><p>CountDownLatch：调用countDown的线程（A线程），调用了await的线程（B线程），A线程先执行，B线程阻塞，满足条件（计数器为0时）B线程开始执行，没有被阻塞；</p>
+</li>
+<li><p>CyclicBarrier：构造函数传入barrierAction线程（A线程） ，调用了await的线程（B线程），A线程先阻塞，B线程也阻塞，满足条件（B线程都调用都调用await后），A线程开始执行完后，B线程开始执行</p>
+</li>
+<li><p>CyclicBarrier：barrierAction只能指定一个线程</p>
+</li>
+<li><p>CountDownLatch的计数器只能使用一次，而CyclicBarrier的计数器可以使用reset()方法重置</p>
+</li>
+<li><p>CyclicBarrier还提供其他有用的方法</p>
+<ol>
+<li>getNumberWaiting方法可以获得Cyclic-Barrier阻塞的线程数量</li>
+<li>isBroken()方法用来了解阻塞的线程是否被中断</li>
+</ol>
+<h2 id="Semaphore"><a href="#Semaphore" class="headerlink" title="Semaphore"></a>Semaphore</h2></li>
+<li><p>Semaphore的作用：用来控制同时访问特定资源的线程数量，它通过协调各个线程，以<br>保证合理的使用公共资源</p>
+</li>
+<li><p>使用场景： Semaphore可以用于做流量控制，特别是公用资源有限的应用场景，比如数据库连接。假<br>如有一个需求，要读取几万个文件的数据，因为都是IO密集型任务，我们可以启动几十个线程<br>并发地读取，但是如果读到内存后，还需要存储到数据库中，而数据库的连接数只有10个，这<br>时我们必须控制只有10个线程同时获取数据库连接保存数据，否则会报错无法获取数据库连<br>接。这个时候，就可以使用Semaphore来做流量控制</p>
+</li>
+<li><p>主要方法：</p>
+<ol>
+<li>Semaphore（int permits）：接受一个整型的数字，表示可用的许可证数量</li>
+<li>void acquire()：获取一个许可证，如果当前信号量大于0，则当前信号量的计数减1，该方法直接返回；如果当前信号量等于0，则当前线程会被放入AQS阻塞队列</li>
+<li>void release():将当前信号量加1</li>
+</ol>
+</li>
+</ul>
+<p>示例代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @Description: TODO</span><br><span class="line"> * @Auther: ThomasWu</span><br><span class="line"> * @Date: 2019/6/23 15:19</span><br><span class="line"> * @Email:1414924381@qq.com</span><br><span class="line"> */</span><br><span class="line">public class SemaphoreTest &#123;</span><br><span class="line">    private static final int THREAD_COUNT = 10;</span><br><span class="line">    private static ExecutorService threadPool = Executors.newFixedThreadPool(THREAD_COUNT);</span><br><span class="line">    private static Semaphore s = new Semaphore(5);</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        for (int i = 0; i &lt; THREAD_COUNT; i++) &#123;</span><br><span class="line">            threadPool.execute(() -&gt; &#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    s.acquire();</span><br><span class="line">                    System.out.println(Thread.currentThread().getName()+&quot;获得了信号量&quot;+&quot;---当前信号量:&quot;+s.availablePermits()+&quot;---等待信号量的线程数:&quot;+s.getQueueLength()+&quot;---&quot;+System.currentTimeMillis());</span><br><span class="line">                    Thread.sleep(2000);</span><br><span class="line">                &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;finally &#123;</span><br><span class="line">                    s.release();</span><br><span class="line">                    System.out.println(Thread.currentThread().getName()+&quot;释放了信号量------&quot;+&quot;---当前信号量:&quot;+s.availablePermits()+&quot;---等待信号量的线程数:&quot;+s.getQueueLength()+System.currentTimeMillis());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">        threadPool.shutdown();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">console result</span><br><span class="line">pool-1-thread-2获得了信号量---当前信号量:4---等待信号量的线程数:0---1561275554694</span><br><span class="line">pool-1-thread-1获得了信号量---当前信号量:3---等待信号量的线程数:0---1561275554694</span><br><span class="line">pool-1-thread-4获得了信号量---当前信号量:2---等待信号量的线程数:0---1561275554694</span><br><span class="line">pool-1-thread-3获得了信号量---当前信号量:1---等待信号量的线程数:0---1561275554694</span><br><span class="line">pool-1-thread-5获得了信号量---当前信号量:0---等待信号量的线程数:0---1561275554694</span><br><span class="line">pool-1-thread-6获得了信号量---当前信号量:0---等待信号量的线程数:4---1561275556695</span><br><span class="line">pool-1-thread-7获得了信号量---当前信号量:0---等待信号量的线程数:3---1561275556695</span><br><span class="line">pool-1-thread-4释放了信号量---------当前信号量:0---等待信号量的线程数:31561275556695</span><br><span class="line">pool-1-thread-1释放了信号量---------当前信号量:0---等待信号量的线程数:31561275556695</span><br><span class="line">pool-1-thread-8获得了信号量---当前信号量:0---等待信号量的线程数:2---1561275556695</span><br><span class="line">pool-1-thread-2释放了信号量---------当前信号量:0---等待信号量的线程数:21561275556695</span><br><span class="line">pool-1-thread-9获得了信号量---当前信号量:1---等待信号量的线程数:0---1561275556696</span><br><span class="line">pool-1-thread-3释放了信号量---------当前信号量:0---等待信号量的线程数:01561275556696</span><br><span class="line">pool-1-thread-5释放了信号量---------当前信号量:1---等待信号量的线程数:01561275556696</span><br><span class="line">pool-1-thread-10获得了信号量---当前信号量:0---等待信号量的线程数:0---1561275556696</span><br><span class="line">pool-1-thread-6释放了信号量---------当前信号量:1---等待信号量的线程数:01561275558695</span><br><span class="line">pool-1-thread-8释放了信号量---------当前信号量:3---等待信号量的线程数:01561275558695</span><br><span class="line">pool-1-thread-7释放了信号量---------当前信号量:2---等待信号量的线程数:01561275558695</span><br><span class="line">pool-1-thread-10释放了信号量---------当前信号量:5---等待信号量的线程数:01561275558696</span><br><span class="line">pool-1-thread-9释放了信号量---------当前信号量:5---等待信号量的线程数:01561275558696</span><br></pre></td></tr></table></figure>
+
+<h2 id="Exchanger"><a href="#Exchanger" class="headerlink" title="Exchanger"></a>Exchanger</h2><ul>
+<li>Exchanger作用：用于进行线程间的数据交<br>换。它提供一个同步点，在这个同步点，两个线程可以交换彼此的数据。这两个线程通过<br>exchange方法交换数据，如果第一个线程先执行exchange()方法，它会一直等待第二个线程也<br>执行exchange方法，当两个线程都到达同步点时，这两个线程就可以交换数据，将本线程生产<br>出来的数据传递给对方。<ul>
+<li>注意：如果两个线程有一个没有执行exchange()方法，则会一直等待，如果担心有特殊情况发<br>生，避免一直等待，可以使用exchange（V x，longtimeout，TimeUnit unit）设置最大等待时长</li>
+</ul>
+</li>
+</ul>
+<p> 示例代码：<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @Description: TODO</span><br><span class="line"> * @Auther: ThomasWu</span><br><span class="line"> * @Date: 2019/6/23 15:53</span><br><span class="line"> * @Email:1414924381@qq.com</span><br><span class="line"> */</span><br><span class="line">public class ExchangerTest &#123;</span><br><span class="line"></span><br><span class="line">    private static final Exchanger&lt;String&gt; exchanger = new Exchanger&lt;String&gt;();</span><br><span class="line">    private static ExecutorService threadPool = Executors.newFixedThreadPool(2);</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        threadPool.execute(new Runnable() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void run() &#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    // A录入银行流水数据</span><br><span class="line">                    String str = &quot;银行流水A&quot;;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + str);</span><br><span class="line">                    str = exchanger.exchange(str);</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + str);</span><br><span class="line">                &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        threadPool.execute(new Runnable() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void run() &#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    String str = &quot;银行流水B&quot;;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + str);</span><br><span class="line">                    str = exchanger.exchange(str);</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + str);</span><br><span class="line"></span><br><span class="line">                &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        threadPool.shutdown();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/19/记一次线上事故总结/" rel="next" title="记一次线上事故总结">
+                <i class="fa fa-chevron-left"></i> 记一次线上事故总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/26/java多线程之内存模型/" rel="prev" title="java多线程之内存模型">
+                java多线程之内存模型 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Thomas Wu">
+            
+              <p class="site-author-name" itemprop="name">Thomas Wu</p>
+              <div class="site-description motion-element" itemprop="description">人帅也要多读书，多学习，多运动</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/peach-boy" title="GitHub &rarr; https://github.com/peach-boy" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/1414924381@qq.com" title="E-Mail &rarr; 1414924381@qq.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.cnblogs.com/xrq730/" title="https://www.cnblogs.com/xrq730/" rel="noopener" target="_blank">五月的仓颉</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.w3cschool.cn/architectroad/" title="https://www.w3cschool.cn/architectroad/" rel="noopener" target="_blank">架构师之路</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://crossoverjie.top/" title="https://crossoverjie.top/" rel="noopener" target="_blank">crossoverjie</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CountDownLatch"><span class="nav-number">1.</span> <span class="nav-text">CountDownLatch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CyclicBarrier-同步屏障或栅栏"><span class="nav-number">2.</span> <span class="nav-text">CyclicBarrier(同步屏障或栅栏)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CyclicBarrier和CountDownLatch的区别"><span class="nav-number">2.1.</span> <span class="nav-text">CyclicBarrier和CountDownLatch的区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Semaphore"><span class="nav-number">3.</span> <span class="nav-text">Semaphore</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Exchanger"><span class="nav-number">4.</span> <span class="nav-text">Exchanger</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Thomas Wu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.2"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
