@@ -96,17 +96,18 @@
 
 
 
-  <meta name="description" content="java多线程学习  ThreadPoolExcutor原理及实例代码 (第一周6月17-6月23)  java工具类CountDownLatch,CyclicBarrier,Semaphore,Exchanger（第二周6月24-6月30）  HashMap与concurrentHashmap实现原理比较  FutureTask简介">
-<meta property="og:type" content="website">
-<meta property="og:title" content="计划待办">
-<meta property="og:url" content="http://www.wuxiantao123.cn/todolist/index.html">
+  <meta name="description" content="explain的作用用来获取查询执行计划的信息，当执行查询时，其返回关于查询计划的每一步的信息，而不是执行它。 explain输出的列explain的输出总是相同的列，总共11列 idselect_type显示对应行时简单查询还是复杂查询（如果是后者，那么是三种复杂类型中的哪一种）取值：  simple:简单查询，不包含子查询和union  primary:查询为复杂查询，最外层标记为PRIMAR">
+<meta name="keywords" content="数据库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql学习笔记之explain用法详解">
+<meta property="og:url" content="http://www.wuxiantao123.cn/2019/07/09/Mysql学习笔记之explain用法详解/index.html">
 <meta property="og:site_name" content="费曼的门徒">
-<meta property="og:description" content="java多线程学习  ThreadPoolExcutor原理及实例代码 (第一周6月17-6月23)  java工具类CountDownLatch,CyclicBarrier,Semaphore,Exchanger（第二周6月24-6月30）  HashMap与concurrentHashmap实现原理比较  FutureTask简介">
+<meta property="og:description" content="explain的作用用来获取查询执行计划的信息，当执行查询时，其返回关于查询计划的每一步的信息，而不是执行它。 explain输出的列explain的输出总是相同的列，总共11列 idselect_type显示对应行时简单查询还是复杂查询（如果是后者，那么是三种复杂类型中的哪一种）取值：  simple:简单查询，不包含子查询和union  primary:查询为复杂查询，最外层标记为PRIMAR">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-23T08:07:21.273Z">
+<meta property="og:updated_time" content="2019-07-15T14:39:08.642Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="计划待办">
-<meta name="twitter:description" content="java多线程学习  ThreadPoolExcutor原理及实例代码 (第一周6月17-6月23)  java工具类CountDownLatch,CyclicBarrier,Semaphore,Exchanger（第二周6月24-6月30）  HashMap与concurrentHashmap实现原理比较  FutureTask简介">
+<meta name="twitter:title" content="Mysql学习笔记之explain用法详解">
+<meta name="twitter:description" content="explain的作用用来获取查询执行计划的信息，当执行查询时，其返回关于查询计划的每一步的信息，而不是执行它。 explain输出的列explain的输出总是相同的列，总共11列 idselect_type显示对应行时简单查询还是复杂查询（如果是后者，那么是三种复杂类型中的哪一种）取值：  simple:简单查询，不包含子查询和union  primary:查询为复杂查询，最外层标记为PRIMAR">
 
 
 
@@ -114,7 +115,7 @@
 
   
   
-  <link rel="canonical" href="http://www.wuxiantao123.cn/todolist/">
+  <link rel="canonical" href="http://www.wuxiantao123.cn/2019/07/09/Mysql学习笔记之explain用法详解/">
 
 
 
@@ -124,7 +125,7 @@
   };
 </script>
 
-  <title>计划待办 | 费曼的门徒</title>
+  <title>Mysql学习笔记之explain用法详解 | 费曼的门徒</title>
   
 
 
@@ -299,7 +300,7 @@
         
         
           
-          <li class="menu-item menu-item-计划待办 menu-item-active">
+          <li class="menu-item menu-item-计划待办">
 
     
     
@@ -365,88 +366,234 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/07/09/Mysql学习笔记之explain用法详解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Thomas Wu">
+      <meta itemprop="description" content="人帅也要多读书，多学习，多运动">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="费曼的门徒">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-<h2 class="post-title" itemprop="name headline">计划待办
-
-</h2>
-
-<div class="post-meta">
-  
-  
-
-
-
-</div>
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <ul>
-<li><input disabled type="checkbox"> <strong>java多线程学习</strong><ul>
-<li><input disabled type="checkbox"> ThreadPoolExcutor原理及实例代码 (第一周6月17-6月23)</li>
-<li><input checked disabled type="checkbox"> java工具类CountDownLatch,CyclicBarrier,Semaphore,Exchanger（第二周6月24-6月30）</li>
-<li><input disabled type="checkbox"> HashMap与concurrentHashmap实现原理比较</li>
-<li><input disabled type="checkbox"> FutureTask简介</li>
-</ul>
-</li>
-</ul>
+          <h2 class="post-title" itemprop="name headline">Mysql学习笔记之explain用法详解
 
+              
+            
+          </h2>
         
-      </div>
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-07-09 16:27:54" itemprop="dateCreated datePublished" datetime="2019-07-09T16:27:54+08:00">2019-07-09</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-15 22:39:08" itemprop="dateModified" datetime="2019-07-15T22:39:08+08:00">2019-07-15</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/mysql/" itemprop="url" rel="index"><span itemprop="name">mysql</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <h3 id="explain的作用"><a href="#explain的作用" class="headerlink" title="explain的作用"></a>explain的作用</h3><p>用来获取查询执行计划的信息，当执行查询时，其返回关于查询计划的每一步的信息，而不是执行它。</p>
+<h3 id="explain输出的列"><a href="#explain输出的列" class="headerlink" title="explain输出的列"></a>explain输出的列</h3><p>explain的输出总是相同的列，总共11列</p>
+<h4 id="id"><a href="#id" class="headerlink" title="id"></a>id</h4><h4 id="select-type"><a href="#select-type" class="headerlink" title="select_type"></a>select_type</h4><p>显示对应行时简单查询还是复杂查询（如果是后者，那么是三种复杂类型中的哪一种）<br>取值：</p>
+<ol>
+<li>simple:简单查询，不包含子查询和union </li>
+<li>primary:查询为复杂查询，最外层标记为PRIMARY</li>
+<li>subquery:包含在select列表中的select子查询（不在from中的子句的子查询）标记为subquery</li>
+<li>dependent subquery</li>
+<li>derived:在from子句中的子查询</li>
+<li>union:</li>
+<li>union result:</li>
+<li>dependent union</li>
+<li></li>
+</ol>
+<h4 id="table"><a href="#table" class="headerlink" title="table"></a>table</h4><p>table表示对应行正在访问那个表，通常情况下，它就是表明或者别名</p>
+<h4 id="type"><a href="#type" class="headerlink" title="type"></a>type</h4><p>访问类型，或者决定如何查找表中的行，依次从最差到最优。</p>
+<p><code>all &lt; index &lt; range &lt; index_subquery &lt; unique_subquery &lt; index_merge &lt; ref_or_null &lt; ref &lt; eq_ref &lt; const&lt;system</code></p>
+<ol>
+<li>all:按行全表扫描，mysql必须扫描整张表，去找到需要的行（例外：limit会从开始扫描到下界加偏移量，如limit 100,10，会从开始扫描到110行;Extra列中有Using distinct/not exists时例外）</li>
+<li>index:按索引次序扫描全表，需要遍历全表索引</li>
+<li>range:范围扫描，只需遍历筛选后的区间的索引，一般带有between或者where的查询</li>
+<li>range ： 这个是index了范围限制，例如 &gt;100、&lt;1000之类的查询条件，这样避免的index的全索引扫描，当然限制的范围越小 效率就越高。</li>
+<li>index_subquery ： 在 某 些 IN 查 询 中 使 用 此 种 类 型 , 与 unique_subquery 类似,但是查询的是非唯一 性索引</li>
+<li>unique_subquery ： 在某些 IN 查询中使用此种类型,而不是常规的 ref</li>
+<li>index_merge ： 说明索引合并优化被使用了</li>
+<li>ref_or_null ： 如同 ref, 但是 MySQL 必须在初次查找的结果 里找出 null 条目,然后进行二次查找。</li>
+<li>ref ： 使用了非唯一性索引进行数据的查找，例如：我们对用户表的用户名这一列建立了非唯一索引，因为用户名可以重复，当我们查找用户的时候select * from user where username=“xxx”的时候就出现了ref，使用非唯一索引查找数据。</li>
+<li>eq_ref ： 这个就很好理解了，使用的唯一性索引进行数据查找，例如主键索引之类的。</li>
+<li>const ： 通常情况下，将一个主键放置到where后面作为条件查询，mysql优化器就能把这次查询优化转化为一个常量，如何转化以及何时转化，这个取决于优化器。这个比eq_ref效率高一点。</li>
+<li>system ： 表只有一行。不过这种情况下就没意义了。</li>
+<li>NULL ： MySQL不用访问表或者索引就直接能到结果。</li>
+</ol>
+<h4 id="possible-keys"><a href="#possible-keys" class="headerlink" title="possible_keys"></a>possible_keys</h4><h4 id="key"><a href="#key" class="headerlink" title="key"></a>key</h4><h4 id="key-len"><a href="#key-len" class="headerlink" title="key_len"></a>key_len</h4><h4 id="ref"><a href="#ref" class="headerlink" title="ref"></a>ref</h4><p>rows列显示MySQL认为它执行查询时必须检查的行数。注意这是一个预估值</p>
+<h4 id="rows"><a href="#rows" class="headerlink" title="rows"></a>rows</h4><h4 id="extra"><a href="#extra" class="headerlink" title="extra"></a>extra</h4>
       
     </div>
-    
-
-
 
     
+
     
     
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/09/JSON使用经验之java对象与json字符串的互转问题/" rel="next" title="JSON使用经验之java对象与json字符串的互转问题">
+                <i class="fa fa-chevron-left"></i> JSON使用经验之java对象与json字符串的互转问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
   </div>
 
 
@@ -475,8 +622,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -636,6 +792,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#explain的作用"><span class="nav-number">1.</span> <span class="nav-text">explain的作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#explain输出的列"><span class="nav-number">2.</span> <span class="nav-text">explain输出的列</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#id"><span class="nav-number">2.1.</span> <span class="nav-text">id</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#select-type"><span class="nav-number">2.2.</span> <span class="nav-text">select_type</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#table"><span class="nav-number">2.3.</span> <span class="nav-text">table</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#type"><span class="nav-number">2.4.</span> <span class="nav-text">type</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#possible-keys"><span class="nav-number">2.5.</span> <span class="nav-text">possible_keys</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#key"><span class="nav-number">2.6.</span> <span class="nav-text">key</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#key-len"><span class="nav-number">2.7.</span> <span class="nav-text">key_len</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ref"><span class="nav-number">2.8.</span> <span class="nav-text">ref</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#rows"><span class="nav-number">2.9.</span> <span class="nav-text">rows</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#extra"><span class="nav-number">2.10.</span> <span class="nav-text">extra</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       

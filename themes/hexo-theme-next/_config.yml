@@ -161,7 +161,7 @@ menu:
   tags: /tags/ || tags
   categories: /categories/  || th
   archives: /archives/ || archive
-  读书: /books || book
+  备忘录: /books || book
   计划待办: /todolist ||calendar
   about: /about/  || user
   #schedule: /schedule/ || calendar
@@ -223,8 +223,9 @@ links_layout: block
 #links_layout: inline
 links:
   五月的仓颉: https://www.cnblogs.com/xrq730/
-  架构师之路: https://www.w3cschool.cn/architectroad/
+  沈剑架构师之路: https://www.w3cschool.cn/architectroad/
   crossoverjie: https://crossoverjie.top/
+  高广超: https://www.jianshu.com/u/2766e4cfc391
 
 # Sidebar Avatar
 avatar:
