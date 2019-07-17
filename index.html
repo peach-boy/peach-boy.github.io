@@ -282,7 +282,7 @@
         
         
           
-          <li class="menu-item menu-item-读书">
+          <li class="menu-item menu-item-备忘录">
 
     
     
@@ -292,7 +292,7 @@
 
     
 
-    <a href="/books" rel="section"><i class="menu-item-icon fa fa-fw fa-book"></i> <br>读书</a>
+    <a href="/books" rel="section"><i class="menu-item-icon fa fa-fw fa-book"></i> <br>备忘录</a>
 
   </li>
         
@@ -385,7 +385,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/07/09/Mysql学习之explain用法详解/">
+    <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/07/09/Mysql学习笔记之explain用法详解/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Thomas Wu">
@@ -405,7 +405,7 @@
           <h2 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2019/07/09/Mysql学习之explain用法详解/" class="post-title-link" itemprop="url">Mysql学习之explain用法详解</a>
+                <a href="/2019/07/09/Mysql学习笔记之explain用法详解/" class="post-title-link" itemprop="url">Mysql学习笔记之explain用法详解</a>
               
             
           </h2>
@@ -434,8 +434,42 @@
             
 
             
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-17 11:07:34" itemprop="dateModified" datetime="2019-07-17T11:07:34+08:00">2019-07-17</time>
+              
+            
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/mysql/" itemprop="url" rel="index"><span itemprop="name">mysql</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -467,7 +501,40 @@
       
         
           
-            
+            <h3 id="explain的作用"><a href="#explain的作用" class="headerlink" title="explain的作用"></a>explain的作用</h3><p>用来获取查询执行计划的信息，当执行查询时，其返回关于查询计划的每一步的信息，而不是执行它。</p>
+<h3 id="explain输出的列"><a href="#explain输出的列" class="headerlink" title="explain输出的列"></a>explain输出的列</h3><p>explain的输出总是相同的列，总共11列</p>
+<h4 id="id"><a href="#id" class="headerlink" title="id"></a>id</h4><h4 id="select-type"><a href="#select-type" class="headerlink" title="select_type"></a>select_type</h4><p>显示对应行时简单查询还是复杂查询（如果是后者，那么是三种复杂类型中的哪一种）<br>取值：</p>
+<ol>
+<li>simple:简单查询，不包含子查询和union </li>
+<li>primary:查询为复杂查询，最外层标记为PRIMARY</li>
+<li>subquery:包含在select列表中的select子查询（不在from中的子句的子查询）标记为subquery</li>
+<li>dependent subquery</li>
+<li>derived:在from子句中的子查询</li>
+<li>union:</li>
+<li>union result:</li>
+<li>dependent union</li>
+<li></li>
+</ol>
+<h4 id="table"><a href="#table" class="headerlink" title="table"></a>table</h4><p>table表示对应行正在访问那个表，通常情况下，它就是表明或者别名</p>
+<h4 id="type"><a href="#type" class="headerlink" title="type"></a>type</h4><p>访问类型，或者决定如何查找表中的行，依次从最差到最优。</p>
+<p><code>all &lt; index &lt; range &lt; index_subquery &lt; unique_subquery &lt; index_merge &lt; ref_or_null &lt; ref &lt; eq_ref &lt; const&lt;system</code></p>
+<ol>
+<li>all:按行全表扫描，mysql必须扫描整张表，去找到需要的行（例外：limit会从开始扫描到下界加偏移量，如limit 100,10，会从开始扫描到110行;Extra列中有Using distinct/not exists时例外）</li>
+<li>index:按索引次序扫描全表，需要遍历全表索引</li>
+<li>range:范围扫描，只需遍历筛选后的区间的索引，一般带有between或者where的查询</li>
+<li>range ： 这个是index了范围限制，例如 &gt;100、&lt;1000之类的查询条件，这样避免的index的全索引扫描，当然限制的范围越小 效率就越高。</li>
+<li>index_subquery ： 在 某 些 IN 查 询 中 使 用 此 种 类 型 , 与 unique_subquery 类似,但是查询的是非唯一 性索引</li>
+<li>unique_subquery ： 在某些 IN 查询中使用此种类型,而不是常规的 ref</li>
+<li>index_merge ： 说明索引合并优化被使用了</li>
+<li>ref_or_null ： 如同 ref, 但是 MySQL 必须在初次查找的结果 里找出 null 条目,然后进行二次查找。</li>
+<li>ref ： 使用了非唯一性索引进行数据的查找，例如：我们对用户表的用户名这一列建立了非唯一索引，因为用户名可以重复，当我们查找用户的时候select * from user where username=“xxx”的时候就出现了ref，使用非唯一索引查找数据。</li>
+<li>eq_ref ： 这个就很好理解了，使用的唯一性索引进行数据查找，例如主键索引之类的。</li>
+<li>const ： 通常情况下，将一个主键放置到where后面作为条件查询，mysql优化器就能把这次查询优化转化为一个常量，如何转化以及何时转化，这个取决于优化器。这个比eq_ref效率高一点。</li>
+<li>system ： 表只有一行。不过这种情况下就没意义了。</li>
+<li>NULL ： MySQL不用访问表或者索引就直接能到结果。</li>
+</ol>
+<h4 id="possible-keys"><a href="#possible-keys" class="headerlink" title="possible_keys"></a>possible_keys</h4><h4 id="key"><a href="#key" class="headerlink" title="key"></a>key</h4><h4 id="key-len"><a href="#key-len" class="headerlink" title="key_len"></a>key_len</h4><h4 id="ref"><a href="#ref" class="headerlink" title="ref"></a>ref</h4><p>rows列显示MySQL认为它执行查询时必须检查的行数。注意这是一个预估值</p>
+<h4 id="rows"><a href="#rows" class="headerlink" title="rows"></a>rows</h4><h4 id="extra"><a href="#extra" class="headerlink" title="extra"></a>extra</h4>
           
         
       
@@ -568,7 +635,7 @@
                 
               
 
-              <time title="创建时间：2019-07-09 16:26:49 / 修改时间：17:35:41" itemprop="dateCreated datePublished" datetime="2019-07-09T16:26:49+08:00">2019-07-09</time>
+              <time title="创建时间：2019-07-09 16:26:49 / 修改时间：18:25:26" itemprop="dateCreated datePublished" datetime="2019-07-09T16:26:49+08:00">2019-07-09</time>
             
 
             
@@ -2519,7 +2586,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                    <span class="site-state-item-count">9</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -2546,7 +2615,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">5</span>
+                      
+                    
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -2602,11 +2673,15 @@
                   </li>
                 
                   <li class="links-of-blogroll-item">
-                    <a href="https://www.w3cschool.cn/architectroad/" title="https://www.w3cschool.cn/architectroad/" rel="noopener" target="_blank">架构师之路</a>
+                    <a href="https://www.w3cschool.cn/architectroad/" title="https://www.w3cschool.cn/architectroad/" rel="noopener" target="_blank">沈剑架构师之路</a>
                   </li>
                 
                   <li class="links-of-blogroll-item">
                     <a href="https://crossoverjie.top/" title="https://crossoverjie.top/" rel="noopener" target="_blank">crossoverjie</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.jianshu.com/u/2766e4cfc391" title="https://www.jianshu.com/u/2766e4cfc391" rel="noopener" target="_blank">高广超</a>
                   </li>
                 
               </ul>
