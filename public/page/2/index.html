@@ -385,6 +385,878 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/19/记一次线上事故总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Thomas Wu">
+      <meta itemprop="description" content="人帅也要多读书，多学习，多运动">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="费曼的门徒">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/06/19/记一次线上事故总结/" class="post-title-link" itemprop="url">记一次线上事故总结</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-19 22:40:45" itemprop="dateCreated datePublished" datetime="2019-06-19T22:40:45+08:00">2019-06-19</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-02 19:21:32" itemprop="dateModified" datetime="2019-07-02T19:21:32+08:00">2019-07-02</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码之外/" itemprop="url" rel="index"><span itemprop="name">代码之外</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="事故起因"><a href="#事故起因" class="headerlink" title="事故起因"></a>事故起因</h3><p>发布预发布环境时，修改配置中心redis连接配置，连接密码错误，导致线上一个接口出现4000余个500请求</p>
+<h3 id="事故经过"><a href="#事故经过" class="headerlink" title="事故经过"></a>事故经过</h3><p>当发布到预发布环境时，控制台立刻发现了错误日志，经排查发现是由于线上环境连接redis没有配置密码导致的。才想起本次上线引用了新开发的redis sdk，同时这个改造是由另外一个同事完成的。当时那位同事已经不再公司，于是就找架构师要了对应redis的连接密码，问题就发生在在这里了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">配置一（线上使用的配置）</span><br><span class="line">host=redis.servers.test.jx</span><br><span class="line">port=6379</span><br><span class="line">password=</span><br><span class="line">database=9</span><br><span class="line">clientName=giveapp-rest</span><br><span class="line"></span><br><span class="line">配置二（新sdk使用的配置）</span><br><span class="line">spring.redis.host=redis.servers.test.jx</span><br><span class="line">spring.redis.port=6379</span><br><span class="line">spring.redis.password=</span><br><span class="line">spring.redis.database=14</span><br></pre></td></tr></table></figure>
+
+<p>线上代码使用的是配置一，上线代码使用的是配置二，我将上述配置截图给架构师后，他将密码发给我，我拿到密码看到配置也在疑惑是使用哪一个配置（注释说明当时没有），<br>于是想当然的加到了两个配置上，自己在app上马上测试了一下，发现没有报错就没有在管了。大概过了几分钟同事告诉我说线上出问题了，我在自己的手机上上试了一下，果然redis相关接口报错，我迅速反应过来，马上把配置还原，问题解决。后来发现线上使用的配置一是可以需要密码的，架构师发给我的密码是配置二节点的密码，配置一和配置二的节点不一同一个，使用同一个密码，线上就会出现redis连接异常，这才是问题所在。另外一个问题，为什么自己修改完redis密码后，自己app没有异常，现在看来可能是客户端本地缓存，当然这个已经不重要，本身这种验证凡是也是及其愚蠢的。</p>
+<h3 id="事故反思"><a href="#事故反思" class="headerlink" title="事故反思"></a>事故反思</h3><p>解决完后，自己也是自责不已，懊恼自己竟会做出如此草率的决定。回到家后，决定深入剖析一下当时自己的心路历程。回想起当时修改完后，自己验证”没问题后”，就被另一件事给耽搁住了，知道同事报障才反应过来。很多时候还是都是存在侥幸心理，以为会没问题。这让我想起了“墨菲定律”，任何小概率事假，看似几乎不能发生，当基数足够足够大时，它将会是必然时间。为什么会出现这次愚蠢的错误，究其原因还是因为自己之前也经常这么干，对有可能影响到线上的改动缺乏足够评估。综合来看，最近公司事故频发，大多数事故发生的场景都较为极端，甚至无法验证出来。但问题在于，这些代码问题或者不规范操作是长期存在的。当出现的次数不断增多时，事故的发生将会是一个必然事件。所以某种程度上，养成一个好的工作习惯是要胜过掌握一项新技术的。线上无小事，每一次关系到线上正常生产的改动，都需要再三保证其绝对正确，养成好的习惯。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/markdown高阶语法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Thomas Wu">
+      <meta itemprop="description" content="人帅也要多读书，多学习，多运动">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="费曼的门徒">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/06/18/markdown高阶语法/" class="post-title-link" itemprop="url">markdown高阶语法</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-18 22:39:10" itemprop="dateCreated datePublished" datetime="2019-06-18T22:39:10+08:00">2019-06-18</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-02 19:21:32" itemprop="dateModified" datetime="2019-07-02T19:21:32+08:00">2019-07-02</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/markdown/" itemprop="url" rel="index"><span itemprop="name">markdown</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Markdown-高阶语法手册"><a href="#Markdown-高阶语法手册" class="headerlink" title="Markdown 高阶语法手册"></a>Markdown 高阶语法手册</h1><h3 id="1-内容目录"><a href="#1-内容目录" class="headerlink" title="1. 内容目录"></a>1. 内容目录</h3><p>在段落中填写 <code>[TOC]</code> 以显示全文内容的目录结构。</p>
+<p>[TOC]</p>
+<h3 id="2-标签分类"><a href="#2-标签分类" class="headerlink" title="2. 标签分类"></a>2. 标签分类</h3><p>在编辑区任意行的列首位置输入以下代码给文稿标签：</p>
+<p>标签： 数学 英语 Markdown</p>
+<p>或者</p>
+<p>Tags： 数学 英语 Markdown</p>
+<h3 id="3-删除线"><a href="#3-删除线" class="headerlink" title="3. 删除线"></a>3. 删除线</h3><p>使用 ~~ 表示删除线。</p>
+<p><del>这是一段错误的文本。</del></p>
+<h3 id="4-注脚"><a href="#4-注脚" class="headerlink" title="4. 注脚"></a>4. 注脚</h3><p>使用 [^keyword] 表示注脚。</p>
+<p>这是一个注脚[^footnote]的样例。</p>
+<p>这是第二个注脚[^footnote2]的样例。</p>
+<h3 id="5-LaTeX-公式"><a href="#5-LaTeX-公式" class="headerlink" title="5. LaTeX 公式"></a>5. LaTeX 公式</h3><p>$ 表示行内公式： </p>
+<p>质能守恒方程可以用一个很简洁的方程式 $E=mc^2$ 来表达。</p>
+<p>$$ 表示整行公式：</p>
+<p>$$\sum_{i=1}^n a_i=0$$</p>
+<p>$$f(x_1,x_x,\ldots,x_n) = x_1^2 + x_2^2 + \cdots + x_n^2 $$</p>
+<p>$$\sum^{j-1}<em>{k=0}{\widehat{\gamma}</em>{kj} z_k}$$</p>
+<p>访问 <a href="http://meta.math.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference" target="_blank" rel="noopener">MathJax</a> 参考更多使用方法。</p>
+<h3 id="6-加强的代码块"><a href="#6-加强的代码块" class="headerlink" title="6. 加强的代码块"></a>6. 加强的代码块</h3><p>支持四十一种编程语言的语法高亮的显示，行号显示。</p>
+<p>非代码示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install vim-gnome</span><br></pre></td></tr></table></figure>
+
+<p>Python 示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@requires_authorization</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">somefunc</span><span class="params">(param1=<span class="string">''</span>, param2=<span class="number">0</span>)</span>:</span></span><br><span class="line">    <span class="string">'''A docstring'''</span></span><br><span class="line">    <span class="keyword">if</span> param1 &gt; param2: <span class="comment"># interesting</span></span><br><span class="line">        <span class="keyword">print</span> <span class="string">'Greater'</span></span><br><span class="line">    <span class="keyword">return</span> (param2 - param1 + <span class="number">1</span>) <span class="keyword">or</span> <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SomeClass</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>message = <span class="string">'''interpreter</span></span><br><span class="line"><span class="string"><span class="meta">... </span>prompt'''</span></span><br></pre></td></tr></table></figure>
+
+<p>JavaScript 示例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* nth element in the fibonacci series.</span></span><br><span class="line"><span class="comment">* @param n &gt;= 0</span></span><br><span class="line"><span class="comment">* @return the nth element, &gt;= 0.</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fib</span>(<span class="params">n</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> a = <span class="number">1</span>, b = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">var</span> tmp;</span><br><span class="line">  <span class="keyword">while</span> (--n &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">    tmp = a;</span><br><span class="line">    a += b;</span><br><span class="line">    b = tmp;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> a;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">document</span>.write(fib(<span class="number">10</span>));</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-流程图"><a href="#7-流程图" class="headerlink" title="7. 流程图"></a>7. 流程图</h3><h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">st=&gt;start: Start:&gt;https://www.zybuluo.com</span><br><span class="line">io=&gt;inputoutput: verification</span><br><span class="line">op=&gt;operation: Your Operation</span><br><span class="line">cond=&gt;condition: Yes or No?</span><br><span class="line">sub=&gt;subroutine: Your Subroutine</span><br><span class="line">e=&gt;end</span><br><span class="line"></span><br><span class="line">st-&gt;io-&gt;op-&gt;cond</span><br><span class="line">cond(yes)-&gt;e</span><br><span class="line">cond(no)-&gt;sub-&gt;io</span><br></pre></td></tr></table></figure>
+
+<h4 id="更多语法参考：流程图语法参考"><a href="#更多语法参考：流程图语法参考" class="headerlink" title="更多语法参考：流程图语法参考"></a>更多语法参考：<a href="http://adrai.github.io/flowchart.js/" target="_blank" rel="noopener">流程图语法参考</a></h4><h3 id="8-序列图"><a href="#8-序列图" class="headerlink" title="8. 序列图"></a>8. 序列图</h3><h4 id="示例-1"><a href="#示例-1" class="headerlink" title="示例 1"></a>示例 1</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Alice-&gt;Bob: Hello Bob, how are you?</span><br><span class="line">Note right of Bob: Bob thinks</span><br><span class="line">Bob--&gt;Alice: I am good thanks!</span><br></pre></td></tr></table></figure>
+
+<h4 id="示例-2"><a href="#示例-2" class="headerlink" title="示例 2"></a>示例 2</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Title: Here is a title</span><br><span class="line">A-&gt;B: Normal line</span><br><span class="line">B--&gt;C: Dashed line</span><br><span class="line">C-&gt;&gt;D: Open arrow</span><br><span class="line">D--&gt;&gt;A: Dashed open arrow</span><br></pre></td></tr></table></figure>
+
+<h4 id="更多语法参考：序列图语法参考"><a href="#更多语法参考：序列图语法参考" class="headerlink" title="更多语法参考：序列图语法参考"></a>更多语法参考：<a href="http://bramp.github.io/js-sequence-diagrams/" target="_blank" rel="noopener">序列图语法参考</a></h4><h3 id="9-甘特图"><a href="#9-甘特图" class="headerlink" title="9. 甘特图"></a>9. 甘特图</h3><p>甘特图内在思想简单。基本是一条线条图，横轴表示时间，纵轴表示活动（项目），线条表示在整个期间上计划和实际的活动完成情况。它直观地表明任务计划在什么时候进行，及实际进展与计划要求的对比。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">title 项目开发流程</span><br><span class="line">section 项目确定</span><br><span class="line">    需求分析       :a1, 2016-06-22, 3d</span><br><span class="line">    可行性报告     :after a1, 5d</span><br><span class="line">    概念验证       : 5d</span><br><span class="line">section 项目实施</span><br><span class="line">    概要设计      :2016-07-05  , 5d</span><br><span class="line">    详细设计      :2016-07-08, 10d</span><br><span class="line">    编码          :2016-07-15, 10d</span><br><span class="line">    测试          :2016-07-22, 5d</span><br><span class="line">section 发布验收</span><br><span class="line">    发布: 2d</span><br><span class="line">    验收: 3d</span><br></pre></td></tr></table></figure>
+
+<h4 id="更多语法参考：甘特图语法参考"><a href="#更多语法参考：甘特图语法参考" class="headerlink" title="更多语法参考：甘特图语法参考"></a>更多语法参考：<a href="https://knsv.github.io/mermaid/#gant-diagrams" target="_blank" rel="noopener">甘特图语法参考</a></h4><h3 id="10-Mermaid-流程图"><a href="#10-Mermaid-流程图" class="headerlink" title="10. Mermaid 流程图"></a>10. Mermaid 流程图</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">A[Hard edge] --&gt;|Link text| B(Round edge)</span><br><span class="line">B --&gt; C&#123;Decision&#125;</span><br><span class="line">C --&gt;|One| D[Result one]</span><br><span class="line">C --&gt;|Two| E[Result two]</span><br></pre></td></tr></table></figure>
+
+<h4 id="更多语法参考：Mermaid-流程图语法参考"><a href="#更多语法参考：Mermaid-流程图语法参考" class="headerlink" title="更多语法参考：Mermaid 流程图语法参考"></a>更多语法参考：<a href="https://knsv.github.io/mermaid/#flowcharts-basic-syntax" target="_blank" rel="noopener">Mermaid 流程图语法参考</a></h4><h3 id="11-Mermaid-序列图"><a href="#11-Mermaid-序列图" class="headerlink" title="11. Mermaid 序列图"></a>11. Mermaid 序列图</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Alice-&gt;John: Hello John, how are you?</span><br><span class="line">loop every minute</span><br><span class="line">    John--&gt;Alice: Great!</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<h4 id="更多语法参考：Mermaid-序列图语法参考"><a href="#更多语法参考：Mermaid-序列图语法参考" class="headerlink" title="更多语法参考：Mermaid 序列图语法参考"></a>更多语法参考：<a href="https://knsv.github.io/mermaid/#sequence-diagrams" target="_blank" rel="noopener">Mermaid 序列图语法参考</a></h4><h3 id="12-表格支持"><a href="#12-表格支持" class="headerlink" title="12. 表格支持"></a>12. 表格支持</h3><table>
+<thead>
+<tr>
+<th>项目</th>
+<th align="right">价格</th>
+<th align="center">数量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>计算机</td>
+<td align="right">$1600</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td>手机</td>
+<td align="right">$12</td>
+<td align="center">12</td>
+</tr>
+<tr>
+<td>管线</td>
+<td align="right">$1</td>
+<td align="center">234</td>
+</tr>
+</tbody></table>
+<h3 id="13-定义型列表"><a href="#13-定义型列表" class="headerlink" title="13. 定义型列表"></a>13. 定义型列表</h3><dl><dt>名词 1</dt><dd>定义 1（左侧有一个可见的冒号和四个不可见的空格）</dd></dl><dl><dt>代码块 2</dt><dd>这是代码块的定义（左侧有一个可见的冒号和四个不可见的空格）</dd></dl><pre><code>代码块（左侧有八个不可见的空格）</code></pre><h3 id="14-Html-标签"><a href="#14-Html-标签" class="headerlink" title="14. Html 标签"></a>14. Html 标签</h3><p>本站支持在 Markdown 语法中嵌套 Html 标签，譬如，你可以用 Html 写一个纵跨两行的表格：</p>
+<pre><code>&lt;table&gt;
+    &lt;tr&gt;
+        &lt;th rowspan=&quot;2&quot;&gt;值班人员&lt;/th&gt;
+        &lt;th&gt;星期一&lt;/th&gt;
+        &lt;th&gt;星期二&lt;/th&gt;
+        &lt;th&gt;星期三&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;李强&lt;/td&gt;
+        &lt;td&gt;张明&lt;/td&gt;
+        &lt;td&gt;王平&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;</code></pre><table>
+    <tr>
+        <th rowspan="2">值班人员</th>
+        <th>星期一</th>
+        <th>星期二</th>
+        <th>星期三</th>
+    </tr>
+    <tr>
+        <td>李强</td>
+        <td>张明</td>
+        <td>王平</td>
+    </tr>
+</table>
+
+<h3 id="15-内嵌图标"><a href="#15-内嵌图标" class="headerlink" title="15. 内嵌图标"></a>15. 内嵌图标</h3><p>本站的图标系统对外开放，在文档中输入</p>
+<pre><code>&lt;i class=&quot;icon-weibo&quot;&gt;&lt;/i&gt;</code></pre><p>即显示微博的图标： <i class="icon-weibo icon-2x"></i></p>
+<p>替换 上述 <code>i 标签</code> 内的 <code>icon-weibo</code> 以显示不同的图标，例如：</p>
+<pre><code>&lt;i class=&quot;icon-renren&quot;&gt;&lt;/i&gt;</code></pre><p>即显示人人的图标： <i class="icon-renren icon-2x"></i></p>
+<p>更多的图标和玩法可以参看 <a href="http://fortawesome.github.io/Font-Awesome/3.2.1/icons/" target="_blank" rel="noopener">font-awesome</a> 官方网站。</p>
+<h3 id="16-待办事宜-Todo-列表"><a href="#16-待办事宜-Todo-列表" class="headerlink" title="16. 待办事宜 Todo 列表"></a>16. 待办事宜 Todo 列表</h3><p>使用带有 [ ] 或 [x] （未完成或已完成）项的列表语法撰写一个待办事宜列表，并且支持子列表嵌套以及混用Markdown语法，例如：</p>
+<pre><code>- [ ] **Cmd Markdown 开发**
+    - [ ] 改进 Cmd 渲染算法，使用局部渲染技术提高渲染效率
+    - [ ] 支持以 PDF 格式导出文稿
+    - [x] 新增Todo列表功能 [语法参考](https://github.com/blog/1375-task-lists-in-gfm-issues-pulls-comments)
+    - [x] 改进 LaTex 功能
+        - [x] 修复 LaTex 公式渲染问题
+        - [x] 新增 LaTex 公式编号功能 [语法参考](http://docs.mathjax.org/en/latest/tex.html#tex-eq-numbers)
+- [ ] **七月旅行准备**
+    - [ ] 准备邮轮上需要携带的物品
+    - [ ] 浏览日本免税店的物品
+    - [x] 购买蓝宝石公主号七月一日的船票</code></pre><p>对应显示如下待办事宜 Todo 列表：</p>
+<ul>
+<li><input disabled type="checkbox"> <strong>Cmd Markdown 开发</strong><ul>
+<li><input disabled type="checkbox"> 改进 Cmd 渲染算法，使用局部渲染技术提高渲染效率</li>
+<li><input disabled type="checkbox"> 支持以 PDF 格式导出文稿</li>
+<li><input checked disabled type="checkbox"> 新增Todo列表功能 <a href="https://github.com/blog/1375-task-lists-in-gfm-issues-pulls-comments" target="_blank" rel="noopener">语法参考</a></li>
+<li><input checked disabled type="checkbox"> 改进 LaTex 功能<ul>
+<li><input checked disabled type="checkbox"> 修复 LaTex 公式渲染问题</li>
+<li><input checked disabled type="checkbox"> 新增 LaTex 公式编号功能 <a href="http://docs.mathjax.org/en/latest/tex.html#tex-eq-numbers" target="_blank" rel="noopener">语法参考</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><input disabled type="checkbox"> <strong>七月旅行准备</strong><ul>
+<li><input disabled type="checkbox"> 准备邮轮上需要携带的物品</li>
+<li><input disabled type="checkbox"> 浏览日本免税店的物品</li>
+<li><input checked disabled type="checkbox"> 购买蓝宝石公主号七月一日的船票</li>
+</ul>
+</li>
+</ul>
+<p>[^footnote]: 这是一个 <em>注脚</em> 的 <strong>文本</strong>。</p>
+<p>[^footnote2]: 这是另一个 <em>注脚</em> 的 <strong>文本</strong>。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/markdown简单语法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Thomas Wu">
+      <meta itemprop="description" content="人帅也要多读书，多学习，多运动">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="费曼的门徒">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/06/18/markdown简单语法/" class="post-title-link" itemprop="url">markdown简单语法</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-18 22:25:56" itemprop="dateCreated datePublished" datetime="2019-06-18T22:25:56+08:00">2019-06-18</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-02 19:21:32" itemprop="dateModified" datetime="2019-07-02T19:21:32+08:00">2019-07-02</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/markdown/" itemprop="url" rel="index"><span itemprop="name">markdown</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="markdown语法"><a href="#markdown语法" class="headerlink" title="markdown语法"></a>markdown语法</h2><h3 id="1-斜体和粗体"><a href="#1-斜体和粗体" class="headerlink" title="1. 斜体和粗体"></a>1. 斜体和粗体</h3><p>使用 * 和 ** 表示斜体和粗体。</p>
+<p>示例：</p>
+<p>这是 <em>斜体</em>，这是 <strong>粗体</strong>。</p>
+<h3 id="2-分级标题"><a href="#2-分级标题" class="headerlink" title="2. 分级标题"></a>2. 分级标题</h3><p>使用 === 表示一级标题，使用 — 表示二级标题。</p>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">这是一个一级标题</span><br><span class="line">============================</span><br><span class="line"></span><br><span class="line">这是一个二级标题</span><br><span class="line">--------------------------------------------------</span><br><span class="line"></span><br><span class="line">### 这是一个三级标题</span><br></pre></td></tr></table></figure>
+
+<p>你也可以选择在行首加井号表示不同级别的标题 (H1-H6)，例如：# H1, ## H2, ### H3，#### H4。</p>
+<h3 id="3-外链接"><a href="#3-外链接" class="headerlink" title="3. 外链接"></a>3. 外链接</h3><p>使用 [描述](链接地址) 为文字增加外链接。</p>
+<p>示例：<a href="http://www.wuxiantao123.cn">我的博客</a></p>
+<h3 id="4-无序列表"><a href="#4-无序列表" class="headerlink" title="4. 无序列表"></a>4. 无序列表</h3><p>使用 *，+，- 表示无序列表。</p>
+<p>示例：</p>
+<ul>
+<li>无序列表项 一</li>
+<li>无序列表项 二</li>
+<li>无序列表项 三</li>
+</ul>
+<h3 id="5-有序列表"><a href="#5-有序列表" class="headerlink" title="5. 有序列表"></a>5. 有序列表</h3><p>使用数字和点表示有序列表。</p>
+<p>示例：</p>
+<ol>
+<li>有序列表项 一</li>
+<li>有序列表项 二</li>
+<li>有序列表项 三</li>
+</ol>
+<h3 id="6-文字引用"><a href="#6-文字引用" class="headerlink" title="6. 文字引用"></a>6. 文字引用</h3><p>使用 &gt; 表示文字引用。</p>
+<p>示例：</p>
+<blockquote>
+<p>野火烧不尽，春风吹又生。</p>
+</blockquote>
+<h3 id="7-行内代码块"><a href="#7-行内代码块" class="headerlink" title="7. 行内代码块"></a>7. 行内代码块</h3><p>使用 `代码` 表示行内代码块。</p>
+<p>示例：让我们聊聊 <code>html</code>。</p>
+<h3 id="8-插入图像"><a href="#8-插入图像" class="headerlink" title="8.  插入图像"></a>8.  插入图像</h3><p>使用 ![描述](图片链接地址) 插入图像。</p>
+<p>示例：</p>
+<p><img src="https://www.zybuluo.com/static/img/my_head.jpg" alt="我的头像"></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/git常用命令/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Thomas Wu">
+      <meta itemprop="description" content="人帅也要多读书，多学习，多运动">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="费曼的门徒">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/06/18/git常用命令/" class="post-title-link" itemprop="url">git常用命令</a>
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-18 16:57:14" itemprop="dateCreated datePublished" datetime="2019-06-18T16:57:14+08:00">2019-06-18</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-02 19:21:32" itemprop="dateModified" datetime="2019-07-02T19:21:32+08:00">2019-07-02</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/git/" itemprop="url" rel="index"><span itemprop="name">git</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="git小记"><a href="#git小记" class="headerlink" title="git小记"></a>git小记</h2><h3 id="创建分支"><a href="#创建分支" class="headerlink" title="创建分支"></a>创建分支</h3><ol>
+<li>git checkout -b develop_XXX origin/develop （以远程的develop分支为基准建立自己的本地分支）</li>
+<li>git push origin develop_XXX（将本地develop_XXX分支提交到远程）</li>
+</ol>
+<h3 id="删除分支"><a href="#删除分支" class="headerlink" title="删除分支"></a>删除分支</h3><p> 1.git branch -D branchName（删除本地分支）</p>
+<ol start="2">
+<li>git push origin –delete branchName （删除远程分支）</li>
+</ol>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/06/18/git常用命令/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/java多线程之常见面试问题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1808,936 +2680,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/Iterator循环删除list中元素/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Thomas Wu">
-      <meta itemprop="description" content="人帅也要多读书，多学习，多运动">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="费曼的门徒">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/06/18/Iterator循环删除list中元素/" class="post-title-link" itemprop="url">Iterator循环删除list中元素</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-06-18 16:49:39" itemprop="dateCreated datePublished" datetime="2019-06-18T16:49:39+08:00">2019-06-18</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-07-02 19:21:32" itemprop="dateModified" datetime="2019-07-02T19:21:32+08:00">2019-07-02</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java基础/" itemprop="url" rel="index"><span itemprop="name">java基础</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="一、业务场景"><a href="#一、业务场景" class="headerlink" title="一、业务场景"></a>一、业务场景</h3><p>当我们需要剔除list中的某些元素时，通常的做法就是循环遍历list,然后符合条件时remove掉该元素。</p>
-<h3 id="二、实现逻辑"><a href="#二、实现逻辑" class="headerlink" title="二、实现逻辑"></a>二、实现逻辑</h3><pre><code>for (Iterator&lt;String&gt; iterator = list.iterator(); iterator.hasNext(); ) {
-        String str=iterator.next();
-        if (Objects.equals(&quot;one&quot;,str)){
-            iterator.remove();
-        }
-    }
-// or
-Iterator&lt;String&gt; iterator = list.iterator();
-    while(iterator.hasNext()){
-        String str=iterator.next();
-        if (Objects.equals(&quot;one&quot;,str)){
-            iterator.remove();
-        }</code></pre><h3 id="三、代码分析"><a href="#三、代码分析" class="headerlink" title="三、代码分析"></a>三、代码分析</h3><p>使用iterator遍历list同时删除元素，不会因为删除元素改变size而造成异常</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/设计模式之策略模式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Thomas Wu">
-      <meta itemprop="description" content="人帅也要多读书，多学习，多运动">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="费曼的门徒">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/06/18/设计模式之策略模式/" class="post-title-link" itemprop="url">设计模式之策略模式</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-06-18 16:48:43" itemprop="dateCreated datePublished" datetime="2019-06-18T16:48:43+08:00">2019-06-18</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-07-02 19:21:32" itemprop="dateModified" datetime="2019-07-02T19:21:32+08:00">2019-07-02</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/设计模式/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="一、业务场景"><a href="#一、业务场景" class="headerlink" title="一、业务场景"></a>一、业务场景</h3><p>一个接口需要根据前段传入的资产类型（assetType），调用不同的业务类中的资产明细方法（dealList），最初的做法就是最常见的switch case或者if/else调用不同的service。相信每个程序员看到代码中大段的判断逻辑代码都会很头疼，刚好之前看过《重构既有代码》这本Java届的经典书，里面就明确指出switch case违反开闭原则，可以用策略模式改写。</p>
-<h3 id="二、实现逻辑"><a href="#二、实现逻辑" class="headerlink" title="二、实现逻辑"></a>二、实现逻辑</h3><p>1.定义统一资产接口，每种资产实现此接口，代码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">AssetService</span> </span>&#123;</span><br><span class="line">    <span class="function">Integer <span class="title">assetType</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">DealListResponse <span class="title">queryDealList</span><span class="params">(Integer assetId, Integer status, Integer sinceId, Integer count)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>2.资产service实现接口，并重写assetType()和queryDealList()方法，代码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CashService</span> <span class="keyword">implements</span> <span class="title">AssetService</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> CashDetailService cashDetailService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">assetType</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> AssetType.CASH.getId();</span><br><span class="line">    &#125;</span><br><span class="line">	 <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> DealListResponse <span class="title">queryDealList</span><span class="params">(Integer assetId, Integer status, Integer sinceId, Integer count)</span> </span>&#123;</span><br><span class="line">		   </span><br><span class="line">	 &#125;</span><br></pre></td></tr></table></figure>
-
-<p>3.统一分发路由类，根据assetType调用对应的service,代码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AssetServiceRoute</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> AssetService[] assetServices;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> AssetService <span class="title">route</span><span class="params">(Integer assetType)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (AssetService assetService : assetServices) &#123;</span><br><span class="line">            <span class="keyword">if</span> (Objects.equals(assetType, assetService.assetType())) &#123;</span><br><span class="line">                <span class="keyword">return</span> assetService;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> BusinessRuntimeException(GiveErrorCode.CHECK_PARAM_FAILED);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>4.调用，代码如下；</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> DealListResponse <span class="title">dealList</span><span class="params">(Integer assetType, Integer assetId, Integer status, Integer sinceId, Integer count)</span> </span>&#123;</span><br><span class="line">       AssetService assetService = assetServiceRoute.route(assetType);</span><br><span class="line">       <span class="keyword">if</span> (assetService == <span class="keyword">null</span>) &#123;</span><br><span class="line">           <span class="keyword">throw</span> <span class="keyword">new</span> BusinessRuntimeException(GiveErrorCode.INVALID_PARAMS);</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> assetService.queryDealList(assetId, status, sinceId, count);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="三、代码分析"><a href="#三、代码分析" class="headerlink" title="三、代码分析"></a>三、代码分析</h3><p>意图：定义一系列的算法,把它们一个个封装起来, 并且使它们可相互替换。<br>主要解决：在有多种算法相似的情况下，使用 if…else 所带来的复杂和难以维护（违反开闭原则）。<br>何时使用：一个系统有许多许多类，而区分它们的只是他们直接的行为。<br>如何解决：将这些算法封装成一个一个的类，任意地替换。<br>关键代码：实现同一个接口。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/java8之lamda表达式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Thomas Wu">
-      <meta itemprop="description" content="人帅也要多读书，多学习，多运动">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="费曼的门徒">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/06/18/java8之lamda表达式/" class="post-title-link" itemprop="url">java8之lamda表达式</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-06-18 16:47:39" itemprop="dateCreated datePublished" datetime="2019-06-18T16:47:39+08:00">2019-06-18</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-07-02 19:21:32" itemprop="dateModified" datetime="2019-07-02T19:21:32+08:00">2019-07-02</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java基础/" itemprop="url" rel="index"><span itemprop="name">java基础</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="lamda表达式"><a href="#lamda表达式" class="headerlink" title="lamda表达式"></a>lamda表达式</h2><p>java8中lamda表达式的引入，标志着java开始拥抱主流函数式编程语言，其实lamda表达式并不是什么新鲜事物，在JavaScript中早已存在。作为经典语言引入lamda表达式以及java8中的其他新特性，如流式处理，会一定程度上让代码更简洁，当然还是无法和JavaScript这类语言相比，但这也正是各自所处的角色的不同决定的。</p>
-<h2 id="lamda表达式的格式"><a href="#lamda表达式的格式" class="headerlink" title="lamda表达式的格式"></a>lamda表达式的格式</h2><ol>
-<li>参数类型声明：可以不需要声明参数类型，编译器会识别参数值。</li>
-<li>参数圆括号（可选）：在单个参数时可以不使用括号，多个参数时必须使用。</li>
-<li>大括号和return关键字（可选）：如果只有一个表达式，则可以省略大括号和return关键字，编译器会自动的返回值；相对的，在使用大括号的情况下，则必须指明返回值。</li>
-</ol>
-<h2 id="lamda表达式例子"><a href="#lamda表达式例子" class="headerlink" title="lamda表达式例子"></a>lamda表达式例子</h2><p>以Collections.sort为例</p>
-<pre><code>/**
- * @author xiantao.wu
- * @create 2018/8/1514:09
- **/
-public class TestLamda {
-    public static void main(String[] args) {
-        //原生方法
-        List&lt;Student&gt; students1=getStudentList();
-        Collections.sort(students1, new Comparator&lt;Student&gt;() {
-            @Override
-            public int compare(Student o1, Student o2) {
-                return o1.getAge().compareTo(o2.getAge());
-            }
-        });
-        students1.forEach(in-&gt; System.out.print(in.getName()+in.getAge()+&quot;|&quot;));
-        System.out.println(&quot;原生方法&quot;);
-
-
-        //第一种情况：传入静态方法
-        List&lt;Student&gt; students2=getStudentList();
-        Collections.sort(students2, (s1, s2) -&gt; Student.sortByAgeStatic(s1, s2));
-        students2.forEach(in-&gt; System.out.print(in.getName()+in.getAge()+&quot;|&quot;));
-        System.out.println(&quot;第一种情况：传入静态方法&quot;);
-
-
-        //第二种情况：传入实例方法
-        List&lt;Student&gt; students3=getStudentList();
-        Collections.sort(students3, (s1, s2) -&gt; new Student().sortByAgeNonStatic(s1, s2));
-        students3.forEach(in-&gt; System.out.print(in.getName()+in.getAge()+&quot;|&quot;));
-        System.out.println(&quot;第二种情况：传入实例方法&quot;);
-
-
-        //第三种请款，不适用大括号
-        List&lt;Student&gt; students4=getStudentList();
-        Collections.sort(students4, (s1, s2) -&gt; s1.getAge().compareTo(s2.getAge()));
-        students4.forEach(in-&gt; System.out.print(in.getName()+in.getAge()+&quot;|&quot;));
-        System.out.println(&quot;第三种请款，不适用大括号&quot;);
-
-
-        //第四种情况，使用大括号
-        List&lt;Student&gt; students5=getStudentList();
-        Collections.sort(students5, (s1, s2) -&gt; {
-            return s1.getAge().compareTo(s2.getAge());
-        });
-        students5.forEach(in-&gt; System.out.print(in.getName()+in.getAge()+&quot;|&quot;));
-        System.out.println(&quot;第四种情况，使用大括号&quot;);
-
-    }
-
-    private static List&lt;Student&gt; getStudentList() {
-        List&lt;Student&gt; studentList = new ArrayList();
-        for (int i = 0; i &lt; 5; i++) {
-            Student stu = new Student();
-            stu.setAge(new Random().nextInt(10));
-            stu.setName(&quot;tom&quot;);
-            studentList.add(stu);
-        }
-        return studentList;
-    }
-
-
-}
-
-
-/**
- * @author xiantao.wu
- * @create 2018/8/1515:44
- **/
-public class Student {
-    private Integer age;
-    private String name;
-
-
-    public static int sortByAgeStatic(Student o1, Student o2) {
-        return o1.getAge().compareTo(o2.getAge());
-    }
-
-
-    public int sortByAgeNonStatic(Student o1, Student o2) {
-        return o1.getAge().compareTo(o2.getAge());
-    }
-
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-}</code></pre><h3 id="测试结果："><a href="#测试结果：" class="headerlink" title="测试结果："></a>测试结果：</h3><pre><code>tom1|tom2|tom3|tom3|tom9|原生方法
-tom0|tom0|tom1|tom2|tom4|第一种情况：传入静态方法
-tom2|tom2|tom3|tom4|tom8|第二种情况：传入实例方法
-tom1|tom1|tom1|tom4|tom8|第三种请款，不适用大括号
-tom0|tom1|tom1|tom3|tom7|第四种情况，使用大括号</code></pre>
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wuxiantao123.cn/2019/06/18/interceptor-配合Threadlocal全局处理请求基本信息/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Thomas Wu">
-      <meta itemprop="description" content="人帅也要多读书，多学习，多运动">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="费曼的门徒">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/06/18/interceptor-配合Threadlocal全局处理请求基本信息/" class="post-title-link" itemprop="url">interceptor 配合Threadlocal全局处理请求基本信息</a>
-              
-            
-          </h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-06-18 16:43:32" itemprop="dateCreated datePublished" datetime="2019-06-18T16:43:32+08:00">2019-06-18</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-07-02 19:21:32" itemprop="dateModified" datetime="2019-07-02T19:21:32+08:00">2019-07-02</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/java基础/" itemprop="url" rel="index"><span itemprop="name">java基础</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="业务场景"><a href="#业务场景" class="headerlink" title="业务场景"></a>业务场景</h3><blockquote>
-<p>最近接手一个供app端调用的网关项目，app端迭代更新，接口就要相应的区分版本并做相应的逻辑区分，所以每一次请求必须要获取版本号。</p>
-</blockquote>
-<h3 id="实现逻辑"><a href="#实现逻辑" class="headerlink" title="实现逻辑"></a>实现逻辑</h3><blockquote>
-<p>期初的做法是在controller中直接定义 @RequestParam(“name”) String name，但发现调用的方法层数增加时，参数需要逐层传递，调用链上每个方法都需要加参数，代码及不优雅。后改为添加一个拦截器VersionInfoInterceptor，在拦截器中操作Threadlocal中的变量，代码如下：</p>
-</blockquote>
-<pre><code>/**
- * @author:xiantao.wu
- * @createDate:2018/7/1011:25
- * 先执行preHandle方法，将需要的变量放入ThreadLocal,方法执行完执行afterCompletion，将变量remove掉，拦截器原理后续文章将会介绍
- * 
- **/
-public class VersionInfoInterceptor extends HandlerInterceptorAdapter {
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String clientVersion = request.getHeader(&quot;x-client-version&quot;);
-        if (clientVersion != null) {
-            RequestHeaderBaseInfo requestHeaderBaseInfo=new RequestHeaderBaseInfo();
-            requestHeaderBaseInfo.setVersion(clientVersion);
-            ThreadLocalUtil.set(requestHeaderBaseInfo);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        ThreadLocalUtil.remove();
-    }</code></pre><blockquote>
-<p>直接TreadlocalUtil.get()即可获取version放入的变量</p>
-</blockquote>
-<pre><code>/**
- * @author:xiantao.wu
- * @createDate:2018/7/1011:25
- * 提供工具类你，操作Threadlocal
- **/
-public class ThreadLocalUtil {
-    private ThreadLocalUtil() {
-    }
-
-    private static ThreadLocal&lt;RequestHeaderBaseInfo&gt; LOCAL = new  TransmittableThreadLocal&lt;&gt;();
-
-    public static void set(RequestHeaderBaseInfo requestHeaderBaseInfo) {
-        LOCAL.set(requestHeaderBaseInfo);
-    }
-
-    public static RequestHeaderBaseInfo get() {
-        return LOCAL.get();
-    }
-
-    public static void remove() {
-        LOCAL.remove();
-    }
-
-}</code></pre><h3 id="敲黑板（需要避免的坑）-现在ThreadLocal除原生实现外，还有InheritableThreadLocal，TransmittableThreadLocal（眼尖的同学可能已经注意到了）这两种实现，上面选用的就是TransmittableThreadLocal，以下是三者的比较："><a href="#敲黑板（需要避免的坑）-现在ThreadLocal除原生实现外，还有InheritableThreadLocal，TransmittableThreadLocal（眼尖的同学可能已经注意到了）这两种实现，上面选用的就是TransmittableThreadLocal，以下是三者的比较：" class="headerlink" title="敲黑板（需要避免的坑） 现在ThreadLocal除原生实现外，还有InheritableThreadLocal，TransmittableThreadLocal（眼尖的同学可能已经注意到了）这两种实现，上面选用的就是TransmittableThreadLocal，以下是三者的比较："></a>敲黑板（需要避免的坑） 现在ThreadLocal除原生实现外，还有InheritableThreadLocal，TransmittableThreadLocal（眼尖的同学可能已经注意到了）这两种实现，上面选用的就是TransmittableThreadLocal，以下是三者的比较：</h3><table>
-<thead>
-<tr>
-<th align="left">实现</th>
-<th align="left">能否在传递到子线程</th>
-<th align="left">使用注意点</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">ThreadLocal</td>
-<td align="left">否</td>
-<td align="left">只能在当前线程中获取本地变量</td>
-</tr>
-<tr>
-<td align="left">InheritableThreadLocal</td>
-<td align="left">是</td>
-<td align="left">可获取父线程的中的本地变量，线程池场景不适用，存在线程复用，会导致混</td>
-</tr>
-<tr>
-<td align="left">TransmittableThreadLocal</td>
-<td align="left">是</td>
-<td align="left">可获取父线程中的本地变量，适用线程池场景</td>
-</tr>
-</tbody></table>
-<h3 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果"></a>测试结果</h3><p>/** * Created by wuxiantao on 2018/7/14. */ public class TransmittableThreadlocalTest {</p>
-<pre><code>private static ThreadLocal&lt;String&gt; transmittableThreadLocal=new TransmittableThreadLocal&lt;&gt;();
-
-public static void main(String[] args) throws InterruptedException {
-    ThreadPoolExecutor threadPoolExecutor=new ThreadPoolExecutor(3,3,10, TimeUnit.MINUTES, new LinkedBlockingQueue&lt;Runnable&gt;());
-    transmittableThreadLocal.set(&quot;父线程设定的值&quot;);
-    System.out.println(Thread.currentThread().getName()+&quot;====&quot;+transmittableThreadLocal.get());
-
-    for (int i = 0; i &lt; 5; i++) {
-        threadPoolExecutor.submit(TtlCallable.get(new Callable&lt;String&gt;() {
-            public String call() throws Exception {
-                System.out.println(Thread.currentThread().getName()+&quot;------&quot;+transmittableThreadLocal.get());
-                transmittableThreadLocal.set(&quot;我被修改了&quot;);
-                return transmittableThreadLocal.get();
-            }
-        }));
-    }
-}</code></pre><p>}</p>
-<pre><code>&lt;br /&gt;使用transmimttable-threadlocal中TtlCallable.get()提交任务，在子线程中修改Threadlocal,子线程还是会取主线程中的threadlocal</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">main====父线程设定的值</span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">2</span>------父线程设定的值</span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">1</span>------父线程设定的值</span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">1</span>------父线程设定的值</span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">1</span>------父线程设定的值</span><br><span class="line">pool-<span class="number">1</span>-thread-<span class="number">3</span>------父线程设定的值</span><br></pre></td></tr></table></figure>
-
-<p>`<code>\</code></p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2781,7 +2728,7 @@ public static void main(String[] args) throws InterruptedException {
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

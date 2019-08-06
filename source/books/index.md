@@ -22,3 +22,7 @@ date: 2019-06-18 22:22:20
 
 ### mockito
 - [Mockito](https://static.javadoc.io/org.mockito/mockito-core/3.0.0/org/mockito/Mockito.html)
+
+
+### 日常采坑
+- [spring aop](https://www.cnblogs.com/hongmoshui/p/10938559.html)
