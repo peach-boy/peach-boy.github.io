@@ -78,5 +78,6 @@ Stream.of("a", "b", "c", "c")
  //return:a,b,c
 ```
 
+参考博客：[java8 stream-api](https://www.ibm.com/developerworks/cn/java/j-lo-java8streamapi/)
 
 

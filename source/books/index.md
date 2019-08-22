@@ -10,6 +10,7 @@ date: 2019-06-18 22:22:20
 ### springboot
 - [springboot官方中文文档](https://docshome.gitbooks.io/springboot/content/)
 - [springboot官方英文文档](https://spring.io/projects/spring-boot)
+- [spring事务](https://www.ibm.com/developerworks/cn/java/j-master-spring-transactional-use/index.html)
 
 
 ### hexo
