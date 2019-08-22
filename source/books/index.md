@@ -27,3 +27,7 @@ date: 2019-06-18 22:22:20
 
 ### 日常采坑
 - [spring aop](https://www.cnblogs.com/hongmoshui/p/10938559.html)
+
+### 书籍下载网站
+- [鸠摩搜书](https://www.jiumodiary.com/)
+- [cici岛](http://www.cicidao.com/index.html)
