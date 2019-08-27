@@ -103,7 +103,7 @@
 <meta property="og:site_name" content="费曼的门徒">
 <meta property="og:description" content="一、流操作之中间操作简介中间操作主要是用来对Stream做出相应转换及限制流，实际上是将源Stream转换为一个新的Stream，以达到需求效果。 二、常用中间操作方法   操作 类型 返回类型 操作参数 函数描述符 作用    filter 中间 Stream Predicate T -&amp;gt; boolean 返回参数函数为true的元素的流   map 中间 Stream Function&amp;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-07-02T11:21:32.668Z">
+<meta property="og:updated_time" content="2019-08-22T14:41:28.950Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java 8之Stream Api解析">
 <meta name="twitter:description" content="一、流操作之中间操作简介中间操作主要是用来对Stream做出相应转换及限制流，实际上是将源Stream转换为一个新的Stream，以达到需求效果。 二、常用中间操作方法   操作 类型 返回类型 操作参数 函数描述符 作用    filter 中间 Stream Predicate T -&amp;gt; boolean 返回参数函数为true的元素的流   map 中间 Stream Function&amp;">
@@ -445,7 +445,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-02 19:21:32" itemprop="dateModified" datetime="2019-07-02T19:21:32+08:00">2019-07-02</time>
+                <time title="修改时间：2019-08-22 22:41:28" itemprop="dateModified" datetime="2019-08-22T22:41:28+08:00">2019-08-22</time>
               
             
           </span>
@@ -586,6 +586,7 @@
 <h3 id="distinct方法"><a href="#distinct方法" class="headerlink" title="distinct方法"></a>distinct方法</h3><p>使用实例：去重操作</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Stream.of(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>, <span class="string">"c"</span>)</span><br><span class="line">                .distinct()</span><br><span class="line">                .forEach(System.out::println);</span><br><span class="line"> <span class="comment">//return:a,b,c</span></span><br></pre></td></tr></table></figure>
 
+<p>参考博客：<a href="https://www.ibm.com/developerworks/cn/java/j-lo-java8streamapi/" target="_blank" rel="noopener">java8 stream-api</a></p>
 
       
     </div>
